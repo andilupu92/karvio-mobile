@@ -4,7 +4,7 @@ import { useColorScheme } from 'nativewind';
 import { Box } from '@/components/ui/box';
 import { HStack } from '@/components/ui/hstack';
 import { Input, InputField } from '@/components/ui/input';
-import type { TextInputProps } from 'react-native';
+import type { KeyboardTypeOptions, TextInputProps } from 'react-native';
 
 interface FloatingInputProps extends Omit<TextInputProps, 'placeholder' | 'onBlur' | 'onFocus'> {
   label: string;
@@ -17,6 +17,7 @@ interface FloatingInputProps extends Omit<TextInputProps, 'placeholder' | 'onBlu
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   className?: string;
+  keyboardType?: KeyboardTypeOptions;
 }
 
 export default function FloatingInput({
@@ -95,7 +96,7 @@ export default function FloatingInput({
           left: leftIcon ? 48 : 16,
           top: labelTop,
           fontSize: labelFontSize,
-          fontWeight: '600',
+          fontFamily: "Inter_600SemiBold",
           color: getLabelColor(),
           backgroundColor: getLabelBackgroundColor(),
           paddingHorizontal: 4,
@@ -126,7 +127,7 @@ export default function FloatingInput({
           {/* Input Field */}
           <Input className="h-7 flex-1 p-0 border-0 border-transparent">
             <InputField
-              className={"font-bold text-base text-gray-800 dark:text-white p-0 leading-tight"}
+              className={"font-inter-bold text-base text-gray-800 dark:text-white p-0 leading-tight"}
               placeholder=""
               value={value !== undefined && value !== null ? String(value) : ''}
               onChangeText={onChangeText}

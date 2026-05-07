@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Animated,
   View,
@@ -8,6 +8,8 @@ import {
   TouchableWithoutFeedback,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  StatusBar,
+  Platform,
 } from 'react-native';
 import { useColorScheme } from 'nativewind';
 import { Box } from '@/components/ui/box';
@@ -18,6 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 interface SelectOption {
   label: string;
   value: any;
+  icon?: React.ReactNode;
 }
 
 interface FloatingSelectProps {
@@ -38,7 +41,7 @@ export default function FloatingSelect({
   onValueChange,
   options,
   isInvalid = false,
-  isDisabled = false,
+  isDisabled,
   leftIcon,
   className = '',
   maxVisibleOptions = 4,
@@ -70,7 +73,12 @@ export default function FloatingSelect({
   const openDropdown = () => {
     if (isDisabled) return;
     triggerRef.current?.measureInWindow((x, y, width, height) => {
-      setDropdownLayout({ x, y: y + height + 6, width });
+      const statusBarOffset = Platform.OS === 'android' ? (StatusBar.currentHeight || 0) : 0;
+      setDropdownLayout({
+        x,
+        y: y + height + (Platform.OS === 'android' ? statusBarOffset : 0),
+        width
+      });
       setIsOpen(true);
       Animated.timing(animatedValue, {
         toValue: 1,
@@ -161,7 +169,7 @@ export default function FloatingSelect({
           left: leftIcon ? 48 : 16,
           top: labelTop,
           fontSize: labelFontSize,
-          fontWeight: '600',
+          fontFamily: "Inter_600SemiBold",
           color: getLabelColor(),
           backgroundColor: getLabelBackgroundColor(),
           paddingHorizontal: 4,
@@ -185,13 +193,18 @@ export default function FloatingSelect({
             rounded-2xl px-4 py-4
             ${isDisabled ? 'opacity-50' : ''}
           `}
+          style={isOpen ? {
+            borderBottomWidth: 0,
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
+          } : {}}
         >
           <HStack className="items-center" space="md">
             {leftIcon && <View style={{ marginRight: 8 }}>{leftIcon}</View>}
 
             <View style={{ flex: 1, height: 28, justifyContent: 'center' }}>
               <Text
-                className="font-bold text-base text-gray-800 dark:text-white"
+                className="font-inter-bold text-base text-gray-800 dark:text-white"
                 numberOfLines={1}
               >
                 {selectedLabel ?? ''}
@@ -225,13 +238,19 @@ export default function FloatingSelect({
                   left: dropdownLayout.x,
                   width: dropdownLayout.width,
                   backgroundColor: getDropdownBg(),
-                  borderRadius: 20,
-                  borderWidth: 1,
+                  borderBottomWidth: 1,
+                  borderLeftWidth: 1,
+                  borderRightWidth: 1,
+                  borderTopWidth: 0,
                   borderColor: getDropdownBorder(),
                   shadowColor: '#3b82f6',
                   shadowOffset: { width: 0, height: 8 },
                   shadowOpacity: colorScheme === 'dark' ? 0.3 : 0.12,
-                  shadowRadius: 20,
+                  shadowRadius: 0,
+                  borderTopLeftRadius: 0,
+                  borderTopRightRadius: 0,
+                  borderBottomLeftRadius: 20,
+                  borderBottomRightRadius: 20,
                   elevation: 10,
                   paddingVertical: 8,
                   flexDirection: 'row',
@@ -269,25 +288,22 @@ export default function FloatingSelect({
                             paddingVertical: 12,
                           }}
                         >
-                          {/* Left accent bar */}
-                          <View
-                            style={{
-                              width: 3,
-                              height: 20,
-                              borderRadius: 2,
-                              backgroundColor: isSelected ? '#3b82f6' : 'transparent',
-                              marginRight: 12,
-                            }}
-                          />
+
+                          {/* Option icon */}
+                          {item.icon && (
+                            <View style={{ marginRight: 10 }}>
+                              {item.icon}
+                            </View>
+                          )}
 
                           {/* Label */}
                           <Text
                             style={{
                               flex: 1,
                               fontSize: 15,
-                              fontWeight: isSelected ? '700' : '400',
+                              fontFamily: isSelected ? 'Inter_700Bold' : 'Inter_400Regular',
                               color: isSelected
-                                ? '#3b82f6'
+                                ? '#0a4f67'
                                 : colorScheme === 'dark' ? '#e2e8f0' : '#374151',
                               letterSpacing: isSelected ? 0.2 : 0,
                             }}
@@ -295,25 +311,6 @@ export default function FloatingSelect({
                             {item.label}
                           </Text>
 
-                          {/* Checkmark pill */}
-                          {isSelected && (
-                            <View
-                              style={{
-                                backgroundColor: '#3b82f6',
-                                borderRadius: 20,
-                                paddingHorizontal: 8,
-                                paddingVertical: 3,
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                gap: 4,
-                              }}
-                            >
-                              <Ionicons name="checkmark" size={11} color="#ffffff" />
-                              <Text style={{ fontSize: 11, color: '#ffffff', fontWeight: '600' }}>
-                                Selected
-                              </Text>
-                            </View>
-                          )}
                         </TouchableOpacity>
 
                         {/* Divider — hidden after the last item */}

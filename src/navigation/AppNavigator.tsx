@@ -3,28 +3,84 @@ import LoginScreen from "../page/auth/login";
 import HomeScreen from "../page/home/homeScreen";
 import ForgotPasswordScreen from '../page/auth/forgotPassword';
 import SignUpScreen from '../page/auth/signUp';
-import UserDetailsScreen from '../page/home/profile/userDetails';
-import AllDocumentsScreen from '../page/home/documents/allDocuments';
-import AllExpensesScreen from '../page/home/expenses/allExpenses';
+import AddCar from '../page/cars/addCar';
+import AddDocument from '../page/documents/addDocument';
+import AddExpense from '../page/expenses/addExpense';
+import Documents from '../page/documents/documents';
+import DocumentDetail from '../page/documents/documentDetail';
+import Cars from '../page/cars/cars';
+import CarDetail from '../page/cars/carDetail';
+import ExpensesDetail from '../page/expenses/expensesDetail';
+import ExpensesMenu from '../page/expenses/expensesMenu';
+import DocumentsMenu from '../page/documents/documentsMenu';
+import Settings from '../page/settings/settings';
+
+type Car = {
+  id: number;
+  name: string;
+  energyType: string;
+  kilometers: number;
+  year: number;
+  consumption: number;
+  healthScore: number;
+};
+
+type CarItem = {
+  id: number;
+  km: number;
+  name: string;
+  consumption: number;
+  healthScore: number;
+};
+
+type CarWithExpenses = {
+    carId: number;
+    name: string;
+    consumption: number;
+    healthScore: number;
+    amount: number;
+}
 
 type Document = {
   id: number;
-  documentCategoryId: number;
-  documentCategoryName: string;
-  expiryDate: string;
+  documentTypeId: number;
+  documentTypeName: string;
+  documentTypeIconName: string;
+  expiryDate: Date;
   daysRemaining: number;
-  documentCategoryIconName: string;
-  documentCategoryIconLibrary: string;
 };
+
+type Expense = {
+  id: number,
+  expenseTypeId: 1,
+  expenseTypeName: string,
+  expenseTypeIconName: string,
+  date: Date,
+  amount: number
+};
+
+type ExpenseHistory = {
+  monthName: string;
+  totalAmount: number;
+  expenseResponseList: Expense[];
+}
 
 export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
   ForgotPassword: undefined;
   SignUp: undefined;
-  UserDetails: undefined;
-  AllDocuments: { documents: Document[], currentCarId: number };
-  AllExpenses: { carId: number };
+  AddCar: undefined;
+  AddDocument: { car: CarItem, cars: Car[], document?: Document };
+  AddExpense: { cars: Car[] };
+  Documents: { car: CarItem, cars: Car[], documents: Document[] };
+  DocumentDetail: { car: CarItem, document: Document, cars: Car[] }
+  Cars: undefined;
+  CarDetail: {car: CarWithExpenses};
+  ExpensesDetail: {car: CarItem, cars: Car[], expenses: ExpenseHistory[] };
+  ExpensesMenu: { car: CarItem, cars: Car[] };
+  DocumentsMenu: { car: CarItem, cars: Car[] };
+  Settings: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -42,9 +98,17 @@ export default function AppNavigator() {
           ) : (
           <>*/}
             <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="UserDetails" component={UserDetailsScreen} options={{ presentation: 'transparentModal', headerShown: false, animation: 'fade', contentStyle: { backgroundColor: 'transparent' } }} />
-            <Stack.Screen name="AllDocuments" component={AllDocumentsScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="AllExpenses" component={AllExpensesScreen} options={{ headerShown: false }}/>
+            <Stack.Screen name="AddCar" component={AddCar} options={{ headerShown: false }}/>
+            <Stack.Screen name="AddDocument" component={AddDocument} options={{ headerShown: false }}/>
+            <Stack.Screen name="AddExpense" component={AddExpense} options={{ headerShown: false }}/>
+            <Stack.Screen name="Documents" component={Documents} options={{ headerShown: false }}/>
+            <Stack.Screen name="DocumentDetail" component={DocumentDetail} options={{ headerShown: false }}/>
+            <Stack.Screen name="Cars" component={Cars} options={{ headerShown: false }}/>
+            <Stack.Screen name="CarDetail" component={CarDetail} options={{ headerShown: false }}/>
+            <Stack.Screen name="ExpensesDetail" component={ExpensesDetail} options={{ headerShown: false }}/>
+            <Stack.Screen name="ExpensesMenu" component={ExpensesMenu} options={{ headerShown: false }}/>
+            <Stack.Screen name="DocumentsMenu" component={DocumentsMenu} options={{ headerShown: false }}/>
+            <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }}/>
           {/*</>
         )}*/}
         </Stack.Navigator>

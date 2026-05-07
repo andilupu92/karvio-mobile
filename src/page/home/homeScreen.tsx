@@ -1,179 +1,234 @@
-import { Pressable, ScrollView } from "react-native";
+import { useState, useCallback } from "react";
+import { StatusBar, ActivityIndicator, View } from "react-native";
+import { Box } from "@/components/ui/box";
+import { SafeAreaView } from "react-native-safe-area-context";
+import HomeHeader from "./homeHeader";
+import HomeMenu from "./homeMenu";
+import { carApi } from "@/src/api/services/carService";
+import { documentApi } from "@/src/api/services/docService";
+import { Text } from "@/components/ui/text";
+import { CarFront, Plus } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../navigation/AppNavigator";
-import { View } from "react-native";
-import { Text } from '@/components/ui/text';
-import CarsSection from "./cars/carsSection";
-import HeaderSection from "../../utils/headerSection";
-import DocumentCard from "./documents/document";
-import ExpensesChart from "./expenses/expensesChart";
-import { useCallback, useEffect, useState } from "react";
-import AddDocuments from "./documents/addDocuments";
-import Header from "./header";
-import AddCar from "./cars/addCar";
-import AddExpenses from "./expenses/addExpenses";
-import { documentApi } from "@/src/api/services/docService";
-import { ActivityIndicator } from "react-native";
+import { RootStackParamList } from "@/src/navigation/AppNavigator";
+import { Button } from "@/components/ui/button";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import HomeQuickActions from "./homeQuickActions";
+import HomeGarage from "./homeGarage";
+import HomeAddBottomSheet from "./homeAddSheet";
+import { useFocusEffect } from "@react-navigation/native";
+import HomeFuelConsumption from "./homeFuelConsumption";
+import HomeExpenses from "./homeExpenses";
+import HomeHealth from "./homeHealth";
+import HomeDocuments from "./homeDocuments";
+import AddFuel from "../cars/addFuel";
+
+type TabName = "Home" | "Documents" | "Expenses" | "Settings";
+
+type Car = {
+  id: number;
+  name: string;
+  energyType: string;
+  kilometers: number;
+  year: number;
+  consumption: number;
+  healthScore: number;
+};
 
 type Document = {
   id: number;
-  documentCategoryId: number;
-  documentCategoryName: string;
-  expiryDate: string;
+  documentTypeId: number;
+  documentTypeName: string,
+  documentTypeIconName: string,
+  expiryDate: Date,
   daysRemaining: number;
-  documentCategoryIconName: string;
-  documentCategoryIconLibrary: string;
 };
 
+type Expense = {
+  id: number,
+  expenseTypeId: 1,
+  expenseTypeName: string,
+  expenseTypeIconName: string,
+  date: Date,
+  amount: number
+};
+
+type ExpenseHistory = {
+  monthName: string;
+  totalAmount: number;
+  expenseResponseList: Expense[];
+}
+
 export default function HomeScreen() {
-  const [isSheetDocOpen, setIsSheetDocOpen] = useState(false);
-  const [isSheetCarOpen, setIsSheetCarOpen] = useState(false);
-  const [isSheetExpensesOpen, setIsSheetExpensesOpen] = useState(false);
-  const [editingDocData, setEditingDocData] = useState<{ documentCategoryId: number; expiryDate: Date; documentId: number } | null>(null);
-  const [editingCarData, setEditingCarData] = useState<{ id: number; brandId: number; brandName: string; modelId: number; modelName: string; kilometers: number; year: number } | null>(null);
-  const [currentCarLogo, setCurrentCarLogo] = useState<string | null>(null);
-  const [currentCarId, setCurrentCarId] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<TabName>("Home");
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [car, setCar] = useState({ id: 0, km: 0, name: "", healthScore: 0, consumption: 0 });
+  const [showAddSheet, setShowAddSheet] = useState(false);
+  const [showAddFuel, setShowAddFuel] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [documentsLoading, setDocumentsLoading] = useState(false);
+  const [expensesLoading, setExpensesLoading] = useState(false);
+  const [expenses, setExpenses] = useState<ExpenseHistory[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
-  const [loadingDocs, setLoadingDocs] = useState(false);
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [cars, setCars] = useState<Car[]>([]);
 
-  const openUserDetails = () => {
-    navigation.navigate("UserDetails");
+  useFocusEffect (
+    useCallback(() => {
+      const fetchCars = async () => {
+        try {
+          setLoading(true);
+          const responseData = await carApi.cars();
+          setCars(responseData);
+          setCar({
+            id: responseData[0]?.id || 0,
+            km: responseData[0]?.kilometers || 0,
+            name: responseData[0]?.name || "Nici o mașină",
+            healthScore: responseData[0]?.healthScore,
+            consumption: responseData[0]?.consumption
+          });
+          await fetchDocuments(responseData[0]?.id);
+          await fetchExpenses(responseData[0]?.id);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+        fetchCars();
+    }, [])
+  );
+
+  const fetchExpenses = async (carId: number) => {
+    try {
+      setExpensesLoading(true);
+      const responseData = await documentApi.expenses(carId);
+      setExpenses(responseData);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setExpensesLoading(false);
+    }
   };
 
-  const handleCarChange = useCallback((logoUrl: string, id: number) => {
-    setCurrentCarLogo(logoUrl);
-    setCurrentCarId(id);
-  }, []);
-
-  useEffect(() => {
-    if (currentCarId === null) return;
-
-    const fetchDocuments = async () => {
-      try {
-        setLoadingDocs(true);
-        const data = await documentApi.getDocuments(currentCarId);
-        setDocuments(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoadingDocs(false);
-      }
-    };
-
-    fetchDocuments();
-  }, [currentCarId]);
-
-  const handleEditDoc = (data: { documentCategoryId: number; expiryDate: Date; documentId: number }) => {
-    setEditingDocData(data);
-    setIsSheetDocOpen(true);
+  const fetchDocuments = async (carId: number) => {
+    try {
+      setDocumentsLoading(true);
+      const responseData = await documentApi.documents(carId);
+      setDocuments(responseData);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setDocumentsLoading(false);
+    }
   };
 
-  const handleEditCar = (data: { id: number; brandId: number; brandName: string; modelId: number; modelName: string; kilometers: number; year: number }) => {
-    setEditingCarData(data);
-    setIsSheetCarOpen(true);
+  const handleCarChange = (id: number, km: number, name: string, healthScore: number, consumption: number) => {
+    setCar({ id, km, name, healthScore, consumption });
+    fetchDocuments(id);
+    fetchExpenses(id);
   };
 
-  const handleViewAllDocuments = () => {
-    navigation.navigate("AllDocuments", { documents, currentCarId }); 
-  };
+  if (activeTab === "Expenses") {
+      navigation.navigate("ExpensesMenu", { car, cars });
+  } else if (activeTab === "Documents") {
+      navigation.navigate("DocumentsMenu", { car, cars });
+  } else if (activeTab === "Settings") {
+    navigation.navigate("Settings");
+  }
 
   return (
-    <View style={{ flex: 1 }}>
 
-      <Header openUserDetails={openUserDetails} logoUrl={currentCarLogo} />
+    <SafeAreaView className="flex-1 bg-background-50">
+      <StatusBar barStyle="dark-content" />
+      
+        <Box className="flex-1 bg-background-50 px-2 py-1">
 
-      <ScrollView
-        className="flex-1 bg-gray-150"
-        contentContainerStyle={{ paddingBottom: 140 }}
-        showsVerticalScrollIndicator={false}
-      >
-
-       <View className="mt-4">
-          <CarsSection onAddCar={() => setIsSheetCarOpen(true)} onEditCar={handleEditCar} onCarChange={handleCarChange}/>
-        </View>
-
-        <View className="px-6 mt-12">
-          <View>
-            <HeaderSection
-              name="My Documents"
-              onAdd={() => setIsSheetDocOpen(true)}
+            <HomeHeader
+              carName={car.name}
+              carKm={car.km}
+              healthScore={car.healthScore}
+              profileImage={undefined}
+              onProfilePress={() => console.log("profile pressed")}
+              lengthCar={cars.length}
             />
 
-            {loadingDocs ? (
-              <ActivityIndicator size="small" color="#F97316" style={{ marginTop: 16 }} />
+          <KeyboardAwareScrollView
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 90 }}
+            enableOnAndroid
+            extraScrollHeight={20}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            {loading ? (
+              <ActivityIndicator size="small" style={{ marginTop: 16 }} />
+            ) : cars.length > 0 ? (
+                  <View key={cars.length} className="flex-1 w-full">
+                    <HomeQuickActions car={car} cars={cars} documents={documents} />
+                    <HomeGarage cars={cars} onCarSelect={handleCarChange} />
+                    <HomeFuelConsumption consumption={car.consumption}
+                      onAddFuel={() => setShowAddFuel(true)}
+                    />
+                    <View className="flex-row px-4 mb-3">
+                      <HomeExpenses
+                        expensesHistory={expenses[expenses.length - 1]}
+                        period={new Date().toLocaleDateString("ro-RO", { month: "long" }).toUpperCase()}
+                        onExpensesPress={() => navigation.navigate('ExpensesDetail', { car, cars, expenses })}
+                      />
+                      <HomeHealth
+                        healthScore={car.healthScore}
+                      />
+                    </View>
+                    <HomeDocuments
+                      documents={documents.slice(0,3)}
+                      onDocumentPress={(document) => navigation.navigate('DocumentDetail', { car, document, cars })}
+                    />
+                  </View>
             ) : (
-              documents.slice(0, 3).map((doc) => (
-                <DocumentCard
-                  key={doc.id}
-                  documentId={doc.id}
-                  documentCategoryId={doc.documentCategoryId}
-                  icon={doc.documentCategoryIconName}
-                  library={doc.documentCategoryIconLibrary}
-                  iconBg="#e6eff5"
-                  name={doc.documentCategoryName}
-                  daysRemaining={doc.daysRemaining}
-                  expiryDate={new Date(doc.expiryDate)}
-                  onEdit={handleEditDoc}
-                />
-              ))
-            )}
-            {documents.length > 0 && !loadingDocs ? (
-              <Pressable 
-                onPress={handleViewAllDocuments}
-                className="mt-4 bg-white py-2 px-6 rounded-full self-center flex-row items-center justify-center border border-gray-100"
-              >
-                <Text className="text-orange-500 font-medium text-sm">
-                  Vezi toate documentele
+              <View className="px-7 flex-1 items-center justify-center gap-10" style={{ paddingBottom: 180 }}>
+
+                <View className="w-32 h-32 rounded-full bg-secondary-500 items-center justify-center">
+                  <CarFront size={60} color="#ffffff" strokeWidth={1.6} />
+                </View>
+
+                <Text className="text-center font-inter-medium text-typography-50 leading-6">
+                  Nu există mașini în garaj. Adaugă una pentru a începe să urmărești cheltuielile și documentele!
                 </Text>
-              </Pressable>
-            ) : (
-              <Text className="text-gray-400 italic text-center mt-4">
-                Nu există documente pentru această mașină.
-              </Text>
+
+                <Button
+                  onPress={() => navigation.navigate('AddCar')}
+                  className="flex-row items-center justify-center h-16 bg-secondary-500 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]"
+                >
+                  <Plus size={18} color="#ffffff" strokeWidth={2.5} />
+                  <Text className="text-primary-0 font-inter-semibold text-base">
+                    Adaugă o mașină
+                  </Text>
+                </Button>
+
+              </View>
             )}
-          </View>
-        </View>
+          </KeyboardAwareScrollView>
+        </Box>
 
-        <View className="px-6 mt-5">
-          <HeaderSection
-            name="My Expenses"
-            onAdd={() => setIsSheetExpensesOpen(true)}
-          />
-          <ExpensesChart carId={currentCarId} />
-        </View>
-      </ScrollView>
-
-      <AddCar
-        key={editingCarData ? `car-${editingCarData.brandId}-${editingCarData.modelId}-${Date.now()}` : "car-add"}
-        isVisible={isSheetCarOpen}
-        initialData={editingCarData}
-        onClose={() => {
-          setIsSheetCarOpen(false);
-          setEditingCarData(null);
-        }}
+      <HomeMenu
+        activeTab={activeTab}
+        onTabPress={(tab) => setActiveTab(tab)}
+        onAddPress={() => setShowAddSheet(prev => !prev)}
       />
 
-      <AddDocuments
-        key={editingDocData ? `doc-${editingDocData.documentCategoryId}-${Date.now()}` : "doc-add"}
-        isVisible={isSheetDocOpen}
-        initialData={editingDocData}
-        carId={currentCarId}
-        onClose={() => {
-          setIsSheetDocOpen(false);
-          setEditingDocData(null);
-        }}
+      <HomeAddBottomSheet
+        visible={showAddSheet}
+        onClose={() => setShowAddSheet(false)}
+        onAddCar={() => navigation.navigate('AddCar')}
+        onAddDocument={() => navigation.navigate('AddDocument', { car, cars } )}
+        onAddExpense={() => navigation.navigate('AddExpense', { cars } )}
       />
 
-      <AddExpenses
-        isVisible={isSheetExpensesOpen}
-        onClose={() => {
-          setIsSheetExpensesOpen(false);
-        }}
+      <AddFuel
+        visible={showAddFuel}
+        carId={car.id}
+        onClose={() => setShowAddFuel(false)}
       />
 
-    </View>
+    </SafeAreaView>
   );
 }

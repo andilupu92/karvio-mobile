@@ -6,9 +6,16 @@ import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import '@/global.css';
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+} from '@expo-google-fonts/inter';
 import { useEffect } from "react";
 import { useAuthStore } from "./src/store/authStore";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -17,9 +24,11 @@ export default function App() {
   const initialize = useAuthStore((state) => state.initialize);
   const isLoading = useAuthStore((state) => state.isLoading);
 
-  const [fontsLoaded] = useFonts({
-    'Inter-SemiBold': require('./assets/fonts/Inter_18pt-SemiBold.ttf'),
-    'Inter-Italic': require('./assets/fonts/Inter_18pt-Italic.ttf'),
+  const [fontsLoaded, fontError] = useFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
   });
 
   useEffect(() => {
@@ -41,11 +50,13 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <GluestackUIProvider mode={(colorScheme ?? "light") as "light" | "dark"}>
-        <NavigationContainer>
-          <AppNavigator />
-        </NavigationContainer>
-      </GluestackUIProvider>
+      <SafeAreaProvider>
+        <GluestackUIProvider mode={(colorScheme ?? "light") as "light" | "dark"}>
+          <NavigationContainer>
+            <AppNavigator />
+          </NavigationContainer>
+        </GluestackUIProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
