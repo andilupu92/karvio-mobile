@@ -141,7 +141,7 @@ export default function HomeScreen() {
   return (
 
     <SafeAreaView className="flex-1 bg-background-50">
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       
         <Box className="flex-1 bg-background-50 px-2 py-1">
 

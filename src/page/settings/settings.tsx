@@ -11,6 +11,7 @@ import { RootStackParamList } from "@/src/navigation/AppNavigator";
 import HomeAddBottomSheet from "../home/homeAddSheet";
 import { Bell, ChevronRight, Moon, Settings2, Tag } from "lucide-react-native";
 import { useTheme } from "@/src/context/themeContext";
+import ThemeToggle from "./themeToggle";
 
 type TabName = "Home" | "Documents" | "Expenses" | "Settings";
 
@@ -37,7 +38,7 @@ export default function Settings() {
 
   return (
     <SafeAreaView className="flex-1 bg-background-50">
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle={isDark === true ? 'light-content' : 'dark-content'} />
             {/* ── Header ── */}
             <View className="flex-row items-center px-6 pt-4 pb-4">
                 <Text className="font-inter-bold text-typography-900 text-2xl mb-2">
@@ -65,13 +66,7 @@ export default function Settings() {
                                 <Text className="flex-1 font-inter-medium text-typography-800 text-base">
                                     Dark Mode
                                 </Text>
-                                <Switch
-                                    value={isDark}
-                                    onValueChange={toggleTheme}
-                                    trackColor={{ false: "#e2e8f0", true: "#0ea5e9" }}
-                                    thumbColor="#ffffff"
-                                    ios_backgroundColor="#e2e8f0"
-                                />
+                                <ThemeToggle value={isDark} onValueChange={toggleTheme} />
                             </View>
 
                             {/* Separator */}
