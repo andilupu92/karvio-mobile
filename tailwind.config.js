@@ -158,7 +158,7 @@ module.exports = {
           600: 'rgb(var(--color-background-600)/<alpha-value>)',
           700: 'rgb(var(--color-background-700)/<alpha-value>)',
           800: 'rgb(var(--color-background-800)/<alpha-value>)',
-          900: 'rgb(var(--color-background-900)/<alpha-value>)',
+          900: '#181719',
           950: 'rgb(var(--color-background-950)/<alpha-value>)',
           error: 'rgb(var(--color-background-error)/<alpha-value>)',
           warning: 'rgb(var(--color-background-warning)/<alpha-value>)',

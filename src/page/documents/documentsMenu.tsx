@@ -65,14 +65,15 @@ useEffect(() => {
 const actionRequired = documentsSummary?.documents.filter((doc) => doc.daysRemaining <= 10);
 const valid = documentsSummary?.documents.filter((doc) => doc.daysRemaining > 10);
 
-
-if (activeTab === "Home") {
-    navigation.navigate("Home");
-} else if (activeTab === "Expenses") {
-    navigation.navigate("ExpensesMenu", { car, cars });
-} else if (activeTab === "Settings") {
-    navigation.navigate("Settings");
-}
+useEffect(() => {
+    if (activeTab === "Home") {
+        navigation.navigate("Home");
+    } else if (activeTab === "Expenses") {
+        navigation.navigate("ExpensesMenu", { car, cars });
+    } else if (activeTab === "Settings") {
+        navigation.navigate("Settings", { car, cars });
+    }
+}, [activeTab]);
 
   return (
     <SafeAreaView className="flex-1 bg-background-50">

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { StatusBar, ActivityIndicator, View } from "react-native";
 import { Box } from "@/components/ui/box";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -128,18 +128,20 @@ export default function HomeScreen() {
     fetchExpenses(id);
   };
 
-  if (activeTab === "Expenses") {
-      navigation.navigate("ExpensesMenu", { car, cars });
-  } else if (activeTab === "Documents") {
-      navigation.navigate("DocumentsMenu", { car, cars });
-  } else if (activeTab === "Settings") {
-    navigation.navigate("Settings");
-  }
+  useEffect(() => {
+    if (activeTab === "Expenses") {
+        navigation.navigate("ExpensesMenu", { car, cars });
+    } else if (activeTab === "Documents") {
+        navigation.navigate("DocumentsMenu", { car, cars });
+    } else if (activeTab === "Settings") {
+      navigation.navigate("Settings", { car, cars });
+    }
+  }, [activeTab]);
 
   return (
 
     <SafeAreaView className="flex-1 bg-background-50">
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
       
         <Box className="flex-1 bg-background-50 px-2 py-1">
 

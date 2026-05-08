@@ -16,11 +16,12 @@ import { useEffect } from "react";
 import { useAuthStore } from "./src/store/authStore";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { ThemeProvider, useTheme } from "./src/context/themeContext";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const { colorScheme } = useColorScheme();
+  const { colorScheme } = useTheme();
   const initialize = useAuthStore((state) => state.initialize);
   const isLoading = useAuthStore((state) => state.isLoading);
 
@@ -51,11 +52,13 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <GluestackUIProvider mode={(colorScheme ?? "light") as "light" | "dark"}>
-          <NavigationContainer>
-            <AppNavigator />
-          </NavigationContainer>
-        </GluestackUIProvider>
+        <ThemeProvider>
+          <GluestackUIProvider mode={colorScheme}>
+            <NavigationContainer>
+              <AppNavigator />
+            </NavigationContainer>
+          </GluestackUIProvider>
+        </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

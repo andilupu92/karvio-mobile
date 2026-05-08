@@ -92,13 +92,15 @@ const isPositive = percentChange >= 0;
 const maxTotal = Math.max(...expenses.map((m) => m.totalAmount), 1);
 const BAR_MAX_HEIGHT = 92;
 
-if (activeTab === "Home") {
-    navigation.navigate("Home");
-} else if (activeTab === "Documents") {
-    navigation.navigate("DocumentsMenu", { car, cars });
-} else if (activeTab === "Settings") {
-    navigation.navigate("Settings");
-}
+useEffect(() => {
+    if (activeTab === "Home") {
+        navigation.navigate("Home");
+    } else if (activeTab === "Documents") {
+        navigation.navigate("DocumentsMenu", { car, cars });
+    } else if (activeTab === "Settings") {
+        navigation.navigate("Settings", { car, cars });
+    }
+}, [activeTab]);
 
   return (
     <SafeAreaView className="flex-1 bg-background-50">

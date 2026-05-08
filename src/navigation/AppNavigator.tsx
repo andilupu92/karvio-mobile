@@ -80,7 +80,7 @@ export type RootStackParamList = {
   ExpensesDetail: {car: CarItem, cars: Car[], expenses: ExpenseHistory[] };
   ExpensesMenu: { car: CarItem, cars: Car[] };
   DocumentsMenu: { car: CarItem, cars: Car[] };
-  Settings: undefined;
+  Settings: { car: CarItem, cars: Car[] };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
