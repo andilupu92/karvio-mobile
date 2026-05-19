@@ -1,4 +1,4 @@
-import apiClient from "../client";
+import apiClient from '../client';
 
 const API_URL = '/auth';
 
@@ -18,7 +18,6 @@ export interface LoginResponse {
 }
 
 export const authApi = {
-
   signUp: async (credentials: LoginCredentials) => {
     const response = await apiClient.post(`${API_URL}/register`, credentials);
     return response.data;
@@ -37,5 +36,4 @@ export const authApi = {
   logout: async (): Promise<void> => {
     await apiClient.post(`${API_URL}/logout`);
   },
-
 };

@@ -1,7 +1,7 @@
-import "./global.css";
-import { NavigationContainer } from "@react-navigation/native";
-import AppNavigator from "./src/navigation/AppNavigator";
-import { useColorScheme } from "nativewind";
+import './global.css';
+import { NavigationContainer } from '@react-navigation/native';
+import AppNavigator from './src/navigation/AppNavigator';
+import { useColorScheme } from 'nativewind';
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -12,11 +12,11 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
 } from '@expo-google-fonts/inter';
-import { useEffect } from "react";
-import { useAuthStore } from "./src/store/authStore";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { ThemeProvider, useTheme } from "./src/context/themeContext";
+import { useEffect } from 'react';
+import { useAuthStore } from './src/store/authStore';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ThemeProvider, useTheme } from './src/context/themeContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,7 +35,7 @@ export default function App() {
   useEffect(() => {
     initialize();
   }, []);
-  
+
   useEffect(() => {
     if (fontsLoaded && !isLoading) {
       const hideSplash = async () => {
@@ -59,7 +59,6 @@ export default function App() {
     </GestureHandlerRootView>
   );
 }
-
 
 function AppContent() {
   const { colorScheme } = useTheme();

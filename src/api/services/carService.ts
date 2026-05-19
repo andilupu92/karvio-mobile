@@ -1,4 +1,4 @@
-import apiClient from "../client";
+import apiClient from '../client';
 
 const API_URL = '/car';
 
@@ -18,7 +18,6 @@ export interface CarFuelCredentials {
 }
 
 export const carApi = {
-
   cars: async () => {
     const response = await apiClient.get(`${API_URL}/cars`);
     return response.data;

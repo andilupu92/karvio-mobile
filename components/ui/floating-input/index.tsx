@@ -35,7 +35,7 @@ export default function FloatingInput({
 }: FloatingInputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const { colorScheme } = useColorScheme();
-  
+
   const animatedValue = useRef(new Animated.Value(value ? 1 : 0)).current;
 
   const handleFocus = () => {
@@ -96,7 +96,7 @@ export default function FloatingInput({
           left: leftIcon ? 48 : 16,
           top: labelTop,
           fontSize: labelFontSize,
-          fontFamily: "Inter_600SemiBold",
+          fontFamily: 'Inter_600SemiBold',
           color: getLabelColor(),
           backgroundColor: getLabelBackgroundColor(),
           paddingHorizontal: 4,
@@ -108,7 +108,7 @@ export default function FloatingInput({
       </Animated.Text>
 
       {/* Input Container */}
-      <Box 
+      <Box
         className={`
           bg-gray-50 dark:bg-slate-900 
           border ${getBorderColor()}
@@ -118,16 +118,14 @@ export default function FloatingInput({
       >
         <HStack className="items-center" space="md">
           {/* Left Icon */}
-          {leftIcon && (
-            <View style={{ marginRight: 8 }}>
-              {leftIcon}
-            </View>
-          )}
+          {leftIcon && <View style={{ marginRight: 8 }}>{leftIcon}</View>}
 
           {/* Input Field */}
           <Input className="h-7 flex-1 p-0 border-0 border-transparent">
             <InputField
-              className={"font-inter-bold text-base text-gray-800 dark:text-white p-0 leading-tight"}
+              className={
+                'font-inter-bold text-base text-gray-800 dark:text-white p-0 leading-tight'
+              }
               placeholder=""
               value={value !== undefined && value !== null ? String(value) : ''}
               onChangeText={onChangeText}
@@ -137,13 +135,9 @@ export default function FloatingInput({
               {...textInputProps}
             />
           </Input>
-          
+
           {/* Right Icon */}
-          {rightIcon && (
-            <View style={{ marginLeft: 8 }}>
-              {rightIcon}
-            </View>
-          )}
+          {rightIcon && <View style={{ marginLeft: 8 }}>{rightIcon}</View>}
         </HStack>
       </Box>
     </Box>

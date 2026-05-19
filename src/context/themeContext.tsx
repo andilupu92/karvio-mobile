@@ -1,17 +1,17 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { useColorScheme } from "nativewind";
-import * as SecureStore from "expo-secure-store";
+import { createContext, useContext, useState, useEffect } from 'react';
+import { useColorScheme } from 'nativewind';
+import * as SecureStore from 'expo-secure-store';
 
 type ThemeContextType = {
   isDark: boolean;
   toggleTheme: () => void;
-  colorScheme: "light" | "dark";
+  colorScheme: 'light' | 'dark';
 };
 
 const ThemeContext = createContext<ThemeContextType>({
   isDark: false,
   toggleTheme: () => {},
-  colorScheme: "light",
+  colorScheme: 'light',
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
@@ -19,10 +19,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    SecureStore.getItemAsync("theme").then((saved) => {
-      if (saved === "dark") {
+    SecureStore.getItemAsync('theme').then((saved) => {
+      if (saved === 'dark') {
         setIsDark(true);
-        setColorScheme("dark");
+        setColorScheme('dark');
       }
     });
   }, []);
@@ -30,12 +30,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const toggleTheme = async () => {
     const next = !isDark;
     setIsDark(next);
-    setColorScheme(next ? "dark" : "light");
-    await SecureStore.setItemAsync("theme", next ? "dark" : "light");
+    setColorScheme(next ? 'dark' : 'light');
+    await SecureStore.setItemAsync('theme', next ? 'dark' : 'light');
   };
 
   return (
-    <ThemeContext.Provider value={{ isDark, toggleTheme, colorScheme: isDark ? "dark" : "light" }}>
+    <ThemeContext.Provider value={{ isDark, toggleTheme, colorScheme: isDark ? 'dark' : 'light' }}>
       {children}
     </ThemeContext.Provider>
   );

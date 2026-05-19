@@ -13,7 +13,7 @@ interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  
+
   // Actions
   setTokens: (accessToken: string, refreshToken: string) => void;
   setUser: (user: User | null) => void;
@@ -41,7 +41,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: async (accessToken, refreshToken, user) => {
     // Save tokens to secure storage
     await secureStorage.saveTokens(accessToken, refreshToken);
-    
+
     // Update state
     set({
       accessToken,
@@ -55,7 +55,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: async () => {
     // Clear tokens from secure storage
     await secureStorage.clearTokens();
-    
+
     // Reset state
     set({
       user: null,
@@ -68,7 +68,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   initialize: async () => {
     set({ isLoading: true });
-    
+
     try {
       // Load tokens from secure storage
       const accessToken = await secureStorage.getAccessToken();
@@ -80,7 +80,7 @@ export const useAuthStore = create<AuthState>((set) => ({
           refreshToken,
           isLoading: false,
         });
-        
+
         // Optionally fetch user data here
         // You might want to validate the token or fetch user profile
       } else {

@@ -1,7 +1,6 @@
 import { Button, ButtonText } from '@/components/ui/button';
-import { authApi } from "../../api/services/authService";
-import { useAuthStore } from "../../store/authStore";
-
+import { authApi } from '../../api/services/authService';
+import { useAuthStore } from '../../store/authStore';
 
 export const LogoutButton = () => {
   const logout = useAuthStore((state) => state.logout);
@@ -18,13 +17,8 @@ export const LogoutButton = () => {
   };
 
   return (
-    <Button onPress={handleLogout}
-            className="bg-red-500 rounded-xl active:opacity-80"
-            size="lg"
-    >
-      <ButtonText className="font-medium">
-        Log Out
-      </ButtonText>
+    <Button onPress={handleLogout} className="bg-red-500 rounded-xl active:opacity-80" size="lg">
+      <ButtonText className="font-medium">Log Out</ButtonText>
     </Button>
   );
 };

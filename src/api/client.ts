@@ -1,4 +1,5 @@
-import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { secureStorage } from '../utils/secureStorage';
 import { useAuthStore } from '../store/authStore';
 import Constants from 'expo-constants';
@@ -49,18 +50,18 @@ const processQueue = (error: AxiosError | null, token: string | null = null) => 
 apiClient.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const publicRoutes = ['/auth/login', '/auth/refresh', '/auth/register'];
-    const isPublicRoute = publicRoutes.some(route => config.url?.endsWith(route));
+    const isPublicRoute = publicRoutes.some((route) => config.url?.endsWith(route));
     const { accessToken } = useAuthStore.getState();
-    
+
     if (accessToken && config.headers && !isPublicRoute) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
-    
+
     return config;
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Response interceptor - Handle token refresh
@@ -104,7 +105,7 @@ apiClient.interceptors.response.use(
 
       try {
         // Call refresh token endpoint
-        const BASE_URL =  getBaseUrl();
+        const BASE_URL = getBaseUrl();
         const response = await axios.post(`${BASE_URL}/auth/refresh`, {
           refreshToken,
         });
@@ -122,7 +123,7 @@ apiClient.interceptors.response.use(
         if (originalRequest.headers) {
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         }
-        
+
         return apiClient(originalRequest);
       } catch (refreshError) {
         // Refresh token failed, logout user
@@ -135,7 +136,7 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default apiClient;

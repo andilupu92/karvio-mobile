@@ -1,7 +1,6 @@
 import * as Icons from 'lucide-react-native';
 import { cssInterop } from 'nativewind';
 
-
 Object.keys(Icons).forEach((iconName) => {
   const Icon = (Icons as any)[iconName];
 

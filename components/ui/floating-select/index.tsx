@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import type { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import {
   Animated,
   View,
@@ -6,8 +7,6 @@ import {
   ScrollView,
   Modal,
   TouchableWithoutFeedback,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
   StatusBar,
   Platform,
 } from 'react-native';
@@ -73,11 +72,11 @@ export default function FloatingSelect({
   const openDropdown = () => {
     if (isDisabled) return;
     triggerRef.current?.measureInWindow((x, y, width, height) => {
-      const statusBarOffset = Platform.OS === 'android' ? (StatusBar.currentHeight || 0) : 0;
+      const statusBarOffset = Platform.OS === 'android' ? StatusBar.currentHeight || 0 : 0;
       setDropdownLayout({
         x,
         y: y + height + (Platform.OS === 'android' ? statusBarOffset : 0),
-        width
+        width,
       });
       setIsOpen(true);
       Animated.timing(animatedValue, {
@@ -140,8 +139,7 @@ export default function FloatingSelect({
     return colorScheme === 'dark' ? '#a7a8a8' : '#9ca3af';
   };
 
-  const getLabelBackgroundColor = () =>
-    colorScheme === 'dark' ? '#0f172a' : '#f9fafb';
+  const getLabelBackgroundColor = () => (colorScheme === 'dark' ? '#0f172a' : '#f9fafb');
 
   const getBorderColor = () => {
     if (isInvalid) return 'border-red-400';
@@ -149,11 +147,9 @@ export default function FloatingSelect({
     return 'border-gray-100 dark:border-slate-800';
   };
 
-  const getDropdownBg = () =>
-    colorScheme === 'dark' ? '#1e293b' : '#ffffff';
+  const getDropdownBg = () => (colorScheme === 'dark' ? '#1e293b' : '#ffffff');
 
-  const getDropdownBorder = () =>
-    colorScheme === 'dark' ? '#334155' : '#e2e8f0';
+  const getDropdownBorder = () => (colorScheme === 'dark' ? '#334155' : '#e2e8f0');
 
   const scrollbarTrackColor = colorScheme === 'dark' ? '#1e3a5f' : '#e0eaff';
   const scrollbarThumbColor = '#3b82f6';
@@ -169,7 +165,7 @@ export default function FloatingSelect({
           left: leftIcon ? 48 : 16,
           top: labelTop,
           fontSize: labelFontSize,
-          fontFamily: "Inter_600SemiBold",
+          fontFamily: 'Inter_600SemiBold',
           color: getLabelColor(),
           backgroundColor: getLabelBackgroundColor(),
           paddingHorizontal: 4,
@@ -193,11 +189,15 @@ export default function FloatingSelect({
             rounded-2xl px-4 py-4
             ${isDisabled ? 'opacity-50' : ''}
           `}
-          style={isOpen ? {
-            borderBottomWidth: 0,
-            borderBottomLeftRadius: 0,
-            borderBottomRightRadius: 0,
-          } : {}}
+          style={
+            isOpen
+              ? {
+                  borderBottomWidth: 0,
+                  borderBottomLeftRadius: 0,
+                  borderBottomRightRadius: 0,
+                }
+              : {}
+          }
         >
           <HStack className="items-center" space="md">
             {leftIcon && <View style={{ marginRight: 8 }}>{leftIcon}</View>}
@@ -280,7 +280,9 @@ export default function FloatingSelect({
                             marginVertical: 2,
                             borderRadius: 12,
                             backgroundColor: isSelected
-                              ? colorScheme === 'dark' ? '#1e3a5f' : '#eff6ff'
+                              ? colorScheme === 'dark'
+                                ? '#1e3a5f'
+                                : '#eff6ff'
                               : 'transparent',
                             flexDirection: 'row',
                             alignItems: 'center',
@@ -288,13 +290,8 @@ export default function FloatingSelect({
                             paddingVertical: 12,
                           }}
                         >
-
                           {/* Option icon */}
-                          {item.icon && (
-                            <View style={{ marginRight: 10 }}>
-                              {item.icon}
-                            </View>
-                          )}
+                          {item.icon && <View style={{ marginRight: 10 }}>{item.icon}</View>}
 
                           {/* Label */}
                           <Text
@@ -304,13 +301,14 @@ export default function FloatingSelect({
                               fontFamily: isSelected ? 'Inter_700Bold' : 'Inter_400Regular',
                               color: isSelected
                                 ? '#0a4f67'
-                                : colorScheme === 'dark' ? '#e2e8f0' : '#374151',
+                                : colorScheme === 'dark'
+                                  ? '#e2e8f0'
+                                  : '#374151',
                               letterSpacing: isSelected ? 0.2 : 0,
                             }}
                           >
                             {item.label}
                           </Text>
-
                         </TouchableOpacity>
 
                         {/* Divider — hidden after the last item */}

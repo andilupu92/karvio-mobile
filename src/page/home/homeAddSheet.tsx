@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   TouchableOpacity,
@@ -7,15 +7,15 @@ import {
   StyleSheet,
   Dimensions,
   Platform,
-} from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Text } from "@/components/ui/text";
-import { CarFront, FileText, Receipt, X } from "lucide-react-native";
-import { BlurView } from "expo-blur";
-import { useTheme } from "@/src/context/themeContext";
-import { Icons } from "@/src/utils/icons";
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Text } from '@/components/ui/text';
+import { CarFront, FileText, Receipt, X } from 'lucide-react-native';
+import { BlurView } from 'expo-blur';
+import { useTheme } from '@/src/context/themeContext';
+import { Icons } from '@/src/utils/icons';
 
-const { height } = Dimensions.get("window");
+const { height } = Dimensions.get('window');
 
 interface HomeAddBottomSheetProps {
   visible: boolean;
@@ -76,22 +76,34 @@ export default function HomeAddBottomSheet({
 
   const ACTIONS = [
     {
-      label: "Adaugă o mașină",
+      label: 'Adaugă o mașină',
       icon: <CarFront size={20} color="#45a5c8" strokeWidth={2.5} />,
-      iconBg: isDark ? "#2C2C2C" : "#e9f5f9",
-      onPress: () => { setBlurEnabled(false); onClose(); onAddCar(); },
+      iconBg: isDark ? '#2C2C2C' : '#e9f5f9',
+      onPress: () => {
+        setBlurEnabled(false);
+        onClose();
+        onAddCar();
+      },
     },
     {
-      label: "Adaugă un document",
+      label: 'Adaugă un document',
       icon: <FileText size={20} color="#e6a23c" strokeWidth={2.5} />,
-      iconBg: isDark ? "#2C2C2C" : "#fef5e7",
-      onPress: () => { setBlurEnabled(false); onClose(); onAddDocument(); },
+      iconBg: isDark ? '#2C2C2C' : '#fef5e7',
+      onPress: () => {
+        setBlurEnabled(false);
+        onClose();
+        onAddDocument();
+      },
     },
     {
-      label: "Adaugă o cheltuială",
+      label: 'Adaugă o cheltuială',
       icon: <Receipt size={20} color="#f56c6c" strokeWidth={2.5} />,
-      iconBg: isDark ? "#2C2C2C" : "#fef0f0",
-      onPress: () => { setBlurEnabled(false); onClose(); onAddExpense(); },
+      iconBg: isDark ? '#2C2C2C' : '#fef0f0',
+      onPress: () => {
+        setBlurEnabled(false);
+        onClose();
+        onAddExpense();
+      },
     },
   ];
 
@@ -100,12 +112,16 @@ export default function HomeAddBottomSheet({
   return (
     <View className="absolute inset-0 z-[999]">
       <TouchableWithoutFeedback onPress={onClose}>
-        <Animated.View style={{ ...StyleSheet.absoluteFillObject,
-                                backgroundColor: isDark ? "#71777bbf" : "#9fbccebf",
-                                opacity: backdropAnim }}>
+        <Animated.View
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            backgroundColor: isDark ? '#71777bbf' : '#9fbccebf',
+            opacity: backdropAnim,
+          }}
+        >
           {blurEnabled && (
             <BlurView
-              intensity={Platform.OS === "ios" ? 20 : 7}
+              intensity={Platform.OS === 'ios' ? 20 : 7}
               tint="light"
               style={StyleSheet.absoluteFill}
               experimentalBlurMethod="dimezisBlurView"
@@ -115,45 +131,48 @@ export default function HomeAddBottomSheet({
       </TouchableWithoutFeedback>
 
       <Animated.View
-        style={{ flex: 1,
-                 justifyContent: "flex-end",
-                 paddingHorizontal: 20,
-                 paddingBottom: insets.bottom + 10,
-                 transform: [{ translateY: slideAnim }],
+        style={{
+          flex: 1,
+          justifyContent: 'flex-end',
+          paddingHorizontal: 20,
+          paddingBottom: insets.bottom + 10,
+          transform: [{ translateY: slideAnim }],
         }}
       >
         {/* Card */}
-        <View className={`${ isDark ? 'bg-background-primary-900' : 'bg-background-primary-100'} rounded-2xl p-4 mb-4`}
+        <View
+          className={`${isDark ? 'bg-background-primary-900' : 'bg-background-primary-100'} rounded-2xl p-4 mb-4`}
           style={{
-            shadowColor: "#000",
+            shadowColor: '#000',
             shadowOffset: { width: 0, height: 10 },
             shadowOpacity: 0.15,
             shadowRadius: 20,
             elevation: 12,
-          }}>
+          }}
+        >
           {ACTIONS.map((action, index) => {
             const isLast = index === ACTIONS.length - 1;
 
             return (
-              <TouchableOpacity
-                key={index}
-                onPress={action.onPress}
-                activeOpacity={0.8}
-              >
+              <TouchableOpacity key={index} onPress={action.onPress} activeOpacity={0.8}>
                 <View className="flex-row items-center px-3 py-5">
-                  <View style={{ backgroundColor: action.iconBg }}
-                    className="w-11 h-11 rounded-xl items-center justify-center mr-4">
+                  <View
+                    style={{ backgroundColor: action.iconBg }}
+                    className="w-11 h-11 rounded-xl items-center justify-center mr-4"
+                  >
                     {action.icon}
                   </View>
-                  
-                  <Text className={`flex-1 text-base font-semibold ${ isDark ? 'text-typography-900' : 'text-typography-100'}`}>
+
+                  <Text
+                    className={`flex-1 text-base font-semibold ${isDark ? 'text-typography-900' : 'text-typography-100'}`}
+                  >
                     {action.label}
                   </Text>
-                  
-                  <Icons.ChevronRight 
-                    className={`${ isDark ? 'text-typography-800' : 'text-typography-200'}`}
-                    size={16} 
-                    strokeWidth={2} 
+
+                  <Icons.ChevronRight
+                    className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                    size={16}
+                    strokeWidth={2}
                   />
                 </View>
                 {!isLast && (
@@ -166,10 +185,8 @@ export default function HomeAddBottomSheet({
                   />
                 )}
               </TouchableOpacity>
-
-              
-            )}
-          )}
+            );
+          })}
         </View>
 
         {/* Close button */}
@@ -179,7 +196,7 @@ export default function HomeAddBottomSheet({
             onPress={onClose}
             activeOpacity={0.9}
             style={{
-              shadowColor: "#f86666",
+              shadowColor: '#f86666',
               shadowOffset: { width: 0, height: 6 },
               shadowOpacity: 0.4,
               shadowRadius: 10,
