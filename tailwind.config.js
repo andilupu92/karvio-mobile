@@ -26,7 +26,7 @@ module.exports = {
           900: '#FFFFFF', // Dark mode primary icon color
         },
         error: {
-          0: '#fee2e2', 
+          0: '#fee2e2',
           50: '#E53E3E',
         },
         success: {
@@ -43,13 +43,13 @@ module.exports = {
         typography: {
           100: '#1A1A1A', // Light mode primary typography color
           200: '#888888', // Light mode secondary typography color
-          800: '#AAAAAA', // Dark mode secondary typography color 
+          800: '#AAAAAA', // Dark mode secondary typography color
           900: '#FFFFFF', // Dark mode primary typography color
         },
         outline: {
           50: '#ffffff',
-          100: '#e0e0e0',  // Light mode outline color
-          900: '#2C2C2C',  // Dark mode outline color
+          100: '#e0e0e0', // Light mode outline color
+          900: '#2C2C2C', // Dark mode outline color
         },
         background: {
           primary: {
@@ -67,11 +67,11 @@ module.exports = {
             900: '#2C2C2C', // Dark mode icon background color
           },
           chart: {
-              100: '#572564', // Light mode chart background color selected
-              200: '#d9b8e0', // Light mode chart background color unselected
-              300: '#D0DCE8', // Light mode chart background color selected background
-              400: '#E2EAF0', // Light mode chart background color unselected background
-          }
+            100: '#572564', // Light mode chart background color selected
+            200: '#d9b8e0', // Light mode chart background color unselected
+            300: '#D0DCE8', // Light mode chart background color selected background
+            400: '#E2EAF0', // Light mode chart background color unselected background
+          },
         },
       },
       fontFamily: {

@@ -43,5 +43,3 @@ Then use one of:
   - **React Native** `0.81.x`
   - **React** `19.x`
   - **TypeScript** `~5.9.x`
-
-
