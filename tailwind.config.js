@@ -19,159 +19,59 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: {
-          0: '#ffffff',
-          50: '',
-          100: '',
-          200: 'rgb(var(--color-primary-200)/<alpha-value>)',
-          300: 'rgb(var(--color-primary-300)/<alpha-value>)',
-          400: 'rgb(var(--color-primary-400)/<alpha-value>)',
-          500: 'rgb(var(--color-primary-500)/<alpha-value>)',
-          600: 'rgb(var(--color-primary-600)/<alpha-value>)',
-          700: 'rgb(var(--color-primary-700)/<alpha-value>)',
-          800: 'rgb(var(--color-primary-800)/<alpha-value>)',
-          900: 'rgb(var(--color-primary-900)/<alpha-value>)',
-          950: 'rgb(var(--color-primary-950)/<alpha-value>)',
-        },
-        secondary: {
-          0: 'rgb(var(--color-secondary-0)/<alpha-value>)',
-          50: 'rgb(var(--color-secondary-50)/<alpha-value>)',
-          100: 'rgb(var(--color-secondary-100)/<alpha-value>)',
-          200: '#CBD5E0',
-          300: 'rgb(var(--color-secondary-300)/<alpha-value>)',
-          400: 'rgb(var(--color-secondary-400)/<alpha-value>)',
-          500: '#0a4f67',
-          600: 'rgb(var(--color-secondary-600)/<alpha-value>)',
-          700: 'rgb(var(--color-secondary-700)/<alpha-value>)',
-          800: 'rgb(var(--color-secondary-800)/<alpha-value>)',
-          900: 'rgb(var(--color-secondary-900)/<alpha-value>)',
-          950: 'rgb(var(--color-secondary-950)/<alpha-value>)',
-        },
-        tertiary: {
-          50: 'rgb(var(--color-tertiary-50)/<alpha-value>)',
-          100: 'rgb(var(--color-tertiary-100)/<alpha-value>)',
-          200: 'rgb(var(--color-tertiary-200)/<alpha-value>)',
-          300: 'rgb(var(--color-tertiary-300)/<alpha-value>)',
-          400: 'rgb(var(--color-tertiary-400)/<alpha-value>)',
-          500: 'rgb(var(--color-tertiary-500)/<alpha-value>)',
-          600: 'rgb(var(--color-tertiary-600)/<alpha-value>)',
-          700: 'rgb(var(--color-tertiary-700)/<alpha-value>)',
-          800: 'rgb(var(--color-tertiary-800)/<alpha-value>)',
-          900: 'rgb(var(--color-tertiary-900)/<alpha-value>)',
-          950: 'rgb(var(--color-tertiary-950)/<alpha-value>)',
+        icons: {
+          100: '#1A1A1A', // Light mode primary icon color
+          200: '#888888', // Light mode secondary icon color
+          800: '#AAAAAA', // Dark mode secondary icon color
+          900: '#FFFFFF', // Dark mode primary icon color
         },
         error: {
-          0: '#fee2e2',
-          50: 'rgb(var(--color-error-50)/<alpha-value>)',
-          100: '#E53E3E',
-          200: 'rgb(var(--color-error-200)/<alpha-value>)',
-          300: 'rgb(var(--color-error-300)/<alpha-value>)',
-          400: 'rgb(var(--color-error-400)/<alpha-value>)',
-          500: 'rgb(var(--color-error-500)/<alpha-value>)',
-          600: 'rgb(var(--color-error-600)/<alpha-value>)',
-          700: 'rgb(var(--color-error-700)/<alpha-value>)',
-          800: 'rgb(var(--color-error-800)/<alpha-value>)',
-          900: 'rgb(var(--color-error-900)/<alpha-value>)',
-          950: 'rgb(var(--color-error-950)/<alpha-value>)',
+          0: '#fee2e2', 
+          50: '#E53E3E',
         },
         success: {
           0: '#dcfce7',
           50: '#3cba70',
-          100: 'rgb(var(--color-success-100)/<alpha-value>)',
-          200: 'rgb(var(--color-success-200)/<alpha-value>)',
-          300: 'rgb(var(--color-success-300)/<alpha-value>)',
-          400: 'rgb(var(--color-success-400)/<alpha-value>)',
-          500: 'rgb(var(--color-success-500)/<alpha-value>)',
-          600: 'rgb(var(--color-success-600)/<alpha-value>)',
-          700: 'rgb(var(--color-success-700)/<alpha-value>)',
-          800: 'rgb(var(--color-success-800)/<alpha-value>)',
-          900: 'rgb(var(--color-success-900)/<alpha-value>)',
-          950: 'rgb(var(--color-success-950)/<alpha-value>)',
         },
         warning: {
           0: '#fef3c7',
           50: '#F59E0B',
-          100: 'rgb(var(--color-warning-100)/<alpha-value>)',
-          200: 'rgb(var(--color-warning-200)/<alpha-value>)',
-          300: 'rgb(var(--color-warning-300)/<alpha-value>)',
-          400: 'rgb(var(--color-warning-400)/<alpha-value>)',
-          500: 'rgb(var(--color-warning-500)/<alpha-value>)',
-          600: 'rgb(var(--color-warning-600)/<alpha-value>)',
-          700: 'rgb(var(--color-warning-700)/<alpha-value>)',
-          800: 'rgb(var(--color-warning-800)/<alpha-value>)',
-          900: 'rgb(var(--color-warning-900)/<alpha-value>)',
-          950: 'rgb(var(--color-warning-950)/<alpha-value>)',
         },
         info: {
-          0: 'rgb(var(--color-info-0)/<alpha-value>)',
           50: 'rgb(var(--color-info-50)/<alpha-value>)',
-          100: 'rgb(var(--color-info-100)/<alpha-value>)',
-          200: 'rgb(var(--color-info-200)/<alpha-value>)',
-          300: 'rgb(var(--color-info-300)/<alpha-value>)',
-          400: 'rgb(var(--color-info-400)/<alpha-value>)',
-          500: 'rgb(var(--color-info-500)/<alpha-value>)',
-          600: 'rgb(var(--color-info-600)/<alpha-value>)',
-          700: 'rgb(var(--color-info-700)/<alpha-value>)',
-          800: 'rgb(var(--color-info-800)/<alpha-value>)',
-          900: 'rgb(var(--color-info-900)/<alpha-value>)',
-          950: 'rgb(var(--color-info-950)/<alpha-value>)',
         },
         typography: {
-          0: 'rgb(var(--color-typography-0)/<alpha-value>)',
-          50: '#718096',
-          100: '#1A202C',
-          200: '#37a3b8',
-          300: '#9dabb1',
-          400: 'rgb(var(--color-typography-400)/<alpha-value>)',
-          500: 'rgb(var(--color-typography-500)/<alpha-value>)',
-          600: 'rgb(var(--color-typography-600)/<alpha-value>)',
-          700: 'rgb(var(--color-typography-700)/<alpha-value>)',
-          800: 'rgb(var(--color-typography-800)/<alpha-value>)',
-          900: 'rgb(var(--color-typography-900)/<alpha-value>)',
-          950: 'rgb(var(--color-typography-950)/<alpha-value>)',
-          white: '#FFFFFF',
-          gray: '#D4D4D4',
-          black: '#181718',
+          100: '#1A1A1A', // Light mode primary typography color
+          200: '#888888', // Light mode secondary typography color
+          800: '#AAAAAA', // Dark mode secondary typography color 
+          900: '#FFFFFF', // Dark mode primary typography color
         },
         outline: {
-          0: 'rgb(var(--color-outline-0)/<alpha-value>)',
-          50: 'rgb(var(--color-outline-50)/<alpha-value>)',
-          100: 'rgb(var(--color-outline-100)/<alpha-value>)',
-          200: 'rgb(var(--color-outline-200)/<alpha-value>)',
-          300: 'rgb(var(--color-outline-300)/<alpha-value>)',
-          400: 'rgb(var(--color-outline-400)/<alpha-value>)',
-          500: 'rgb(var(--color-outline-500)/<alpha-value>)',
-          600: 'rgb(var(--color-outline-600)/<alpha-value>)',
-          700: 'rgb(var(--color-outline-700)/<alpha-value>)',
-          800: 'rgb(var(--color-outline-800)/<alpha-value>)',
-          900: 'rgb(var(--color-outline-900)/<alpha-value>)',
-          950: 'rgb(var(--color-outline-950)/<alpha-value>)',
+          50: '#ffffff',
+          100: '#e0e0e0',  // Light mode outline color
+          900: '#2C2C2C',  // Dark mode outline color
         },
         background: {
-          0: '',
-          50: '#e5f1fc',
-          100: '#ecf7ff',
-          200: '#d9edfc',
-          300: '#f4f7f9', //modal background
-          400: '#ecf7ff',
-          500: '#f1faff', //back icons
-          600: 'rgb(var(--color-background-600)/<alpha-value>)',
-          700: 'rgb(var(--color-background-700)/<alpha-value>)',
-          800: 'rgb(var(--color-background-800)/<alpha-value>)',
-          900: '#181719',
-          950: 'rgb(var(--color-background-950)/<alpha-value>)',
-          error: 'rgb(var(--color-background-error)/<alpha-value>)',
-          warning: 'rgb(var(--color-background-warning)/<alpha-value>)',
-          muted: 'rgb(var(--color-background-muted)/<alpha-value>)',
-          success: 'rgb(var(--color-background-success)/<alpha-value>)',
-          info: 'rgb(var(--color-background-info)/<alpha-value>)',
-          light: '#FBFBFB',
-          dark: '#181719',
-        },
-        indicator: {
-          primary: 'rgb(var(--color-indicator-primary)/<alpha-value>)',
-          info: 'rgb(var(--color-indicator-info)/<alpha-value>)',
-          error: 'rgb(var(--color-indicator-error)/<alpha-value>)',
+          primary: {
+            100: '#F2F2F7', // Light mode background color
+            900: '#0D0D0D', // Dark mode background color
+          },
+          card: {
+            100: '#FFFFFF', // Light mode card background color
+            200: '#f8f8f8', // Light mode inactive card background color
+            800: '#131313', // Dark mode inactive card background color
+            900: '#1E1E1E', // Dark mode card background color
+          },
+          icon: {
+            100: '#F0F0F0', // Light mode icon background color
+            900: '#2C2C2C', // Dark mode icon background color
+          },
+          chart: {
+              100: '#572564', // Light mode chart background color selected
+              200: '#d9b8e0', // Light mode chart background color unselected
+              300: '#D0DCE8', // Light mode chart background color selected background
+              400: '#E2EAF0', // Light mode chart background color unselected background
+          }
         },
       },
       fontFamily: {

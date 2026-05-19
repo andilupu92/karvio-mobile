@@ -1,7 +1,9 @@
-import { Image, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
-import { CarFront, ShieldCheck } from "lucide-react-native";
+import { Icons } from "@/src/utils/icons";
+import formatHealthScore from "@/src/utils/colorHeathScore";
+import { useTheme } from "@/src/context/themeContext";
 
 interface HomeHeaderProps {
   carName: string;
@@ -16,70 +18,77 @@ export default function HomeHeader({
   carName,
   carKm,
   healthScore,
-  profileImage,
   onProfilePress,
   lengthCar,
 }: HomeHeaderProps) {
-
+  const { isDark } = useTheme();
+  
   return (
     <Box className="flex-row items-center px-4 py-3 gap-3">
       {/* Left side */}
-      <View className="flex-1">
         {lengthCar != 0 && (
-          <View className="flex-row items-center bg-primary-0 rounded-2xl py-[11px] px-5">
+          <View className={`flex-row flex-1 items-center ${ isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100' } rounded-xl py-[11px] px-5 border`}>
             {/* Left — Car info */}
             <Box className="flex-row items-center gap-3 flex-1">
-              <CarFront size={28} color="#0a4f67" strokeWidth={1.6} />
+              <Icons.CarFront 
+                  className={`${ isDark ? 'text-icons-900' : 'text-icons-100'}`}
+                  size={26} 
+                  strokeWidth={1.6} 
+                />
               <Box>
-                <Text className="text-[12px] font-inter-medium text-typography-50">
+                <Text className={`text-[12px] font-inter-medium ${ isDark ? 'text-typography-800' : 'text-typography-200'} `}>
                   {carName}
                 </Text>
-                <Text className="text-[14px] font-inter-bold text-typography-100">
+                <Text className={`text-[14px] font-inter-bold ${ isDark ? 'text-typography-900' : 'text-typography-100'}`}>
                   {carKm.toLocaleString("ro-RO")} km
                 </Text>
               </Box>
             </Box>
 
             {/* Divider */}
-            <View className="mx-[38px] h-[30px] w-[1.5px] bg-secondary-200" />
+            <View className={`mx-[38px] h-[30px] w-[1.5px] ${ isDark ? 'bg-outline-900' : 'bg-outline-100' }`} />
 
             {/* Right */}
             <Box className="flex-row items-center gap-3">
-              <ShieldCheck size={24} color="#0a4f67" strokeWidth={1.6} />
+                <Icons.ShieldCheck 
+                  className={`${ isDark ? 'text-icons-900' : 'text-icons-100'}`}
+                  size={24} 
+                  strokeWidth={1.6} 
+                />
               <Box>
-                <Text className="text-[12px] font-inter-medium text-typography-50">
+                <Text className={`text-[12px] font-inter-medium ${ isDark ? 'text-typography-800' : 'text-typography-200'} `}>
                   Scor
                 </Text>
-                <Text className="text-[14px] font-inter-bold text-success-50">
-                  {healthScore ? `${healthScore}%` : "—"}
+                <Text className={`text-[14px] font-inter-bold ${formatHealthScore(healthScore)}`}>
+                  {healthScore}
+                  {healthScore ? (
+                    <Text className={`font-inter-medium text-[10px] ${ isDark ? 'text-typography-900' : 'text-typography-100' }`}>
+                      {" "}%
+                    </Text>
+                  ) : (
+                    <Text className={`font-inter-medium text-[10px] ${ isDark ? 'text-typography-900' : 'text-typography-100' }`}>
+                      "-"
+                    </Text>
+                  )}
                 </Text>
               </Box>
             </Box>
           </View>
         )}
-      </View>
 
       {/* Avatar */}
       <TouchableOpacity onPress={onProfilePress} activeOpacity={0.8}>
         <View className="relative">
-          <View className="w-12 h-12 rounded-full bg-white items-center justify-center">
-            {profileImage ? (
-              <Image
-                source={{ uri: profileImage }}
-                className="w-10 h-10 rounded-full"
-                resizeMode="cover"
-              />
-            ) : (
-              <View className="w-11 h-11 rounded-full bg-secondary-500 items-center justify-center">
-                <Text className="text-white text-[17px] font-inter-semibold">
-                  A
-                </Text>
-              </View>
-            )}
+          <View className="w-11 h-11 rounded-full items-center justify-center">
+            <Icons.CircleUserRound 
+              className={`${ isDark ? 'text-icons-900' : 'text-icons-100'}`}
+              size={32} 
+              strokeWidth={1.6} 
+            />
           </View>
 
           {/* Red dot */}
-          <View className="absolute top-[-2px] right-[-2px] w-[15px] h-[15px] rounded-full bg-error-100 border-2 border-white" />
+          <View className="absolute top-[-1px] right-[-1px] w-[15px] h-[15px] rounded-full bg-error-50 border-2 border-outline-50" />
         </View>
       </TouchableOpacity>
 

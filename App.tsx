@@ -53,13 +53,22 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <ThemeProvider>
-          <GluestackUIProvider mode={colorScheme}>
-            <NavigationContainer>
-              <AppNavigator />
-            </NavigationContainer>
-          </GluestackUIProvider>
+          <AppContent />
         </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
+  );
+}
+
+
+function AppContent() {
+  const { colorScheme } = useTheme();
+
+  return (
+    <GluestackUIProvider mode={colorScheme === 'dark' ? 'dark' : 'light'}>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </GluestackUIProvider>
   );
 }

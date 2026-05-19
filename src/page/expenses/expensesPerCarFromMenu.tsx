@@ -1,6 +1,8 @@
 import { View, TouchableOpacity } from "react-native";
 import { Text } from "@/components/ui/text";
 import { Car, ChevronRight } from "lucide-react-native";
+import { useTheme } from "@/src/context/themeContext";
+import * as Icons from "lucide-react-native";
 
 type CarSummary = {
   car: {
@@ -10,14 +12,14 @@ type CarSummary = {
     kilometers: number;
     year: number;
     consumption: number;
-    healthScore: number;
+    healthScore: number | null;
   };
   totalAmount: number;
 };
 
 type ExpensesPerCarProps = {
   carResponsesList: CarSummary[];
-  onCarPress?: (carId: number, name: string, consumption: number, healthScore: number, amount: number) => void;
+  onCarPress?: (carId: number, name: string, consumption: number, healthScore: number | null, amount: number) => void;
   totalAmountOfMonth: number;
 };
 
@@ -25,18 +27,16 @@ export default function ExpensesPerCarFromMenu({ carResponsesList, onCarPress, t
   if (!carResponsesList || carResponsesList.length === 0) return null;
 
   const grandTotal = carResponsesList.reduce((sum, c) => sum + c.totalAmount, 0);
+  const { isDark } = useTheme();
 
   return (
     <View className="mt-6">
-      <Text className="font-inter-bold text-typography-900 text-lg mb-3">
+      <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-bold text-typography-900 text-lg mb-3`}>
         Repartizare per mașină
       </Text>
 
       <View
-        className="rounded-3xl overflow-hidden"
-        style={{
-          backgroundColor: "#FFFFFF",
-        }}
+        className={`rounded-xl overflow-hidden border ${ isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100' }`}
       >
         {carResponsesList.map((item, index) => {
           const percent = grandTotal > 0 ? Math.round((item.totalAmount / grandTotal) * 100) : 0;
@@ -51,36 +51,44 @@ export default function ExpensesPerCarFromMenu({ carResponsesList, onCarPress, t
             >
               {/* Separator */}
               {index > 0 && (
-                <View style={{ height: 1, backgroundColor: "#F1F5F9", marginHorizontal: 16 }} />
+                <View className={`${isDark ? 'bg-outline-900' : 'bg-outline-100'}`}
+                                                                style={{
+                                                                height: 1,
+                                                                marginHorizontal: 20,
+                                                                }}
+                                                            />
               )}
 
               <View className="flex-row items-center px-4 py-4">
 
                 {/* Icon mașină */}
                 <View
-                  className="items-center justify-center rounded-2xl mr-3"
-                  style={{ width: 44, height: 44, backgroundColor: "#EEF6F6" }}
+                  className={`${ isDark ? 'bg-background-icon-900' : 'bg-background-icon-100' } items-center justify-center rounded-xl mr-3 w-[42px] h-[42px] `}
                 >
-                  <Car size={22} color="#0D7377" strokeWidth={1.6} />
+                  <Icons.Car 
+                    className={`${ isDark ? 'text-icons-900' : 'text-icons-100'}`}
+                    size={22} 
+                    strokeWidth={1.6} 
+                  />
                 </View>
 
                 {/* Nume + bara */}
                 <View className="flex-1 mr-3">
-                  <Text className="font-inter-semibold text-typography-900 text-sm mb-1">
+                  <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-sm mb-1`}>
                     {item.car.name}
                   </Text>
 
                   {/* Progress bar */}
                   <View
-                    className="rounded-full overflow-hidden"
-                    style={{ height: 5, backgroundColor: "#E8F0F7", width: "100%" }}
+                    className="rounded-full overflow-hidden bg-gray-200"
+                    style={{ height: 4, width: "100%" }}
                   >
                     <View
                       style={{
                         height: 5,
                         width: `${barWidth}%`,
                         borderRadius: 99,
-                        backgroundColor: "#1B3A5C",
+                        backgroundColor: isDark ? "#516984" : "#1B3A5C",
                       }}
                     />
                   </View>
@@ -88,19 +96,23 @@ export default function ExpensesPerCarFromMenu({ carResponsesList, onCarPress, t
 
                 {/* Suma + procent */}
                 <View className="items-end mr-2">
-                  <Text className="font-inter-bold text-typography-900 text-sm">
-                    {item.totalAmount}{" "}
-                    <Text className="font-inter-regular text-typography-500" style={{ fontSize: 11 }}>
+                  <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-bold text-sm`}>
+                    {item.totalAmount.toLocaleString("ro-RO")}{" "}
+                    <Text className={`${ isDark ? 'text-typography-800' : 'text-typography-200'} font-inter-regular`} style={{ fontSize: 11 }}>
                       RON
                     </Text>
                   </Text>
-                  <Text className="text-typography-400 font-inter-regular" style={{ fontSize: 11 }}>
+                  <Text className={`${ isDark ? 'text-typography-800' : 'text-typography-200'} font-inter-regular`} style={{ fontSize: 11 }}>
                     {percent}% din total
                   </Text>
                 </View>
 
                 {/* Chevron */}
-                <ChevronRight size={16} color="#B8CCE0" strokeWidth={2} />
+                <Icons.ChevronRight 
+                                            className={`${ isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                                            size={16} 
+                                            strokeWidth={2} 
+                                          />
               </View>
             </TouchableOpacity>
           );

@@ -2,7 +2,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, StatusBar, TouchableOpacity, Alert, ActivityIndicator, Modal } from "react-native";
 import { Text } from "@/components/ui/text";
 import { useEffect, useState } from "react";
-import { ChevronLeft, Wallet, Droplets, ShieldCheck, TriangleAlert, Clock, CircleCheck, FileText, Plus, Trash2 } from "lucide-react-native";
+import { Wallet, Droplets, ShieldCheck, TriangleAlert, Clock, CircleCheck, FileText, Trash2 } from "lucide-react-native";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/src/navigation/AppNavigator";
@@ -17,6 +17,8 @@ import { carApi } from "@/src/api/services/carService";
 import { useAuthStore } from "@/src/store/authStore";
 import StatusCard from "./statusCard";
 import formatCurrency from "@/src/utils/formatCurrency";
+import { useTheme } from "@/src/context/themeContext";
+import * as Icons from "lucide-react-native";
 
 type Document = {
   id: number;
@@ -29,7 +31,7 @@ type Document = {
 
 type Expense = {
   id: number,
-  expenseTypeId: 1,
+  expenseTypeId: number,
   expenseTypeName: string,
   expenseTypeIconName: string,
   date: Date,
@@ -45,12 +47,14 @@ export default function CarDetail() {
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [deleteExpenses, setDeleteExpenses] = useState(false);
+    const { isDark } = useTheme();
 
     useEffect(() => {
         const fetchDocuments = async (carId: number) => {
             try {
             setDocumentsLoading(true);
-            const responseData = await documentApi.documents(carId);
+            //const responseData = await documentApi.documents(carId);
+            const responseData = [{"id":2,"documentTypeId":2,"documentTypeName":"ITP","documentTypeIconName":"car","expiryDate":new Date("2026-05-22"),"daysRemaining":7,"carName":null,"carId":17}]
             setDocuments(responseData);
             fetchExpenses(carId);
             } catch (error) {
@@ -65,8 +69,10 @@ export default function CarDetail() {
 
     const fetchExpenses = async (carId: number) => {
         try {
-            const responseData = await documentApi.expenses(carId);
-            setExpenses(responseData[responseData.length -1].expenseResponseList);
+            //const responseData = await documentApi.expenses(carId);
+            const responseData = [{"monthName":"februarie","totalAmount":540,"expenseResponseList":[{"id":13,"expenseTypeId":14,"expenseTypeName":"Amenzi","expenseTypeIconName":"triangle-alert","date":new Date("2026-02-19T00:00:00"),"amount":540}]},{"monthName":"aprilie","totalAmount":450,"expenseResponseList":[{"id":2,"expenseTypeId":2,"expenseTypeName":"ITP","expenseTypeIconName":"car","date":new Date("2026-04-24T00:00:00"),"amount":450}]},{"monthName":"mai","totalAmount":1477,"expenseResponseList":[{"id":16,"expenseTypeId":4,"expenseTypeName":"Revizie","expenseTypeIconName":"wrench","date":new Date("2026-05-04T00:00:00"),"amount":240},{"id":21,"expenseTypeId":13,"expenseTypeName":"Combustibil","expenseTypeIconName":"fuel","date":new Date("2026-05-06T00:00:00"),"amount":230},{"id":31,"expenseTypeId":8,"expenseTypeName":"Trusă medicală","expenseTypeIconName":"cross","date":new Date("2026-05-07T00:00:00"),"amount":320},{"id":33,"expenseTypeId":3,"expenseTypeName":"RCA","expenseTypeIconName":"shield","date":new Date("2026-05-07T00:00:00"),"amount":23},{"id":34,"expenseTypeId":11,"expenseTypeName":"Spălătorie","expenseTypeIconName":"droplets","date":new Date("2026-05-07T00:00:00"),"amount":20},{"id":35,"expenseTypeId":13,"expenseTypeName":"Combustibil","expenseTypeIconName":"fuel","date":new Date("2026-05-07T00:00:00"),"amount":300},{"id":36,"expenseTypeId":1,"expenseTypeName":"Rovinietă","expenseTypeIconName":"road","date":new Date("2026-05-07T00:00:00"),"amount":344}]}]
+            const top3 = responseData[responseData.length -1].expenseResponseList.sort((a, b) => b.amount - a.amount).slice(0,3);
+            setExpenses(top3);
         } catch (error) {
             console.error(error);
         }
@@ -106,18 +112,22 @@ export default function CarDetail() {
     };
 
     return (
-        <SafeAreaView className="flex-1 bg-background-50">
-            <StatusBar barStyle="dark-content" />
+        <SafeAreaView className={`flex-1 ${ isDark ? 'bg-background-primary-900' : 'bg-background-primary-100'}`}> 
+            <StatusBar barStyle={isDark === true ? 'light-content' : 'dark-content'} />
                 {/* ── Header ── */}
                 <View className="flex-row items-center px-6 pt-2 pb-4">
                     <TouchableOpacity
                         onPress={() => navigation.goBack()}
-                        className="w-10 h-10 bg-primary-0 rounded-full items-center justify-center"
+                        className={`w-10 h-10 ${ isDark ? 'bg-background-card-900' : 'bg-background-card-100'} rounded-full items-center justify-center`}
                         activeOpacity={0.7}
                         >
-                        <ChevronLeft size={20} color="#0a4f67" strokeWidth={1.6} />
+                        <Icons.ChevronLeft 
+                            className={`${ isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                            size={20} 
+                            strokeWidth={1.6} 
+                          />
                     </TouchableOpacity>
-                    <Text className="text-lg font-inter-semibold text-typography-100 text-center flex-1"
+                    <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} text-lg font-inter-semibold text-center flex-1`}
                             style={{ marginRight: 36 }}
                     >
                     Detalii mașină
@@ -126,11 +136,11 @@ export default function CarDetail() {
 
                 {/* ── Car name ── */}
                 <Text
-                    className="text-gray-900 text-2xl font-inter-bold px-6 mt-2 mb-4">
+                    className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} text-2xl font-inter-bold px-6 mb-4`}>
                     {car.name}
                 </Text>
 
-                <Box className="flex-1 bg-background-50 px-6 py-1"> 
+                <Box className={`flex-1 ${ isDark ? 'bg-background-primary-900' : 'bg-background-primary-100'} px-6 py-1`}> 
                     <KeyboardAwareScrollView
                         contentContainerStyle={{ flexGrow: 1 }}
                         enableOnAndroid
@@ -141,22 +151,22 @@ export default function CarDetail() {
                         {/* ── Stats Row ── */}
                         <View className="flex-row gap-3 mb-6">
                             <StatusCard
-                                icon={<Droplets size={20} color={getConsumptionColor(car.consumption).iconColor} strokeWidth={1.8} />}
+                                icon={<Droplets size={20} color={getConsumptionColor(car.consumption, isDark).iconColor} strokeWidth={1.8} />}
                                 value={car.consumption != null ? `${car.consumption.toFixed(1)}%` : "—"}
                                 label="Consum"
-                                valueColor={getConsumptionColor(car.consumption)}
+                                valueColor={getConsumptionColor(car.consumption, isDark)}
                             />
                             <StatusCard
-                                icon={<Wallet size={20} color={getExpenseColor(car.amount).iconColor} strokeWidth={1.8} />}
+                                icon={<Wallet size={20} color={getExpenseColor(car.amount, isDark).iconColor} strokeWidth={1.8} />}
                                 value={car.amount != 0 ? `${formatCurrency(car.amount)}` : "—"}
                                 label="Cheltuieli"
-                                valueColor={getExpenseColor(car.amount)}
+                                valueColor={getExpenseColor(car.amount, isDark)}
                             />
                             <StatusCard
-                                icon={<ShieldCheck size={20} color={getHealthScoreColor(car.healthScore).iconColor} strokeWidth={1.8} />}
+                                icon={<ShieldCheck size={20} color={getHealthScoreColor(car.healthScore, isDark).iconColor} strokeWidth={1.8} />}
                                 value={car.healthScore != null ? `${car.healthScore}%` : "—"}
                                 label="Sănătate"
-                                valueColor={getHealthScoreColor(car.healthScore)}
+                                valueColor={getHealthScoreColor(car.healthScore, isDark)}
                             />
                         </View>
 
@@ -168,11 +178,11 @@ export default function CarDetail() {
                              />
                         ) : documents.length > 0 && (
                             <View className="mb-6">
-                                <Text className="font-inter-bold text-typography-900 text-base mb-3">
+                                <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-bold text-base mb-3`}>
                                     Alerte documente
                                 </Text>
                                 
-                                <Box className="bg-primary-0 rounded-2xl p-4 gap-2">
+                                <Box className={`rounded-xl p-4 gap-2 border ${ isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100' }`}>
                                     {urgentDocs.map((doc, index) => {
                                         const style = getAlertStyle(doc.daysRemaining);
                                         const Icon = getAlertIcon(doc.daysRemaining);
@@ -233,33 +243,27 @@ export default function CarDetail() {
                         {/* ── Top 3 Cheltuieli ── */}
                         {expenses.length > 0 && (
                             <View className="mb-6">
-                                <Text className="font-inter-bold text-typography-900 text-base mb-3">
+                                <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-bold text-base mb-3`}>
                                     Top 3 Cheltuieli
                                 </Text>
 
-                                <Box className="bg-primary-0 rounded-2xl p-4 gap-2">
+                                <Box className={`rounded-xl p-4 gap-2 border ${ isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100' }`}>
                                     {expenses.slice(0,3).map((expense, index) => {
                                     const Icon = ICON_MAP[expense.expenseTypeIconName];
+
                                         return (
-                                            <View
-                                                key={expense.id}
-                                                className="flex-row items-center px-4 py-3"
-                                                style={{
-                                                    borderBottomWidth: index < expenses.length - 1 ? 1 : 0,
-                                                    borderBottomColor: "#f1f5f9",
-                                                }}
-                                            >
+                                            <View key={expense.id}>
+                                                <View className="flex-row items-center px-4 py-3">
                                                 <View
-                                                    className="w-9 h-9 rounded-xl items-center justify-center mr-3"
-                                                    style={{ backgroundColor: "#f8fafc" }}
+                                                    className={`${ isDark ? 'bg-background-icon-900' : 'bg-background-icon-100' } w-9 h-9 rounded-xl items-center justify-center mr-3`}
                                                 >
-                                                    <Icon size={18} color="#64748b" strokeWidth={1.8} />
+                                                    <Icon size={18} className={`${ isDark ? 'text-icons-900' : 'text-icons-100'}`} strokeWidth={1.8} />
                                                 </View>
                                                 <View className="flex-1">
-                                                    <Text className="font-inter-semibold text-sm text-typography-900">
-                                                    {expense.expenseTypeName}
+                                                    <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-sm`}>
+                                                        {expense.expenseTypeName}
                                                     </Text>
-                                                    <Text className="font-inter-regular text-xs text-typography-400 mt-0.5">
+                                                    <Text className={`${ isDark ? 'text-typography-800' : 'text-typography-200'} font-inter-regular text-xs mt-0.5`}>
                                                         {formatDate(expense.date.toString())}
                                                     </Text>
                                                 </View>
@@ -269,6 +273,16 @@ export default function CarDetail() {
                                                 >
                                                     {expense.amount} RON
                                                 </Text>
+                                                </View>
+
+                                                {index < expenses.slice(0,3).length - 1 && (
+                                                            <View className={`${isDark ? 'bg-outline-900' : 'bg-outline-100'}`}
+                                                                style={{
+                                                                height: 1,
+                                                                marginHorizontal: 20,
+                                                                }}
+                                                            />
+                                                        )}
                                             </View>
                                         );
                                     })}
@@ -282,11 +296,11 @@ export default function CarDetail() {
                             {/* Delete car */}
                             <Button
                                 onPress={handleDelete}
-                                className="flex-row items-center justify-center h-16 bg-secondary-500 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]"
+                                className="flex-row items-center justify-center h-16 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]"
                                     style={{ backgroundColor: "#ff5c5c" }}
                             >
                                 <Trash2 size={18} color="#ffffff" strokeWidth={2.5} />
-                                <Text className="text-primary-0 font-inter-semibold text-base">
+                                <Text className="text-typography-900 font-inter-semibold text-base">
                                     Șterge mașină
                                 </Text>
                             </Button>
@@ -358,87 +372,87 @@ export default function CarDetail() {
     )
 }
 
-const getConsumptionColor = (consumption: number) => {
+const getConsumptionColor = (consumption: number, isDark: boolean) => {
     if (consumption == null) {
         return {
             iconColor: "#9dabb1",
-            iconBg: "#edf2f7"
+            iconBg: isDark ? "#2C2C2C" : "#edf2f7"
         };
     }
 
-    if (consumption >= 9) {
+    if (consumption >= 10) {
         return {
             iconColor: "#E53E3E",
-            iconBg: "#fee2e2"
+            iconBg: isDark ? "#2C2C2C" : "#fee2e2"
         };
     }
 
-    if (consumption >= 7) {
+    if (consumption >= 8) {
         return {
             iconColor: "#F59E0B",
-            iconBg: "#fef3c7"
+            iconBg: isDark ? "#2C2C2C" : "#fef3c7"
         };
     }
 
     return {
         iconColor: "#3cba70",
-        iconBg: "#dcfce7"
+        iconBg: isDark ? "#2C2C2C" : "#dcfce7"
     };
 };
 
-const getExpenseColor = (amount: number) => {
+const getExpenseColor = (amount: number, isDark: boolean) => {
     if (amount == 0) {
         return {
             iconColor: "#9dabb1",
-            iconBg: "#edf2f7"
+            iconBg: isDark ? "#2C2C2C" : "#edf2f7"
         };
     }
 
     if (amount >= 2000) {
         return {
             iconColor: "#E53E3E",
-            iconBg: "#fee2e2"
+            iconBg: isDark ? "#2C2C2C" :"#fee2e2"
         };
     }
 
     if (amount >= 1000) {
         return {
             iconColor: "#F59E0B",
-            iconBg: "#fef3c7"
+            iconBg: isDark ? "#2C2C2C" :"#fef3c7"
         };
     }
 
     return {
         iconColor: "#3cba70",
-        iconBg: "#dcfce7"
+        iconBg: isDark ? "#2C2C2C" :"#dcfce7"
     };
 };
 
-const getHealthScoreColor = (amount: number) => {
-    if (amount == null) {
+const getHealthScoreColor = (healthScore: number | null, isDark: boolean) => {
+    if (healthScore == null) {
         return {
             iconColor: "#9dabb1",
-            iconBg: "#edf2f7"
+            iconBg: isDark ? "#2C2C2C" : "#edf2f7"
         };
     }
 
-    if (amount <= 50) {
+    if (healthScore <= 60) {
         return {
             iconColor: "#E53E3E",
-            iconBg: "#fee2e2"
+            iconBg: isDark ? "#2C2C2C" : "#fee2e2"
         };
     }
 
-    if (amount <= 75) {
+    if (healthScore <= 80) {
         return {
             iconColor: "#F59E0B",
-            iconBg: "#fef3c7"
+            iconBg: isDark ? "#2C2C2C" : "#fef3c7"
         };
     }
 
     return {
         iconColor: "#3cba70",
-        iconBg: "#dcfce7"
+        iconBg: isDark ? "#2C2C2C" : "#dcfce7"
     };
 };
 
@@ -446,7 +460,7 @@ function getAlertStyle(days: number) {
   if (days <= 3)
     return { bg: "#fff1f0", icon: "#ef4444", text: "#ef4444", iconBg: "#fee2e2" };
   if (days <= 7)
-    return { bg: "#fffbeb", icon: "#f59e0b", text: "#f59e0b", iconBg: "#fef3c7" };
+    return { bg: "#fff9e4", icon: "#f59e0b", text: "#f59e0b", iconBg: "#fef3c7" };
   return { bg: "#f0fdf4", icon: "#22c55e", text: "#22c55e", iconBg: "#dcfce7" };
 }
 

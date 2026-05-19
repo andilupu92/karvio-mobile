@@ -1,7 +1,6 @@
 import { View } from "react-native";
 import { Text } from "@/components/ui/text";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+import { useTheme } from "@/src/context/themeContext";
 
 type CategorySummary = {
   categoryName: string;
@@ -11,8 +10,6 @@ type CategorySummary = {
 type TopCategoriesProps = {
   categorySummaryResponseList: CategorySummary[];
 };
-
-// ─── Culori pentru categorii ──────────────────────────────────────────────────
 
 const CATEGORY_COLORS: Record<string, string> = {
   "Combustibil":    "#F5A623",
@@ -36,27 +33,24 @@ const FALLBACK_COLORS = [
 const getColor = (name: string, index: number): string =>
   CATEGORY_COLORS[name] ?? FALLBACK_COLORS[index % FALLBACK_COLORS.length];
 
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function TopCategoriesFromMenu({ categorySummaryResponseList }: TopCategoriesProps) {
   if (!categorySummaryResponseList || categorySummaryResponseList.length === 0) return null;
 
   const grandTotal = categorySummaryResponseList.reduce((sum, c) => sum + c.totalAmount, 0);
-
+  const { isDark } = useTheme();
+  
   // Sortăm descrescător după sumă
   const sorted = [...categorySummaryResponseList].sort((a, b) => b.totalAmount - a.totalAmount);
 
   return (
     <View className="mt-6">
-      <Text className="font-inter-bold text-typography-900 text-lg mb-3">
+      <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-bold text-lg mb-3`}>
         Top categorii
       </Text>
 
       <View
-        className="rounded-3xl px-7 py-5"
-        style={{
-          backgroundColor: "#FFFFFF",
-        }}
+        className={`rounded-xl px-7 py-5 border ${ isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100' }`}
       >
         {/* ── Lista categorii ── */}
         {sorted.map((item, index) => {
@@ -79,14 +73,17 @@ export default function TopCategoriesFromMenu({ categorySummaryResponseList }: T
                     marginRight: 10,
                   }}
                 />
-                <Text className="font-inter-medium text-typography-700 text-sm">
+                <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-medium text-sm`}>
                   {item.categoryName}
                 </Text>
               </View>
 
               {/* Procent */}
-              <Text className="font-inter-semibold text-typography-900 text-sm">
-                {percent}%
+              <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-sm`}>
+                {percent}
+              </Text>
+              <Text className={`${ isDark ? 'text-typography-800' : 'text-typography-100'} font-inter-regular text-sm`}>
+                {" "}%
               </Text>
             </View>
           );

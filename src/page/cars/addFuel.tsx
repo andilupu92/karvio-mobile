@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Text } from "@/components/ui/text";
-import { X, Gauge, Fuel, CalendarDays, Receipt } from "lucide-react-native";
 import { BlurView } from "expo-blur";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { z } from "zod";
@@ -28,6 +27,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/src/navigation/AppNavigator";
 import { carApi } from "@/src/api/services/carService";
 import { useAuthStore } from "@/src/store/authStore";
+import { useTheme } from "@/src/context/themeContext";
+import { Icons } from "@/src/utils/icons";
 
 const { height } = Dimensions.get("window");
 
@@ -51,6 +52,7 @@ type FuelFormData = z.input<typeof insertFuelSchema>;
 export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const insets = useSafeAreaInsets();
+  const { isDark } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
   const slideAnim = useRef(new Animated.Value(height)).current;
   const backdropAnim = useRef(new Animated.Value(0)).current;
@@ -126,18 +128,6 @@ export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
     onClose();
   };
 
-  const handleSave = () => {
-    setBlurEnabled(false);
-    onClose();
-  };
-
-  const formatDate = (d: Date) =>
-    d.toLocaleDateString("ro-RO", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-
   if (!isMounted) return null;
 
   return (
@@ -148,13 +138,13 @@ export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
         <Animated.View
           style={{
             ...StyleSheet.absoluteFillObject,
-            backgroundColor: "#2e556fbf",
+            backgroundColor: isDark ? "#71777bbf" : "#9fbccebf",
             opacity: backdropAnim,
           }}
         >
           {blurEnabled && (
             <BlurView
-              intensity={Platform.OS === "ios" ? 20 : 10}
+              intensity={Platform.OS === "ios" ? 20 : 7}
               tint="light"
               style={StyleSheet.absoluteFill}
               experimentalBlurMethod="dimezisBlurView"
@@ -178,7 +168,7 @@ export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
         }}
       >
         <View
-          className="bg-white rounded-[32px] p-6 mb-4 gap-5"
+          className={`${ isDark ? 'bg-background-primary-900' : 'bg-background-card-100'} rounded-2xl p-6 mb-4 gap-5`}
           style={{
             shadowColor: "#000",
             shadowOffset: { width: 0, height: 10 },
@@ -189,13 +179,17 @@ export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
         >
           {/* Header */}
           <View className="flex-row items-center justify-between mb-6">
-            <Text className="text-xl font-inter-bold text-[#23394d]">Add Fuel</Text>
+            <Text className={`text-xl font-inter-bold ${ isDark ? 'text-typography-900' : 'text-typography-100'}`}>Add Fuel</Text>
             <TouchableOpacity
               onPress={handleClose}
               activeOpacity={0.7}
-              className="w-8 h-8 rounded-full bg-[#fef0f0] items-center justify-center"
+              className={`${ isDark ? 'bg-background-icon-900' : 'bg-error-0'} w-8 h-8 rounded-full items-center justify-center`}
             >
-              <X size={18} color="#f42d2d" strokeWidth={2.5} />
+              <Icons.X 
+                className='text-error-50'
+                size={18} 
+                strokeWidth={2.5} 
+              />
             </TouchableOpacity>
           </View>
 
@@ -208,10 +202,10 @@ export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
                         <FloatingInput
                             label="Kilometri"
                             leftIcon={
-                                <Gauge
-                                    size={20}
-                                    color={'#0a4f67'}
-                                    strokeWidth={1.6}
+                                <Icons.Gauge 
+                                  className={`${ isDark ? 'text-icons-800' : 'text-icons-200'}`}
+                                  size={20} 
+                                  strokeWidth={1.6} 
                                 />
                             }
                             value={value}
@@ -238,10 +232,10 @@ export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
                         <FloatingInput
                             label="Litri"
                             leftIcon={
-                                <Fuel
-                                    size={20}
-                                    color={'#0a4f67'}
-                                    strokeWidth={1.6}
+                                <Icons.Fuel 
+                                  className={`${ isDark ? 'text-icons-800' : 'text-icons-200'}`}
+                                  size={20} 
+                                  strokeWidth={1.6} 
                                 />
                             }
                             value={value}
@@ -268,11 +262,11 @@ export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
                             <FloatingInput
                                 label="Suma"
                                 leftIcon={
-                                    <Receipt
-                                        size={20}
-                                        color={'#0a4f67'}
-                                        strokeWidth={1.6}
-                                    />
+                                  <Icons.Receipt 
+                                    className={`${ isDark ? 'text-icons-800' : 'text-icons-200'}`}
+                                    size={20} 
+                                    strokeWidth={1.6} 
+                                  />
                                 }
                                 value={value}
                                 onChangeText={onChange}
@@ -304,11 +298,11 @@ export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
                                             <FloatingSelect
                                                 label="Data plății"
                                                 leftIcon={
-                                                    <CalendarDays
-                                                        size={20}
-                                                        color={'#0a4f67'}
-                                                        strokeWidth={1.6}
-                                                    />
+                                                  <Icons.CalendarDays 
+                                                    className={`${ isDark ? 'text-icons-800' : 'text-icons-200'}`}
+                                                    size={20} 
+                                                    strokeWidth={1.6} 
+                                                  />
                                                 }
                                                 value={value ? value.toLocaleDateString('ro-RO', {
                                                     day: '2-digit',
@@ -360,7 +354,7 @@ export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
                         <Button
                             isDisabled={isSaveLoading}
                             onPress={handleSubmit(onSubmit)}
-                            className="flex-row items-center justify-center h-16 bg-secondary-500 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]"
+                            className={`${isDark ? 'bg-background-primary-100' : 'bg-background-primary-900'} flex-row items-center justify-center h-16 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]`}
                         >
                             <HStack space="md" className="items-center justify-center">
                                 {isSaveLoading ? (
@@ -370,7 +364,7 @@ export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
                                         className="text-white mr-2"
                                     />
                                 ) : null}
-                                <ButtonText className="font-inter-bold text-primary-0 text-lg">
+                                <ButtonText className={`${ isDark ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-lg`}>
                                     {isSaveLoading ? 'Se salvează...' : 'Salvare'}
                                 </ButtonText>
                             </HStack>

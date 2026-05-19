@@ -11,6 +11,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/src/navigation/AppNavigator";
 import HomeAddBottomSheet from "../home/homeAddSheet";
 import DocumentCard from "./documentCard";
+import { useTheme } from "@/src/context/themeContext";
 
 type TabName = "Home" | "Documents" | "Expenses" | "Settings";
 
@@ -36,6 +37,7 @@ interface StatCardProps {
   count: number | undefined;
   label: string;
   countColor: string;
+  isDark: boolean;
 }
 
 export default function DocumentsMenu() {
@@ -46,12 +48,14 @@ const { car, cars } = route.params;
 const [loading, setLoading] = useState(false);
 const [showAddSheet, setShowAddSheet] = useState(false);
 const [documentsSummary, setDocumentsSummary] = useState<DocumentsSummary>();
+const { isDark } = useTheme();
 
 useEffect(() => {
     const fetchDocuments = async () => {
         try {
             setLoading(true);
-            const responseData = await documentApi.documentsHistory();
+            //const responseData = await documentApi.documentsHistory();
+            const responseData = {"urgentCount":2,"soonCount":1,"validCount":0,"documents":[{"id":1,"documentTypeId":2,"documentTypeName":"ITP","documentTypeIconName":"car","expiryDate":new Date("2026-04-30"),"daysRemaining":-15,"carName":"Audi A5","carId":3},{"id":5,"documentTypeId":1,"documentTypeName":"Rovinietă","documentTypeIconName":"road","expiryDate":new Date("2026-05-08"),"daysRemaining":-7,"carName":"Audi A5","carId":3},{"id":2,"documentTypeId":2,"documentTypeName":"ITP","documentTypeIconName":"car","expiryDate":new Date("2026-05-22"),"daysRemaining":7,"carName":"Dacia 1300","carId":17}]}
             setDocumentsSummary(responseData);
         } catch (error) {
             console.error(error);
@@ -76,16 +80,16 @@ useEffect(() => {
 }, [activeTab]);
 
   return (
-    <SafeAreaView className="flex-1 bg-background-50">
-        <StatusBar barStyle="dark-content" />
+    <SafeAreaView className={`flex-1 ${ isDark ? 'bg-background-primary-900' : 'bg-background-primary-100'}`}>
+        <StatusBar barStyle={isDark === true ? 'light-content' : 'dark-content'} />
             {/* ── Header ── */}
             <View className="flex-row items-center px-6 pt-4 pb-4">
-                <Text className="font-inter-bold text-typography-900 text-2xl mb-2">
+                <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-bold text-2xl mb-2`}>
                     Documente
                 </Text>
             </View>
 
-            <Box className="flex-1 bg-background-50 px-5 py-1">            
+            <Box className={`flex-1 ${ isDark ? 'bg-background-primary-900' : 'bg-background-primary-100' } px-5 py-1`}>            
                 <KeyboardAwareScrollView
                     contentContainerStyle={{ flexGrow: 1 }}
                     enableOnAndroid
@@ -106,24 +110,27 @@ useEffect(() => {
                                     <StatCard
                                         count={documentsSummary?.urgentCount}
                                         label="Urgente"
-                                        countColor="text-error-100"
+                                        countColor="text-error-50"
+                                        isDark={isDark}
                                     />
                                     <StatCard
                                         count={documentsSummary?.soonCount}
                                         label="În curând"
                                         countColor="text-warning-50"
+                                        isDark={isDark}
                                     />
                                     <StatCard
                                         count={documentsSummary?.validCount}
                                         label="Valabile"
                                         countColor="text-success-50"
+                                        isDark={isDark}
                                     />
                                 </View>
 
 
                                 {(actionRequired?.length ?? 0) && (
                                 <>
-                                    <Text className="font-inter-semibold text-typography-100 text-base mx-4 mt-6 mb-2">
+                                    <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-base mx-4 mt-6 mb-2`}>
                                         Acțiuni Necesare
                                     </Text>
                                     {actionRequired?.map((doc) => (
@@ -138,7 +145,7 @@ useEffect(() => {
 
                                 {(valid?.length ?? 0) && (
                                 <>
-                                    <Text className="font-inter-semibold text-typography-100 text-base mx-4 mt-6 mb-2">
+                                    <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-base mx-4 mt-6 mb-2`}>
                                         Valabile
                                     </Text>
                                     {valid?.map((doc) => (
@@ -155,10 +162,10 @@ useEffect(() => {
                            </Box>
                         ): (
                             <View className="items-center justify-center mt-20 px-8">
-                                <Text className="font-inter-semibold text-typography-100 text-base text-center">
+                                <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-base text-center`}>
                                     Niciun document găsit
                                 </Text>
-                                <Text className="font-inter-regular text-typography-300 text-sm text-center mt-1">
+                                <Text className={`${ isDark ? 'text-typography-800' : 'text-typography-200'} font-inter-regular text-sm text-center mt-1`}>
                                     Adaugă documente pentru mașinile tale pentru a le urmări ușor.
                                 </Text>
                             </View>
@@ -186,11 +193,11 @@ useEffect(() => {
   );
 }
 
-function StatCard({ count, label, countColor }: StatCardProps) {
+function StatCard({ count, label, countColor, isDark }: StatCardProps) {
   return (
-    <View className="flex-1 bg-white rounded-2xl items-center justify-center py-4 mx-1.5">
+    <View className={`flex-1 rounded-xl items-center justify-center py-4 mx-1.5 border ${ isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100' }`}>
       <Text className={`font-inter-bold text-2xl ${countColor}`}>{count}</Text>
-      <Text className="font-inter-medium text-typography-300 text-xs mt-0.5 tracking-wide uppercase">
+      <Text className={`${ isDark ? 'text-typography-800' : 'text-typography-200'} font-inter-medium text-xs mt-0.5 tracking-wide uppercase`}>
         {label}
       </Text>
     </View>

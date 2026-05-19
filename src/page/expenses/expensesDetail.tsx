@@ -13,10 +13,12 @@ import formatDate from "@/src/utils/formatDate";
 import { Button } from "@/components/ui/button";
 import { documentApi } from "@/src/api/services/docService";
 import { useAuthStore } from "@/src/store/authStore";
+import { useTheme } from "@/src/context/themeContext";
+import { Icons } from "@/src/utils/icons";
 
 type Expense = {
   id: number,
-  expenseTypeId: 1,
+  expenseTypeId: number,
   expenseTypeName: string,
   expenseTypeIconName: string,
   date: Date,
@@ -31,7 +33,7 @@ const MONTH_SHORT: Record<string, string> = {
 };
 
 export default function ExpensesDetail() {
-
+    const { isDark } = useTheme();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const route = useRoute<RouteProp<RootStackParamList, "ExpensesDetail">>();
     const { car, cars, expenses } = route.params;
@@ -87,18 +89,22 @@ export default function ExpensesDetail() {
     };    
 
     return (
-        <SafeAreaView className="flex-1 bg-background-50">
-            <StatusBar barStyle="dark-content" />
+        <SafeAreaView className={`flex-1 ${ isDark ? 'bg-background-primary-900' : 'bg-background-primary-100'}`}>
+            <StatusBar barStyle={isDark === true ? 'light-content' : 'dark-content'} />
                 {/* ── Header ── */}
                 <View className="flex-row items-center px-6 pt-2 pb-4">
                     <TouchableOpacity
                         onPress={() => navigation.goBack()}
-                        className="w-10 h-10 bg-primary-0 rounded-full items-center justify-center"
+                        className={`w-10 h-10 ${ isDark ? 'bg-background-card-900' : 'bg-background-card-100'} rounded-full items-center justify-center`}
                         activeOpacity={0.7}
                         >
-                        <ChevronLeft size={20} color="#0a4f67" strokeWidth={1.6} />
+                        <Icons.ChevronLeft
+                            className={`${ isDark ? 'text-icons-900' : 'text-icons-100'}`}
+                            size={20} 
+                            strokeWidth={1.6} 
+                        />
                     </TouchableOpacity>
-                    <Text className="text-lg font-inter-semibold text-typography-100 text-center flex-1"
+                    <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} text-lg font-inter-semibold text-center flex-1`}
                             style={{ marginRight: 36 }}
                     >
                         Detalii cheltuieli
@@ -106,11 +112,11 @@ export default function ExpensesDetail() {
                 </View>
                 {/* ── Car name ── */}
                 <Text
-                    className="text-gray-900 text-2xl font-inter-bold px-6 mb-4">
+                    className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} text-2xl font-inter-bold px-6 mb-4`}>
                     {car.name}
                 </Text>
             
-            <Box className="flex-1 bg-background-50 px-6 py-1"> 
+            <Box className="flex-1 px-6 py-1"> 
                 <KeyboardAwareScrollView
                     contentContainerStyle={{ flexGrow: 1 }}
                     enableOnAndroid
@@ -122,38 +128,38 @@ export default function ExpensesDetail() {
                         {expenses.length > 0 ? (
                             <Box>
                                 <View
-                                    className="rounded-3xl px-9 py-6"
-                                    style={{
-                                        backgroundColor: "#FFFFFF",
-                                    }}
-                                >
+                                    className={`rounded-xl px-9 py-6 border ${ isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100' }`}>
                                     {/* ── row 1: label + badge ── */}
                                     <View className="flex-row items-center justify-between mb-1">
-                                        <Text className="text-typography-50 text-lg font-inter-regular">
+                                        <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} text-lg font-inter-regular`}>
                                             Total luna curentă
                                         </Text>
                                         <View
-                                            className="flex-row items-center px-2 py-1 rounded-xl"
-                                            style={{ backgroundColor: isPositive ? "#FEE2E2" : "#DCFCE7" }}
-                                        >
+                                            className={`${ isPositive ? 'bg-error-0' : 'bg-success-0' } flex-row items-center px-2 py-1 rounded-xl`}>
                                             {isPositive ? (
-                                                <TrendingUp size={11} color="#DC2626" strokeWidth={2.2} />
+                                                <Icons.TrendingUp 
+                                                    className='text-error-50'
+                                                    size={11} 
+                                                    strokeWidth={2.2} 
+                                                />
                                             ) : (
-                                                <TrendingDown size={11} color="#16A34A" strokeWidth={2.2} />
+                                                <Icons.TrendingDown 
+                                                    className='text-success-50'
+                                                    size={11} 
+                                                    strokeWidth={2.2} 
+                                                />
                                             )}
                                             <Text
-                                                className="text-xs font-inter-semibold ml-1"
-                                                style={{ color: isPositive ? "#DC2626" : "#16A34A" }}
-                                            >
+                                                className={`${ isPositive ? 'text-error-50' : 'text-success-50' } text-xs font-inter-semibold ml-1`}>
                                                 {isPositive ? "+" : ""}{percentChange}%
                                             </Text>
                                         </View>
                                     </View>
 
                                     {/* ── row 2: suma ── */}
-                                    <Text className="font-inter-bold text-typography-900 mb-10" style={{ fontSize: 22 }}>
-                                        {currentTotal}{" "}
-                                        <Text className="text-typography-50 font-inter-medium" style={{ fontSize: 14 }}>
+                                    <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-bold mb-10`} style={{ fontSize: 22 }}>
+                                        {currentTotal.toLocaleString("ro-RO")}{" "}
+                                        <Text className={`${ isDark ? 'text-typography-800' : 'text-typography-200'} font-inter-medium`} style={{ fontSize: 14 }}>
                                             RON
                                         </Text>
                                     </Text>
@@ -181,7 +187,7 @@ export default function ExpensesDetail() {
                                                     <View style={{ width: 30, height: BAR_MAX_HEIGHT, position: "relative" }}>
 
                                                         {/* Bara fundal (track) — intotdeauna la inaltime maxima */}
-                                                        <View
+                                                        <View className={` ${ isSelected ? 'bg-background-chart-300' : 'bg-background-chart-400'}  `}
                                                             style={{
                                                                 position: "absolute",
                                                                 bottom: 0,
@@ -189,12 +195,11 @@ export default function ExpensesDetail() {
                                                                 right: 0,
                                                                 height: BAR_MAX_HEIGHT,
                                                                 borderRadius: 6,
-                                                                backgroundColor: isSelected ? "#D0DCE8" : "#E2EAF0",
                                                             }}
                                                         />
 
                                                         {/* Bara valoare reala — deasupra */}
-                                                        <View
+                                                        <View className={` ${ isSelected ? 'bg-background-chart-100' : 'bg-background-chart-200'}  `}
                                                             style={{
                                                                 position: "absolute",
                                                                 bottom: 0,
@@ -202,16 +207,14 @@ export default function ExpensesDetail() {
                                                                 right: 0,
                                                                 height: barHeight,
                                                                 borderRadius: 6,
-                                                                backgroundColor: isSelected ? "#1B3A5C" : "#B8CCE0",
                                                             }}
                                                         />
                                                     </View>
 
                                                     <Text
-                                                        className="mt-1"
+                                                        className={`${ isDark ? isSelected ? 'text-typography-900' : 'text-typography-800' : isSelected ? 'text-typography-100' : 'text-typography-200'} mt-1`}
                                                         style={{
                                                             fontSize: 10,
-                                                            color: isSelected ? "#1B3A5C" : "#8FA7BE",
                                                             fontWeight: isSelected ? "700" : "400",
                                                             fontFamily: isSelected ? "Inter-Bold" : "Inter-Regular",
                                                         }}
@@ -225,19 +228,17 @@ export default function ExpensesDetail() {
                                 </View>
 
                                 {/* ── Secțiunea "All expenses this month" ── */}
-                                <View className="mt-6 mb-4">
-                                    <Text className="text-base font-inter-semibold text-typography-100 mb-3">
+                                <View className="mt-10 mb-4">
+                                    <Text className={`text-base font-inter-semibold ${ isDark ? 'text-typography-900' : 'text-typography-100'} mb-4`}>
                                         All expenses this month
                                     </Text>
                                     {/* ── Lista cheltuieli ── */}
                                     <View
-                                        className="rounded-3xl overflow-hidden"
-                                        style={{ backgroundColor: "#FFFFFF" }}
-                                    >
+                                        className={`rounded-xl overflow-hidden border ${ isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100' }`}>
                                         {visibleItems.length === 0 ? (
                                             <View className="py-8 items-center">
-                                                <Text className="text-typography-50 font-inter-regular text-sm">
-                                                Nicio cheltuială înregistrată.
+                                                <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-regular text-sm`}>
+                                                    Nicio cheltuială înregistrată.
                                                 </Text>
                                             </View>
                                         ) : (
@@ -249,53 +250,57 @@ export default function ExpensesDetail() {
                                                             <View className="flex-row items-center px-5 py-4">
                                                             {/* Icon categorie */}
                                                             <View
-                                                                className="w-10 h-10 rounded-2xl items-center justify-center mr-4"
-                                                                style={{ backgroundColor: "#EEF3F8" }}
-                                                            >
-                                                                <IconComponent size={20} color="#0a4f67" strokeWidth={1.6} />
+                                                                className={`${ isDark ? 'bg-background-icon-900' : 'bg-background-icon-100' } rounded-xl w-[42px] h-[42px] items-center justify-center mr-3`} >
+                                                                <IconComponent 
+                                                                    className={`${ isDark ? 'text-icons-900' : 'text-icons-100'}`}
+                                                                    size={20} 
+                                                                    strokeWidth={1.6} 
+                                                                />
                                                             </View>
 
                                                             {/* Nume + data */}
                                                             <View className="flex-1">
-                                                                <Text className="font-inter-semibold text-typography-100 text-sm">
+                                                                <Text className={`font-inter-semibold ${ isDark ? 'text-typography-900' : 'text-typography-100'} text-sm`}>
                                                                 {item.expenseTypeName}
                                                                 </Text>
                                                                 <Text
-                                                                className="font-inter-regular mt-0.5"
-                                                                style={{ fontSize: 11, color: "#8FA7BE" }}
+                                                                className={`font-inter-regular mt-0.5 ${ isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                                                                style={{ fontSize: 11 }}
                                                                 >
                                                                 {formatDate(item.date.toString())}
                                                                 </Text>
                                                             </View>
 
                                                             {/* Suma */}
-                                                            <Text className="font-inter-bold text-typography-100 mr-3" style={{ fontSize: 15 }}>
+                                                            <Text className={`font-inter-bold ${ isDark ? 'text-typography-900' : 'text-typography-100'} mr-3`} style={{ fontSize: 15 }}>
                                                                 {item.amount}{" "}
-                                                                <Text className="font-inter-regular" style={{ fontSize: 11, color: "#8FA7BE" }}>
-                                                                RON
+                                                                <Text className={`font-inter-regular ${ isDark ? 'text-typography-800' : 'text-typography-200'}`} style={{ fontSize: 11 }}>
+                                                                    RON
                                                                 </Text>
                                                             </Text>
 
                                                             {/* Buton ștergere */}
                                                             <TouchableOpacity
                                                                 activeOpacity={0.7}
-                                                                className="w-8 h-8 rounded-xl items-center justify-center"
-                                                                style={{ backgroundColor: "#FEE2E2" }}
+                                                                className="w-8 h-8 rounded-xl items-center justify-center bg-error-0"
                                                                 onPress={() => {handleDelete(item)}}
                                                             >
-                                                                <Trash2 size={14} color="#DC2626" strokeWidth={1.8} />
+                                                                <Icons.Trash2 
+                                                                    className='text-error-50'
+                                                                    size={14} 
+                                                                    strokeWidth={2} 
+                                                                />
                                                             </TouchableOpacity>
                                                         </View>
 
                                                         {/* Separator (nu pe ultimul vizibil) */}
                                                         {idx < visibleItems.length - 1 && (
-                                                        <View
-                                                            style={{
-                                                            height: 1,
-                                                            backgroundColor: "#F0F5F9",
-                                                            marginHorizontal: 20,
-                                                            }}
-                                                        />
+                                                            <View className={`${isDark ? 'bg-outline-900' : 'bg-outline-100'}`}
+                                                                style={{
+                                                                height: 1,
+                                                                marginHorizontal: 20,
+                                                                }}
+                                                            />
                                                         )}
                                                     </View>
                                                 )}
@@ -303,21 +308,34 @@ export default function ExpensesDetail() {
                                             {/* ── Show more / Show less ── */}
                                             {hasMore && (
                                                 <>
-                                                    <View style={{ height: 1, backgroundColor: "#F0F5F9", marginHorizontal: 20 }} />
+                                                    <View className={`${isDark ? 'bg-outline-900' : 'bg-outline-100'}`}
+                                                        style={{
+                                                        height: 1,
+                                                        marginHorizontal: 20,
+                                                        }}
+                                                    />
                                                     <TouchableOpacity
-                                                    activeOpacity={0.7}
-                                                    className="flex-row items-center justify-center py-4"
-                                                    onPress={() => setShowAll((prev) => !prev)}
+                                                        activeOpacity={0.7}
+                                                        className="flex-row items-center justify-center py-4"
+                                                        onPress={() => setShowAll((prev) => !prev)}
                                                     >
                                                     <Text
-                                                        className="font-inter-medium mr-1"
-                                                        style={{ fontSize: 13, color: "#1B3A5C" }}
+                                                        className={`font-inter-medium mr-1 ${ isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                                                        style={{ fontSize: 13 }}
                                                     >
                                                         {showAll ? "Show less" : "Show more"}
                                                     </Text>
                                                     {showAll
-                                                        ? <ChevronUp size={14} color="#1B3A5C" strokeWidth={2} />
-                                                        : <ChevronDown size={14} color="#1B3A5C" strokeWidth={2} />
+                                                        ? <Icons.ChevronUp 
+                                                                className={`${ isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                                                                size={14} 
+                                                                strokeWidth={2} 
+                                                            />
+                                                        : <Icons.ChevronDown 
+                                                                className={`${ isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                                                                size={14} 
+                                                                strokeWidth={2} 
+                                                            />
                                                     }
                                                     </TouchableOpacity>
                                                 </>
@@ -335,10 +353,14 @@ export default function ExpensesDetail() {
                     <View className="flex-1 items-center justify-center">
                         <Button
                             onPress={() => navigation.navigate('AddExpense', { cars })}
-                            className="flex-row items-center justify-center h-16 bg-secondary-500 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]"
+                            className={`${isDark ? 'bg-background-primary-100' : 'bg-background-primary-900'} flex-row items-center justify-center h-16 rounded-xl py-4 w-full gap-2 active:scale-[0.99]`}
                         >
-                            <Plus size={18} color="#ffffff" strokeWidth={2.5} />
-                            <Text className="text-primary-0 font-inter-semibold text-base">
+                            <Icons.Plus 
+                                className={`${ isDark ? 'text-icons-100' : 'text-icons-900'}`}
+                                size={18} 
+                                strokeWidth={2.5} 
+                            />
+                            <Text className={`${ isDark ? 'text-typography-100' : 'text-typography-900'} font-inter-semibold text-base`}>
                                 Adaugă o cheltuială
                             </Text>
                         </Button>

@@ -1,12 +1,11 @@
 import { View, TouchableOpacity } from "react-native";
 import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
-import { FileText, Plus } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/src/navigation/AppNavigator";
-
-const ICON_COLOR = "#0a4f67";
+import { useTheme } from "@/src/context/themeContext";
+import { Icons } from "@/src/utils/icons";
 
 type Car = {
   id: number;
@@ -49,15 +48,24 @@ type Props = {
 
 export default function HomeQuickActions({ car, cars, documents }: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { isDark } = useTheme();
 
   const actions: Action[] = [
     {
-      icon: <FileText size={50 * 0.38} color={ICON_COLOR} strokeWidth={1.6} />,
+      icon: <Icons.FileText 
+                  className={`${ isDark ? 'text-icons-900' : 'text-icons-100'}`}
+                  size={50 * 0.38} 
+                  strokeWidth={1.6} 
+                />,
       label: "Documentele\nmașinii",
       onPress: () => navigation.navigate("Documents", { car, cars, documents }),
     },
     {
-      icon: <Plus size={50 * 0.38} color={ICON_COLOR} strokeWidth={1.6} />,
+      icon: <Icons.Plus
+                  className={`${ isDark ? 'text-icons-900' : 'text-icons-100'}`}
+                  size={50 * 0.38} 
+                  strokeWidth={1.6} 
+                />,
       label: "Adaugă mașină",
       onPress: () => navigation.navigate("AddCar"),
     },
@@ -65,7 +73,7 @@ export default function HomeQuickActions({ car, cars, documents }: Props) {
 
   return (
     <Box className="flex-row items-center py-3 px-4">
-      <View className="px-2 py-4 flex-1 rounded-3xl bg-background-200 border-2 border-[#EBF4FC]">
+      <View className={`px-2 py-4 flex-1 rounded-xl border ${ isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100' }`}>
         {/* Icons row */}
         <View className="flex-row justify-evenly items-start">
           {actions.map((action, index) => (
@@ -75,20 +83,12 @@ export default function HomeQuickActions({ car, cars, documents }: Props) {
               activeOpacity={0.75}
             >
               {/* White circle */}
-              <View className="w-12 h-12 rounded-full bg-white items-center justify-center shadow-sm"
-                style={{
-                  shadowColor: "#8ab0c8",
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 10,
-                  elevation: 3,
-                }}
-              >
+              <View className={`w-12 h-12 rounded-full ${ isDark ? 'bg-background-icon-900' : 'bg-background-icon-100' } items-center justify-center`}>
                 {action.icon}
               </View>
 
               {/* Label */}
-              <Text className="text-[12px] text-typography-100 text-center font-inter-medium leading-[19px]"
+              <Text className={`text-[12px] ${ isDark ? 'text-typography-900' : 'text-typography-100'} text-center font-inter-medium leading-[19px]`}
                 numberOfLines={2}
               >
                 {action.label}

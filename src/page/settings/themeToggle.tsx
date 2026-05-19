@@ -29,7 +29,7 @@ export default function ThemeToggle({ value, onValueChange }: ThemeToggleProps) 
   // Track: light = slate-200, dark = sky-500
   const trackBg = bgAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ["#e2e8f0", "#0ea5e9"],
+    outputRange: ["#e2e8f0", "#572564"],
   });
 
   // Thumb slides from left (4px) to right (26px)
@@ -65,7 +65,7 @@ export default function ThemeToggle({ value, onValueChange }: ThemeToggleProps) 
 
           {/* Moon icon (dark mode) */}
           <Animated.View style={[StyleSheet.absoluteFill, styles.iconCenter, { opacity: moonOpacity }]}>
-            <Moon size={13} color="#6366f1" strokeWidth={2.5} />
+            <Moon size={13} color="#572564" strokeWidth={2.5} />
           </Animated.View>
         </Animated.View>
       </Animated.View>

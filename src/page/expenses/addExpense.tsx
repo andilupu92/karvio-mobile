@@ -4,7 +4,6 @@ import { Box } from "@/components/ui/box";
 import { useNavigation, useRoute, RouteProp} from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/src/navigation/AppNavigator";
-import { CalendarDays, ChevronLeft, FileText, CarFront, Receipt } from "lucide-react-native";
 import { Text } from "@/components/ui/text";
 import { FormControl, FormControlError, FormControlErrorText } from "@/components/ui/form-control";
 import { Controller, useForm } from "react-hook-form";
@@ -20,6 +19,8 @@ import { FloatingSelect } from "@/components/ui/floating-select";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useAuthStore } from "@/src/store/authStore";
 import { ICON_MAP } from "@/src/constants/iconMap";
+import { useTheme } from "@/src/context/themeContext";
+import * as Icons from "lucide-react-native";
 
 type ExpenseTypeItem = {
   id: number;
@@ -55,6 +56,7 @@ export default function AddExpense() {
     const [isLoading, setLoading] = useState(false);
     const [expenseTypes, setExpenseTypes] = useState<ExpenseTypeItem[]>([]);
     const [showInsertDatePicker, setShowInsertDatePicker] = useState(false);
+    const { isDark } = useTheme();
 
     const { control, handleSubmit, formState: { errors } } = useForm<ExpenseFormData>({
         resolver: zodResolver(insertExpenseSchema),
@@ -100,18 +102,22 @@ export default function AddExpense() {
     };
 
   return (
-    <SafeAreaView className="flex-1 bg-background-50">
-      <StatusBar barStyle="dark-content" />
+    <SafeAreaView className={`flex-1 ${ isDark ? 'bg-background-primary-900' : 'bg-background-primary-100'}`}>
+      <StatusBar barStyle={isDark === true ? 'light-content' : 'dark-content'} />
 
       <View className="flex-row items-center px-6 pt-2 pb-4">
         <TouchableOpacity
             onPress={() => navigation.goBack()}
-            className="w-10 h-10 bg-primary-0 rounded-full items-center justify-center"
+            className={`w-10 h-10 ${ isDark ? 'bg-background-card-900' : 'bg-background-card-100'} rounded-full items-center justify-center`}
             activeOpacity={0.7}
             >
-            <ChevronLeft size={20} color="#0a4f67" strokeWidth={1.6} />
+            <Icons.ChevronLeft
+                            className={`${ isDark ? 'text-icons-900' : 'text-icons-100'}`}
+                            size={20}
+                            strokeWidth={1.6} 
+                        />
         </TouchableOpacity>
-        <Text className="text-lg font-inter-semibold text-typography-100 text-center flex-1"
+        <Text className={`${ isDark ? 'text-typography-900' : 'text-typography-100'} text-lg font-inter-semibold text-center flex-1`}
                 style={{ marginRight: 36 }}
         >
           Adaugă o cheltuială
@@ -125,10 +131,14 @@ export default function AddExpense() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-                <Box className="flex-1 bg-background-50 px-6 py-8 gap-5">
+                <Box className={`flex-1 ${ isDark ? 'bg-background-primary-900' : 'bg-background-primary-100'} px-6 py-8 gap-5`}>
 
-                    <View className="self-center w-32 h-32 rounded-full bg-secondary-500 items-center justify-center mb-8">
-                        <FileText size={60} color="#ffffff" strokeWidth={1.6} />
+                    <View className={`${ isDark ? 'bg-background-icon-900' : 'bg-background-icon-100' } self-center w-32 h-32 rounded-full items-center justify-center mb-8`}>
+                        <Icons.Receipt 
+                                                    className={`${ isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                                                    size={60} 
+                                                    strokeWidth={1.6} 
+                                                />
                     </View>
 
                     {/* --- CARS --- */}
@@ -140,11 +150,11 @@ export default function AddExpense() {
                                 <FloatingSelect
                                     label="Numele mașinii"
                                     leftIcon={
-                                        <CarFront
-                                        size={20}
-                                        color={'#0a4f67'}
-                                        strokeWidth={1.6}
-                                        />
+                                        <Icons.CarFront
+                                                                            className={`${ isDark ? 'text-icons-800' : 'text-icons-200'}`}
+                                                                            size={20} 
+                                                                            strokeWidth={1.6} 
+                                                                        />
                                     }
                                     value={value}
                                     onValueChange={onChange}
@@ -169,11 +179,11 @@ export default function AddExpense() {
                                 <FloatingSelect
                                     label="Tipul de cheltuială"
                                     leftIcon={
-                                        <FileText
-                                            size={20}
-                                            color={'#0a4f67'}
-                                            strokeWidth={1.6}
-                                        />
+                                        <Icons.Receipt
+                                                                            className={`${ isDark ? 'text-icons-800' : 'text-icons-200'}`}
+                                                                            size={20} 
+                                                                            strokeWidth={1.6} 
+                                                                        />
                                     }
                                     value={value}
                                     onValueChange={onChange}
@@ -198,11 +208,11 @@ export default function AddExpense() {
                             <FloatingInput
                                 label="Suma"
                                 leftIcon={
-                                    <Receipt
-                                        size={20}
-                                        color={'#0a4f67'}
-                                        strokeWidth={1.6}
-                                    />
+                                    <Icons.Receipt
+                                                                        className={`${ isDark ? 'text-icons-800' : 'text-icons-200'}`}
+                                                                        size={20} 
+                                                                        strokeWidth={1.6} 
+                                                                    />
                                 }
                                 value={value}
                                 onChangeText={onChange}
@@ -234,11 +244,11 @@ export default function AddExpense() {
                                             <FloatingSelect
                                                 label="Data plății"
                                                 leftIcon={
-                                                    <CalendarDays
-                                                        size={20}
-                                                        color={'#0a4f67'}
-                                                        strokeWidth={1.6}
-                                                    />
+                                                    <Icons.CalendarDays
+                                                                                        className={`${ isDark ? 'text-icons-800' : 'text-icons-200'}`}
+                                                                                        size={20} 
+                                                                                        strokeWidth={1.6} 
+                                                                                    />
                                                 }
                                                 value={value ? value.toLocaleDateString('ro-RO', {
                                                     day: '2-digit',
@@ -290,7 +300,7 @@ export default function AddExpense() {
                         <Button
                             isDisabled={isSaveLoading}
                             onPress={handleSubmit(onSubmit)}
-                            className="flex-row items-center justify-center h-16 bg-secondary-500 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]"
+                            className={`${isDark ? 'bg-background-primary-100' : 'bg-background-primary-900'} flex-row items-center justify-center h-16 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]`}
                         >
                             <HStack space="md" className="items-center justify-center">
                                 {isSaveLoading ? (
@@ -300,7 +310,7 @@ export default function AddExpense() {
                                         className="text-white mr-2"
                                     />
                                 ) : null}
-                                <ButtonText className="font-inter-bold text-primary-0 text-lg">
+                                <ButtonText className={`${ isDark ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-lg`}>
                                     {isSaveLoading ? 'Se salvează...' : 'Salvare'}
                                 </ButtonText>
                             </HStack>

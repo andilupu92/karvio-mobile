@@ -3,7 +3,9 @@ import { TouchableOpacity, View, Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Path } from "react-native-svg";
 import { Text } from "@/components/ui/text";
-import { Home, FileText, Plus, BarChart2, Settings, X } from "lucide-react-native";
+import { Home, FileText, Plus, BarChart2, Settings } from "lucide-react-native";
+import { useTheme } from "@/src/context/themeContext";
+import { Icons } from "@/src/utils/icons";
 
 type TabName = "Home" | "Documents" | "Expenses" | "Settings";
 
@@ -45,16 +47,11 @@ export default function HomeMenu({
   onAddPress,
 }: HomeMenuProps) {
   const insets = useSafeAreaInsets();
+  const { isDark } = useTheme();
   
   const safeBottom = insets.bottom > 0 ? insets.bottom : 16; 
   const totalH = BAR_HEIGHT + safeBottom + 24; // Base height + safe area + wave curve height
   const cx = W / 2;
-
-  const THEME = {
-    primary: "#0a4f67", // Dark teal for active states and FAB
-    inactive: "#9dabb1", // Cool gray for inactive tabs
-    bg: "#d9edfc"
-  };
 
   return (
     <View style={{ width: W, height: totalH, position: "absolute", bottom: 0 }}>
@@ -65,7 +62,7 @@ export default function HomeMenu({
         height={totalH}
         style={{ position: "absolute", bottom: 0, left: 0 }}
       >
-        <Path d={buildWavePath(W, totalH)} fill={THEME.bg} />
+        <Path d={buildWavePath(W, totalH)} fill={ isDark ? '#303234' : '#202e3b'} />
       </Svg>
 
       {/* 2. Floating Action Button (FAB) */}
@@ -73,7 +70,7 @@ export default function HomeMenu({
         className="absolute top-[-15px] z-10"
         style={{
             left: cx - FAB_R,
-            shadowColor: THEME.primary,
+            shadowColor: '#303234',
             shadowOffset: { width: 0, height: 6 },
             shadowOpacity: 0.15,
             shadowRadius: 8,
@@ -83,15 +80,19 @@ export default function HomeMenu({
         <TouchableOpacity
           onPress={onAddPress}
           activeOpacity={0.85}
-          className="items-center justify-center border-[6px] border-white"
+          className={`items-center justify-center border-[6px] ${ isDark ? 'border-outline-100' : 'border-outline-50'} `}
           style={{
             width: FAB_SIZE,
             height: FAB_SIZE,
             borderRadius: FAB_R,
-            backgroundColor: THEME.primary,
+            backgroundColor: isDark ? '#303234' : '#202e3b',
           }}
         >
-          <Plus size={28} color="#FFFFFF" strokeWidth={2} />
+          <Icons.Plus
+                      className='text-icons-900'
+                      size={28} 
+                      strokeWidth={2} 
+                    />
         </TouchableOpacity>
       </View>
 
@@ -106,7 +107,6 @@ export default function HomeMenu({
         {TABS.map((tab, index) => {
           const isActive = activeTab === tab.name;
           const Icon = tab.icon;
-          const iconColor = isActive ? THEME.primary : THEME.inactive;
 
           return (
             <React.Fragment key={tab.name}>
@@ -121,15 +121,12 @@ export default function HomeMenu({
                 className="flex-1 items-center justify-center"
               >
                 <Icon
-                  size={24}
-                  color={iconColor}
-                  strokeWidth={isActive ? 2.5 : 2}
+                  className={`${ isActive ? 'text-icons-900' : 'text-icons-200'}`}
+                  size={26} 
+                  strokeWidth={isActive ? 2.5 : 1.5} 
                 />
                 <Text
-                  className={`text-[11px] mt-1 ${isActive ? 'font-inter-semibold' : 'font-inter-medium'}`}
-                  style={{
-                    color: iconColor,
-                  }}
+                  className={`text-[11px] mt-1 ${isActive ? 'font-inter-semibold text-typography-900' : 'font-inter-medium text-typography-800'}`}
                 >
                   {tab.label}
                 </Text>
