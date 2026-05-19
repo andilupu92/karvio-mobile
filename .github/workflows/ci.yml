@@ -92,3 +92,4 @@ jobs:
             -Dsonar.projectKey=andilupu92_autoTrace-mobile
             -Dsonar.organization=andilupu1992
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.exclusions=coverage/**,**/*.test.js
