@@ -31,11 +31,7 @@ export default function Cars() {
     const fetchCarsWithExpenses = async () => {
       try {
         setLoading(true);
-        //const responseData = await carApi.carsWithExpenses();
-        const responseData = [
-          { carId: 3, name: 'Audi A5', consumption: 7.35, healthScore: 75, amount: 5590 },
-          { carId: 17, name: 'Dacia 1300', consumption: 6, healthScore: 100, amount: 1477 },
-        ];
+        const responseData = await carApi.carsWithExpenses();
         setCars(responseData);
       } catch (error) {
         console.error(error);

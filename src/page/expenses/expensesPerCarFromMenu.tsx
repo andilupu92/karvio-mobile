@@ -1,6 +1,5 @@
 import { View, TouchableOpacity } from 'react-native';
 import { Text } from '@/components/ui/text';
-import { Car, ChevronRight } from 'lucide-react-native';
 import { useTheme } from '@/src/context/themeContext';
 import * as Icons from 'lucide-react-native';
 

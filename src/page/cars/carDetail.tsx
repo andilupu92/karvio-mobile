@@ -63,19 +63,7 @@ export default function CarDetail() {
     const fetchDocuments = async (carId: number) => {
       try {
         setDocumentsLoading(true);
-        //const responseData = await documentApi.documents(carId);
-        const responseData = [
-          {
-            id: 2,
-            documentTypeId: 2,
-            documentTypeName: 'ITP',
-            documentTypeIconName: 'car',
-            expiryDate: new Date('2026-05-22'),
-            daysRemaining: 7,
-            carName: null,
-            carId: 17,
-          },
-        ];
+        const responseData = await documentApi.documents(carId);
         setDocuments(responseData);
         fetchExpenses(carId);
       } catch (error) {
@@ -89,101 +77,10 @@ export default function CarDetail() {
 
   const fetchExpenses = async (carId: number) => {
     try {
-      //const responseData = await documentApi.expenses(carId);
-      const responseData = [
-        {
-          monthName: 'februarie',
-          totalAmount: 540,
-          expenseResponseList: [
-            {
-              id: 13,
-              expenseTypeId: 14,
-              expenseTypeName: 'Amenzi',
-              expenseTypeIconName: 'triangle-alert',
-              date: new Date('2026-02-19T00:00:00'),
-              amount: 540,
-            },
-          ],
-        },
-        {
-          monthName: 'aprilie',
-          totalAmount: 450,
-          expenseResponseList: [
-            {
-              id: 2,
-              expenseTypeId: 2,
-              expenseTypeName: 'ITP',
-              expenseTypeIconName: 'car',
-              date: new Date('2026-04-24T00:00:00'),
-              amount: 450,
-            },
-          ],
-        },
-        {
-          monthName: 'mai',
-          totalAmount: 1477,
-          expenseResponseList: [
-            {
-              id: 16,
-              expenseTypeId: 4,
-              expenseTypeName: 'Revizie',
-              expenseTypeIconName: 'wrench',
-              date: new Date('2026-05-04T00:00:00'),
-              amount: 240,
-            },
-            {
-              id: 21,
-              expenseTypeId: 13,
-              expenseTypeName: 'Combustibil',
-              expenseTypeIconName: 'fuel',
-              date: new Date('2026-05-06T00:00:00'),
-              amount: 230,
-            },
-            {
-              id: 31,
-              expenseTypeId: 8,
-              expenseTypeName: 'Trusă medicală',
-              expenseTypeIconName: 'cross',
-              date: new Date('2026-05-07T00:00:00'),
-              amount: 320,
-            },
-            {
-              id: 33,
-              expenseTypeId: 3,
-              expenseTypeName: 'RCA',
-              expenseTypeIconName: 'shield',
-              date: new Date('2026-05-07T00:00:00'),
-              amount: 23,
-            },
-            {
-              id: 34,
-              expenseTypeId: 11,
-              expenseTypeName: 'Spălătorie',
-              expenseTypeIconName: 'droplets',
-              date: new Date('2026-05-07T00:00:00'),
-              amount: 20,
-            },
-            {
-              id: 35,
-              expenseTypeId: 13,
-              expenseTypeName: 'Combustibil',
-              expenseTypeIconName: 'fuel',
-              date: new Date('2026-05-07T00:00:00'),
-              amount: 300,
-            },
-            {
-              id: 36,
-              expenseTypeId: 1,
-              expenseTypeName: 'Rovinietă',
-              expenseTypeIconName: 'road',
-              date: new Date('2026-05-07T00:00:00'),
-              amount: 344,
-            },
-          ],
-        },
-      ];
+      const responseData = await documentApi.expenses(carId);
+
       const top3 = responseData[responseData.length - 1].expenseResponseList
-        .sort((a, b) => b.amount - a.amount)
+        .sort((a : any, b : any) => b.amount - a.amount)
         .slice(0, 3);
       setExpenses(top3);
     } catch (error) {

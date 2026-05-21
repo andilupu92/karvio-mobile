@@ -1,6 +1,5 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, StatusBar, TouchableOpacity } from 'react-native';
-import { ChevronLeft, FileText, Plus } from 'lucide-react-native';
 import { Box } from '@/components/ui/box';
 import { Text } from '@/components/ui/text';
 import type { RouteProp } from '@react-navigation/native';

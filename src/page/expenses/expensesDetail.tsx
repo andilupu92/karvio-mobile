@@ -8,15 +8,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Box } from '@/components/ui/box';
 import { View, StatusBar, TouchableOpacity, Alert } from 'react-native';
 import { Text } from '@/components/ui/text';
-import {
-  TrendingDown,
-  TrendingUp,
-  ChevronLeft,
-  Trash2,
-  ChevronUp,
-  ChevronDown,
-  Plus,
-} from 'lucide-react-native';
 import { ICON_MAP } from '@/src/constants/iconMap';
 import formatDate from '@/src/utils/formatDate';
 import { Button } from '@/components/ui/button';

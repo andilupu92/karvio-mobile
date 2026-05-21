@@ -45,7 +45,6 @@ export default function TopCategoriesFromMenu({ categorySummaryResponseList }: T
   const grandTotal = categorySummaryResponseList.reduce((sum, c) => sum + c.totalAmount, 0);
   const { isDark } = useTheme();
 
-  // Sortăm descrescător după sumă
   const sorted = [...categorySummaryResponseList].sort((a, b) => b.totalAmount - a.totalAmount);
 
   return (
@@ -59,14 +58,13 @@ export default function TopCategoriesFromMenu({ categorySummaryResponseList }: T
       <View
         className={`rounded-xl px-7 py-5 border ${isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100'}`}
       >
-        {/* ── Lista categorii ── */}
         {sorted.map((item, index) => {
           const percent = grandTotal > 0 ? Math.round((item.totalAmount / grandTotal) * 100) : 0;
           const color = getColor(item.categoryName, index);
 
           return (
             <View key={item.categoryName} className="flex-row items-center justify-between mb-3">
-              {/* Dot + nume */}
+              {/* Dot + name */}
               <View className="flex-row items-center flex-1">
                 <View
                   style={{
@@ -84,7 +82,7 @@ export default function TopCategoriesFromMenu({ categorySummaryResponseList }: T
                 </Text>
               </View>
 
-              {/* Procent */}
+              {/* Percent */}
               <Text
                 className={`${isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-sm`}
               >
@@ -100,7 +98,6 @@ export default function TopCategoriesFromMenu({ categorySummaryResponseList }: T
           );
         })}
 
-        {/* ── Bara segmentată ── */}
         <View className="flex-row rounded-full overflow-hidden mt-1" style={{ height: 5 }}>
           {sorted.map((item, index) => {
             const percent = grandTotal > 0 ? (item.totalAmount / grandTotal) * 100 : 0;

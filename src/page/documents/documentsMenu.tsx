@@ -55,44 +55,7 @@ export default function DocumentsMenu() {
     const fetchDocuments = async () => {
       try {
         setLoading(true);
-        //const responseData = await documentApi.documentsHistory();
-        const responseData = {
-          urgentCount: 2,
-          soonCount: 1,
-          validCount: 0,
-          documents: [
-            {
-              id: 1,
-              documentTypeId: 2,
-              documentTypeName: 'ITP',
-              documentTypeIconName: 'car',
-              expiryDate: new Date('2026-04-30'),
-              daysRemaining: -15,
-              carName: 'Audi A5',
-              carId: 3,
-            },
-            {
-              id: 5,
-              documentTypeId: 1,
-              documentTypeName: 'Rovinietă',
-              documentTypeIconName: 'road',
-              expiryDate: new Date('2026-05-08'),
-              daysRemaining: -7,
-              carName: 'Audi A5',
-              carId: 3,
-            },
-            {
-              id: 2,
-              documentTypeId: 2,
-              documentTypeName: 'ITP',
-              documentTypeIconName: 'car',
-              expiryDate: new Date('2026-05-22'),
-              daysRemaining: 7,
-              carName: 'Dacia 1300',
-              carId: 17,
-            },
-          ],
-        };
+        const responseData = await documentApi.documentsHistory();
         setDocumentsSummary(responseData);
       } catch (error) {
         console.error(error);
