@@ -104,27 +104,31 @@ export default function ProfileScreen() {
                 marginHorizontal: 16,
               }}
             />
-            <View className="flex-row items-center px-4 py-4">
-              <View
-                className={`${isDark ? 'bg-background-icon-900' : 'bg-background-icon-100'} w-10 h-10 rounded-xl items-center justify-center mr-3`}
-              >
-                <Icons.Bell
-                  className={`${isDark ? 'text-icons-900' : 'text-icons-100'}`}
-                  size={18}
-                  strokeWidth={1.8}
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('Notifications')}
+              activeOpacity={0.7}>
+              <View className="flex-row items-center px-4 py-4">
+                <View
+                  className={`${isDark ? 'bg-background-icon-900' : 'bg-background-icon-100'} w-10 h-10 rounded-xl items-center justify-center mr-3`}
+                >
+                  <Icons.Bell
+                    className={`${isDark ? 'text-icons-900' : 'text-icons-100'}`}
+                    size={18}
+                    strokeWidth={1.8}
+                  />
+                </View>
+                <Text
+                  className={`${isDark ? 'text-typography-900' : 'text-typography-100'} flex-1 font-inter-medium text-base`}
+                >
+                  Notificari
+                </Text>
+                <Icons.ChevronRight
+                  className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                  size={16}
+                  strokeWidth={2}
                 />
               </View>
-              <Text
-                className={`${isDark ? 'text-typography-900' : 'text-typography-100'} flex-1 font-inter-medium text-base`}
-              >
-                Notificari
-              </Text>
-              <Icons.ChevronRight
-                className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
-                size={16}
-                strokeWidth={2}
-              />
-            </View>
+            </TouchableOpacity>
           </View>
 
           <View

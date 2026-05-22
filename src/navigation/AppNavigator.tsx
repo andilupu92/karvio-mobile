@@ -18,6 +18,7 @@ import Profile from '../page/profile/profile';
 import PersonalDocumentDetail from '../page/profile/personalDocumentDetail';
 import AddPersonalDocument from '../page/profile/addPersonalDocument';
 import PersonalDocuments from '../page/profile/personalDocuments';
+import Notifications from '../page/profile/notifications';
 
 type Car = {
   id: number;
@@ -89,6 +90,7 @@ export type RootStackParamList = {
   PersonalDocuments: undefined;
   PersonalDocumentDetail: { document: Document };
   AddPersonalDocument: { document?: Document };
+  Notifications: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -137,6 +139,7 @@ export default function AppNavigator() {
       <Stack.Screen name="PersonalDocuments" component={PersonalDocuments} options={{ headerShown: false }} />
       <Stack.Screen name="PersonalDocumentDetail" component={PersonalDocumentDetail} options={{ headerShown: false }} />
       <Stack.Screen name="AddPersonalDocument" component={AddPersonalDocument} options={{ headerShown: false }} />
+      <Stack.Screen name="Notifications" component={Notifications} options={{ headerShown: false }} />
       {/*</>
         )}*/}
     </Stack.Navigator>
