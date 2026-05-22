@@ -15,6 +15,9 @@ import ExpensesMenu from '../page/expenses/expensesMenu';
 import DocumentsMenu from '../page/documents/documentsMenu';
 import Settings from '../page/settings/settings';
 import Profile from '../page/profile/profile';
+import PersonalDocumentDetail from '../page/profile/personalDocumentDetail';
+import AddPersonalDocument from '../page/profile/addPersonalDocument';
+import PersonalDocuments from '../page/profile/personalDocuments';
 
 type Car = {
   id: number;
@@ -83,6 +86,9 @@ export type RootStackParamList = {
   DocumentsMenu: { car: CarItem; cars: Car[] };
   Settings: { car: CarItem; cars: Car[] };
   Profile: undefined;
+  PersonalDocuments: undefined;
+  PersonalDocumentDetail: { document: Document };
+  AddPersonalDocument: { document?: Document };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -128,6 +134,9 @@ export default function AppNavigator() {
       />
       <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
       <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+      <Stack.Screen name="PersonalDocuments" component={PersonalDocuments} options={{ headerShown: false }} />
+      <Stack.Screen name="PersonalDocumentDetail" component={PersonalDocumentDetail} options={{ headerShown: false }} />
+      <Stack.Screen name="AddPersonalDocument" component={AddPersonalDocument} options={{ headerShown: false }} />
       {/*</>
         )}*/}
     </Stack.Navigator>

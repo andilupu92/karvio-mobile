@@ -13,6 +13,7 @@ import {
   SquareParking,
   Fuel,
   TriangleAlert,
+  IdCard,
 } from 'lucide-react-native';
 
 export const ICON_MAP: Record<string, LucideIcon> = {
@@ -29,4 +30,5 @@ export const ICON_MAP: Record<string, LucideIcon> = {
   'square-parking': SquareParking,
   fuel: Fuel,
   'triangle-alert': TriangleAlert,
+  'id-card': IdCard,
 };

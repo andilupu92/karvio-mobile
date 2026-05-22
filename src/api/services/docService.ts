@@ -10,6 +10,11 @@ export interface DocumentCredentials {
   insertDate?: Date | undefined;
 }
 
+export interface DocumentPersonalCredentials {
+  documentTypeId: number;
+  expiryDate: Date;
+}
+
 export interface ExpenseCredentials {
   carId: number;
   expenseTypeId: number;
@@ -33,6 +38,11 @@ export const documentApi = {
     return response.data;
   },
 
+  personalDocuments: async () => {
+    const response = await apiClient.get(`${API_URL}/documents/personal`);
+    return response.data;
+  },
+
   expenses: async (carId: number) => {
     const response = await apiClient.get(`${API_URL}/expenses/${carId}/3`);
     return response.data;
@@ -43,8 +53,18 @@ export const documentApi = {
     return response.data;
   },
 
+  addPersonalDocument: async (credentials: DocumentPersonalCredentials) => {
+    const response = await apiClient.post(`${API_URL}/documents/personal`, { ...credentials });
+    return response.data;
+  },
+
   updateDocument: async (documentId: number, credentials: DocumentCredentials) => {
     const response = await apiClient.put(`${API_URL}/documents/${documentId}`, { ...credentials });
+    return response.data;
+  },
+
+  updatePersonalDocument: async (documentId: number, credentials: DocumentPersonalCredentials) => {
+    const response = await apiClient.put(`${API_URL}/documents/personal/${documentId}`, { ...credentials });
     return response.data;
   },
 
@@ -55,6 +75,11 @@ export const documentApi = {
 
   deleteDocument: async (documentId: number) => {
     const response = await apiClient.delete(`${API_URL}/documents/${documentId}`);
+    return response.data;
+  },
+
+  deletePersonalDocument: async (documentId: number) => {
+    const response = await apiClient.delete(`${API_URL}/documents/personal/${documentId}`);
     return response.data;
   },
 
