@@ -1,6 +1,6 @@
 import { Text } from '@/components/ui/text';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar, TouchableOpacity, View } from 'react-native';
+import { Modal, StatusBar, TouchableOpacity, View } from 'react-native';
 import { Icons } from '@/src/utils/icons';
 import { useTheme } from '@/src/context/themeContext';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -9,10 +9,21 @@ import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Box } from '@/components/ui/box';
 import { useAuthStore } from '@/src/store/authStore';
+import { useState } from 'react';
 
 export default function ProfileScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { isDark } = useTheme();
+  const logout = useAuthStore((state) => state.logout);
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+
+  const handleLogout = async () => {
+    await logout();
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    });
+  };
 
   return (
     <SafeAreaView
@@ -258,21 +269,26 @@ export default function ProfileScreen() {
           <View
             className={`${isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100'} border rounded-xl overflow-hidden mt-1`}
           >
-            <View className="flex-row items-center px-4 py-4">
-              <View
-                className={`${isDark ? 'bg-background-icon-900' : 'bg-error-0'} w-10 h-10 rounded-xl items-center justify-center mr-3`}
-              >
-                <Icons.LogOut className="text-error-50" size={18} strokeWidth={1.8} />
+            <TouchableOpacity
+              onPress={() => setLogoutModalVisible(true)}
+              activeOpacity={0.7}
+            >
+              <View className="flex-row items-center px-4 py-4">
+                <View
+                  className={`${isDark ? 'bg-background-icon-900' : 'bg-error-0'} w-10 h-10 rounded-xl items-center justify-center mr-3`}
+                >
+                  <Icons.LogOut className="text-error-50" size={18} strokeWidth={1.8} />
+                </View>
+                <Text className={`text-error-50 flex-1 font-inter-medium text-base`}>
+                  Deloghează-te
+                </Text>
+                <Icons.ChevronRight
+                  className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                  size={16}
+                  strokeWidth={2}
+                />
               </View>
-              <Text className={`text-error-50 flex-1 font-inter-medium text-base`}>
-                Deloghează-te
-              </Text>
-              <Icons.ChevronRight
-                className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
-                size={16}
-                strokeWidth={2}
-              />
-            </View>
+            </TouchableOpacity>
             <View
               className={`${isDark ? 'bg-outline-900' : 'bg-outline-100'}`}
               style={{
@@ -298,6 +314,46 @@ export default function ProfileScreen() {
           </View>
         </Box>
       </KeyboardAwareScrollView>
+
+      {/* Modal logout */}
+      <Modal
+        visible={logoutModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setLogoutModalVisible(false)}
+      >
+        <View className="flex-1 justify-center items-center bg-black/50">
+          <View className="bg-white rounded-2xl p-6 w-[85%] shadow-lg elevation-8">
+            {/* Title */}
+            <Text className="font-inter-semibold text-[17px] text-gray-900 mb-2.5">
+              Deloghează-te
+            </Text>
+
+            {/* Message */}
+            <Text className="font-inter-regular text-sm text-gray-600 mb-5 leading-5">
+              Ești sigur că vrei să te deloghezi din cont?
+            </Text>
+
+            {/* Separator */}
+            <View className="h-px bg-gray-100 mb-4" />
+
+            {/* Buttons */}
+            <View className="flex-row justify-end gap-5">
+              <TouchableOpacity onPress={() => setLogoutModalVisible(false)}>
+                <Text className="font-inter-semibold text-sm text-[#0a4f67] tracking-wide">
+                  ÎNAPOI
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleLogout}>
+                <Text className="font-inter-semibold text-sm text-red-500 tracking-wide">
+                  DELOGHEAZĂ-MĂ
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      
     </SafeAreaView>
   );
 }

@@ -10,11 +10,6 @@ export interface LoginCredentials {
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
-  /*user: {
-    id: string;
-    email: string;
-    name: string;
-  };*/
 }
 
 export const authApi = {
@@ -31,9 +26,5 @@ export const authApi = {
   refreshToken: async (refreshToken: string) => {
     const response = await apiClient.post(`${API_URL}/refreshToken`, { refreshToken });
     return response.data;
-  },
-
-  logout: async (): Promise<void> => {
-    await apiClient.post(`${API_URL}/logout`);
   },
 };

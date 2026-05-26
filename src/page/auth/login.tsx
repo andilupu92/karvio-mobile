@@ -64,7 +64,7 @@ export default function LoginScreen() {
       await login(
         responseData.accessToken,
         responseData.refreshToken,
-        { id: '0', email: data.email, name: 'John Doe' }, // I will modify dynamically later when I have the user data from the backend
+        { email: data.email },
       );
 
       console.log('Login Success for: ', data.email);
@@ -183,13 +183,13 @@ export default function LoginScreen() {
             </FormControl>
 
             {/* Forgot Password Link */}
-            {/*<Box className="items-end mb-8 mr-1"> 
+            <Box className="items-end mb-8 mr-1"> 
               <Link onPress={() => navigation.navigate('ForgotPassword')}>
                 <LinkText className="text-sm text-blue-500 dark:text-blue-400 font-medium no-underline">
                   Forgot your password?
                 </LinkText>
               </Link>
-            </Box>*/}
+            </Box>
 
             {/* Sign In Button */}
             <Button

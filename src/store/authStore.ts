@@ -2,9 +2,7 @@ import { create } from 'zustand';
 import { secureStorage } from '../utils/secureStorage';
 
 interface User {
-  id: string;
   email: string;
-  name: string;
 }
 
 interface AuthState {
