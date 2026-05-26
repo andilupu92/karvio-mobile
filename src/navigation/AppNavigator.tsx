@@ -21,6 +21,8 @@ import PersonalDocuments from '../page/profile/personalDocuments';
 import Notifications from '../page/profile/notifications';
 import BugReportScreen from '../page/profile/bugReport';
 import FeedbackScreen from '../page/profile/feedback';
+import ContactUsScreen from '../page/profile/contactUs';
+import AboutAppScreen from '../page/profile/aboutApp';
 
 type Car = {
   id: number;
@@ -95,6 +97,8 @@ export type RootStackParamList = {
   Notifications: undefined;
   BugReportScreen: undefined;
   FeedbackScreen: undefined;
+  ContactUsScreen: undefined;
+  AboutAppScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -146,6 +150,8 @@ export default function AppNavigator() {
       <Stack.Screen name="Notifications" component={Notifications} options={{ headerShown: false }} />
       <Stack.Screen name="BugReportScreen" component={BugReportScreen} options={{ headerShown: false }} />
       <Stack.Screen name="FeedbackScreen" component={FeedbackScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ContactUsScreen" component={ContactUsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="AboutAppScreen" component={AboutAppScreen} options={{ headerShown: false }} />
       {/*</>
         )}*/}
     </Stack.Navigator>

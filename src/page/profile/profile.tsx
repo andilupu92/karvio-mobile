@@ -196,27 +196,31 @@ export default function ProfileScreen() {
           <View
             className={`${isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100'} border rounded-xl overflow-hidden mt-1`}
           >
-            <View className="flex-row items-center px-4 py-4">
-              <View
-                className={`${isDark ? 'bg-background-icon-900' : 'bg-background-icon-100'} w-10 h-10 rounded-xl items-center justify-center mr-3`}
-              >
-                <Icons.Mail
-                  className={`${isDark ? 'text-icons-900' : 'text-icons-100'}`}
-                  size={18}
-                  strokeWidth={1.8}
-                />
-              </View>
-              <Text
-                className={`${isDark ? 'text-typography-900' : 'text-typography-100'} flex-1 font-inter-medium text-base`}
-              >
-                Contactează-ne
-              </Text>
-              <Icons.ChevronRight
-                className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
-                size={16}
-                strokeWidth={2}
-              />
-            </View>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('ContactUsScreen')}
+              activeOpacity={0.7}>
+                <View className="flex-row items-center px-4 py-4">
+                  <View
+                    className={`${isDark ? 'bg-background-icon-900' : 'bg-background-icon-100'} w-10 h-10 rounded-xl items-center justify-center mr-3`}
+                  >
+                    <Icons.Mail
+                      className={`${isDark ? 'text-icons-900' : 'text-icons-100'}`}
+                      size={18}
+                      strokeWidth={1.8}
+                    />
+                  </View>
+                  <Text
+                    className={`${isDark ? 'text-typography-900' : 'text-typography-100'} flex-1 font-inter-medium text-base`}
+                  >
+                    Contactează-ne
+                  </Text>
+                  <Icons.ChevronRight
+                    className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                    size={16}
+                    strokeWidth={2}
+                  />
+                </View>
+                </TouchableOpacity>
             <View
               className={`${isDark ? 'bg-outline-900' : 'bg-outline-100'}`}
               style={{
@@ -224,27 +228,31 @@ export default function ProfileScreen() {
                 marginHorizontal: 16,
               }}
             />
-            <View className="flex-row items-center px-4 py-4">
-              <View
-                className={`${isDark ? 'bg-background-icon-900' : 'bg-background-icon-100'} w-10 h-10 rounded-xl items-center justify-center mr-3`}
-              >
-                <Icons.Info
-                  className={`${isDark ? 'text-icons-900' : 'text-icons-100'}`}
-                  size={18}
-                  strokeWidth={1.8}
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('AboutAppScreen')}
+              activeOpacity={0.7}>
+                <View className="flex-row items-center px-4 py-4">
+                <View
+                  className={`${isDark ? 'bg-background-icon-900' : 'bg-background-icon-100'} w-10 h-10 rounded-xl items-center justify-center mr-3`}
+                >
+                  <Icons.Info
+                    className={`${isDark ? 'text-icons-900' : 'text-icons-100'}`}
+                    size={18}
+                    strokeWidth={1.8}
+                  />
+                </View>
+                <Text
+                  className={`${isDark ? 'text-typography-900' : 'text-typography-100'} flex-1 font-inter-medium text-base`}
+                >
+                  Despre aplicație
+                </Text>
+                <Icons.ChevronRight
+                  className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                  size={16}
+                  strokeWidth={2}
                 />
               </View>
-              <Text
-                className={`${isDark ? 'text-typography-900' : 'text-typography-100'} flex-1 font-inter-medium text-base`}
-              >
-                Despre aplicație
-              </Text>
-              <Icons.ChevronRight
-                className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
-                size={16}
-                strokeWidth={2}
-              />
-            </View>
+              </TouchableOpacity>
           </View>
 
           <View
