@@ -110,7 +110,7 @@ export default function LoginScreen() {
         className="flex-1"
       >
         <VStack
-          className={`flex-1 px-8 pt-12 mt-12 ${colorScheme === 'dark' ? 'bg-background-primary-900' : 'bg-background-primary-100'} rounded-t-[35px]`}
+          className={`flex-1 px-8 pt-12 mt-20 ${colorScheme === 'dark' ? 'bg-background-primary-900' : 'bg-background-primary-100'} rounded-t-[35px]`}
           style={{ zIndex: 20 }}
         >
           <Box className="mt-2">
@@ -227,16 +227,16 @@ export default function LoginScreen() {
               </HStack>
             </Button>
 
-            <HStack className="items-center my-8">
+            {/*<HStack className="items-center my-8">
               <Box className="flex-1 h-[1px] bg-gray-200 dark:bg-slate-800" />
               <Text className={`${colorScheme === 'dark' ? 'text-typography-800' : 'text-typography-200'} px-4 text-sm font-medium`}>
                 or continue with
               </Text>
               <Box className={`flex-1 h-[1px] ${colorScheme === 'dark' ? 'bg-outline-900' : 'bg-outline-100'}`} />
-            </HStack>
+            </HStack>*/}
 
             {/* Social Login Buttons Container */}
-            <Button
+            {/*<Button
               size="xl"
               action="secondary"
               className="w-full h-16 items-center justify-center border border-[#747775] bg-white dark:border-[#8E918F] dark:bg-[#131314] rounded-2xl shadow-lg shadow-gray-200 dark:shadow-none border border-gray-200"
@@ -253,7 +253,7 @@ export default function LoginScreen() {
                   {isGoogleLoading ? 'Signing up...' : 'Sign up with Google'}
                 </ButtonText>
               </HStack>
-            </Button>
+            </Button>*/}
 
             {/* Footer Links */}
             <HStack className="justify-center mt-8 items-center" space="xs">
