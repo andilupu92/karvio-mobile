@@ -20,6 +20,7 @@ import type { RootStackParamList } from '../../navigation/AppNavigator';
 import { authApi } from '../../api/services/authService';
 import { useAuthStore } from '../../store/authStore';
 import GoogleIcon from '@/src/icons/GoogleIcon';
+import { Icons } from '@/src/utils/icons';
 
 const loginSchema = z.object({
   email: z
@@ -93,7 +94,7 @@ export default function LoginScreen() {
   const activeIconColor = '#10b981';
 
   return (
-    <Box className="flex-1 bg-white dark:bg-slate-950">
+    <Box className={`flex-1 ${colorScheme === 'dark' ? 'bg-background-primary-900' : 'bg-background-primary-100'}`}>
       {/* HEADER */}
       <Box style={{ zIndex: 10 }}>
         <WelcomeCard
@@ -109,7 +110,7 @@ export default function LoginScreen() {
         className="flex-1"
       >
         <VStack
-          className="flex-1 px-8 pt-12 mt-12 bg-white dark:bg-slate-950 rounded-t-[35px]"
+          className={`flex-1 px-8 pt-12 mt-12 ${colorScheme === 'dark' ? 'bg-background-primary-900' : 'bg-background-primary-100'} rounded-t-[35px]`}
           style={{ zIndex: 20 }}
         >
           <Box className="mt-2">
@@ -127,6 +128,13 @@ export default function LoginScreen() {
                     isInvalid={!!errors.email}
                     keyboardType="email-address"
                     autoCapitalize="none"
+                    leftIcon={
+                                        <Icons.LucideMail
+                                          className={`${colorScheme === 'dark' ? 'text-icons-800' : 'text-icons-200'}`}
+                                          size={18}
+                                          strokeWidth={1.8}
+                                        />
+                                      }
                     rightIcon={
                       isEmailValid ? (
                         <CheckCircleIcon
@@ -160,6 +168,13 @@ export default function LoginScreen() {
                     isInvalid={!!errors.password}
                     secureTextEntry={!showPassword}
                     autoCapitalize="none"
+                    leftIcon={
+                                        <Icons.LucideLock
+                                          className={`${colorScheme === 'dark' ? 'text-icons-800' : 'text-icons-200'}`}
+                                          size={18}
+                                          strokeWidth={1.8}
+                                        />
+                                      }
                     rightIcon={
                       <TouchableOpacity
                         onPress={() => setShowPassword(!showPassword)}
@@ -194,7 +209,7 @@ export default function LoginScreen() {
             {/* Sign In Button */}
             <Button
               size="xl"
-              className="bg-black dark:bg-blue-600 h-16 rounded-2xl shadow-lg shadow-gray-200 dark:shadow-none active:scale-[0.98]"
+              className={`${colorScheme === 'dark' ? 'bg-background-primary-100' : 'bg-background-primary-900'} h-16 rounded-2xl shadow-lg shadow-gray-200 dark:shadow-none active:scale-[0.98]`}
               isDisabled={isLoading}
               onPress={handleSubmit(onSubmit)}
             >
@@ -206,7 +221,7 @@ export default function LoginScreen() {
                     className="text-white dark:text-blue-400 mr-2"
                   />
                 ) : null}
-                <ButtonText className="font-bold dark:text-white text-lg">
+                <ButtonText className={`${colorScheme === 'dark' ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-lg`}>
                   {isLoading ? 'Logging in...' : 'Login'}
                 </ButtonText>
               </HStack>
@@ -214,10 +229,10 @@ export default function LoginScreen() {
 
             <HStack className="items-center my-8">
               <Box className="flex-1 h-[1px] bg-gray-200 dark:bg-slate-800" />
-              <Text className="px-4 text-gray-400 dark:text-slate-500 text-sm font-medium">
+              <Text className={`${colorScheme === 'dark' ? 'text-typography-800' : 'text-typography-200'} px-4 text-sm font-medium`}>
                 or continue with
               </Text>
-              <Box className="flex-1 h-[1px] bg-gray-200 dark:bg-slate-800" />
+              <Box className={`flex-1 h-[1px] ${colorScheme === 'dark' ? 'bg-outline-900' : 'bg-outline-100'}`} />
             </HStack>
 
             {/* Social Login Buttons Container */}
@@ -242,11 +257,11 @@ export default function LoginScreen() {
 
             {/* Footer Links */}
             <HStack className="justify-center mt-8 items-center" space="xs">
-              <Text className="text-gray-500 dark:text-slate-500 font-medium">
+              <Text className={`${colorScheme === 'dark' ? 'text-typography-800' : 'text-typography-200'} font-medium`}>
                 Don't have an account?
               </Text>
               <Link onPress={() => navigation.navigate('SignUp')}>
-                <LinkText className="text-blue-600 dark:text-blue-400 font-bold no-underline">
+                <LinkText className={`${colorScheme === 'dark' ? 'text-blue-400' : 'text-blue-600'} font-bold no-underline`}>
                   Sign up
                 </LinkText>
               </Link>

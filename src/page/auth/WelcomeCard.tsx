@@ -24,7 +24,7 @@ const THEMES = {
   light: {
     cardColor: '#F0A83A',
     iconColor: '#FDB022',
-    backIconColor: '#f8f6f6',
+    backIconColor: '#fafafa',
     backButtonBg: 'rgba(255, 255, 255, 0.3)',
     backArrowColor: '#FFFFFF',
   },
