@@ -10,19 +10,40 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Box } from '@/components/ui/box';
 import { useAuthStore } from '@/src/store/authStore';
 import { useState } from 'react';
+import { authApi } from '@/src/api/services/authService';
 
 export default function ProfileScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { isDark } = useTheme();
   const logout = useAuthStore((state) => state.logout);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const handleLogout = async () => {
-    await logout();
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Login' }],
-    });
+    try {
+      await logout();
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+      });
+    } catch (error) {
+      setLogoutModalVisible(false);
+      console.error('Logout failed:', error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await authApi.deleteAccount();
+      await logout();
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+      });
+    } catch (error) {
+      setDeleteModalVisible(false);
+      console.error('Delete account failed:', error);
+    }
   };
 
   return (
@@ -296,21 +317,26 @@ export default function ProfileScreen() {
                 marginHorizontal: 16,
               }}
             />
-            <View className="flex-row items-center px-4 py-4">
-              <View
-                className={`${isDark ? 'bg-background-icon-900' : 'bg-error-0'} w-10 h-10 rounded-xl items-center justify-center mr-3`}
-              >
-                <Icons.Trash2 className="text-error-50" size={18} strokeWidth={1.8} />
+            <TouchableOpacity
+              onPress={() => setDeleteModalVisible(true)}
+              activeOpacity={0.7}
+            >
+              <View className="flex-row items-center px-4 py-4">
+                <View
+                  className={`${isDark ? 'bg-background-icon-900' : 'bg-error-0'} w-10 h-10 rounded-xl items-center justify-center mr-3`}
+                >
+                  <Icons.Trash2 className="text-error-50" size={18} strokeWidth={1.8} />
+                </View>
+                <Text className={`text-error-50 flex-1 font-inter-bold text-base`}>
+                  Șterge contul
+                </Text>
+                <Icons.ChevronRight
+                  className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                  size={16}
+                  strokeWidth={2}
+                />
               </View>
-              <Text className={`text-error-50 flex-1 font-inter-bold text-base`}>
-                Șterge contul
-              </Text>
-              <Icons.ChevronRight
-                className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
-                size={16}
-                strokeWidth={2}
-              />
-            </View>
+            </TouchableOpacity>
           </View>
         </Box>
       </KeyboardAwareScrollView>
@@ -347,6 +373,45 @@ export default function ProfileScreen() {
               <TouchableOpacity onPress={handleLogout}>
                 <Text className="font-inter-semibold text-sm text-red-500 tracking-wide">
                   DELOGHEAZĂ-MĂ
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal delete account */}
+      <Modal
+        visible={deleteModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setDeleteModalVisible(false)}
+      >
+        <View className="flex-1 justify-center items-center bg-black/50">
+          <View className="bg-white rounded-2xl p-6 w-[85%] shadow-lg elevation-8">
+            {/* Title */}
+            <Text className="font-inter-semibold text-[17px] text-gray-900 mb-2.5">
+              Șterge contul
+            </Text>
+
+            {/* Message */}
+            <Text className="font-inter-regular text-sm text-gray-600 mb-5 leading-5">
+              Ești sigur că vrei să ștergi contul?
+            </Text>
+
+            {/* Separator */}
+            <View className="h-px bg-gray-100 mb-4" />
+
+            {/* Buttons */}
+            <View className="flex-row justify-end gap-5">
+              <TouchableOpacity onPress={() => setDeleteModalVisible(false)}>
+                <Text className="font-inter-semibold text-sm text-[#0a4f67] tracking-wide">
+                  ÎNAPOI
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleDelete}>
+                <Text className="font-inter-semibold text-sm text-red-500 tracking-wide">
+                  ȘTERGE CONTUL
                 </Text>
               </TouchableOpacity>
             </View>

@@ -120,7 +120,6 @@ export default function AddDocument() {
         error?.response?.data?.message ||
         error?.message ||
         'An error occurred during document save';
-      console.log('Body:', JSON.stringify(error?.response?.data));
       console.error('Document save error:', errorMessage);
     } finally {
       setSaveLoading(false);

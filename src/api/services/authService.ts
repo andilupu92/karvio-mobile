@@ -27,4 +27,9 @@ export const authApi = {
     const response = await apiClient.post(`${API_URL}/refreshToken`, { refreshToken });
     return response.data;
   },
+
+  deleteAccount: async () => {
+    const response = await apiClient.delete(`${API_URL}/delete`);
+    return response.data;
+  }
 };
