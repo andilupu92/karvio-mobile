@@ -5,14 +5,22 @@ import { useAuthStore } from '../store/authStore';
 import Constants from 'expo-constants';
 
 const getBaseUrl = () => {
+
+  //prodction environment - use the environment variable
+  if (!__DEV__) {
+    return process.env.EXPO_PUBLIC_API_BASE_URL;
+  }
+
+  // development environment - construct the URL based on the host URI provided by Expo
   const hostUri = Constants.expoConfig?.hostUri;
 
   if (!hostUri) {
-    return 'http://localhost:8080';
+    return process.env.EXPO_PUBLIC_API_BASE_URL;
   }
 
   const ip = hostUri.split(':')[0];
-  return `http://${ip}:8080`;
+  const port = process.env.EXPO_PUBLIC_API_PORT ?? '8080';
+  return `http://${ip}:${port}`;
 };
 
 const apiClient = axios.create({
