@@ -100,7 +100,7 @@ export default function BugReportScreen() {
           } text-lg font-inter-semibold text-center flex-1`}
           style={{ marginRight: 36 }}
         >
-          Report a bug
+          Raportează o problemă
         </Text>
       </View>
 
@@ -122,7 +122,7 @@ export default function BugReportScreen() {
               isDark ? 'text-typography-800' : 'text-typography-200'
             } font-inter-regular text-sm text-center leading-6`}
           >
-            Dacă ați sesizat bug-uri în timp ce ați rulat pe aplicație, vă rogăm să ne scrieți aici și noi o
+            Dacă ai sesizat bug-uri în timp ce ai rulat pe aplicație, te rog să ne scrii aici și noi o
             vom rezolva cât se poate de rapid
           </Text>
 
@@ -145,7 +145,7 @@ export default function BugReportScreen() {
                   <TextInput
                     value={value}
                     onChangeText={onChange}
-                    placeholder="Descrieți problema aici..."
+                    placeholder="Descrie problema aici..."
                     placeholderTextColor={isDark ? '#6B7280' : '#9CA3AF'}
                     multiline
                     textAlignVertical="top"

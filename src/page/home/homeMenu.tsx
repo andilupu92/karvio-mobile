@@ -7,6 +7,16 @@ import { Home, FileText, Plus, BarChart2, Settings } from 'lucide-react-native';
 import { useTheme } from '@/src/context/themeContext';
 import { Icons } from '@/src/utils/icons';
 
+type Car = {
+  id: number;
+  name: string;
+  energyType: string;
+  kilometers: number;
+  year: number;
+  consumption: number;
+  healthScore: number;
+};
+
 type TabName = 'Home' | 'Documents' | 'Expenses' | 'Settings';
 
 const TABS = [
@@ -17,6 +27,7 @@ const TABS = [
 ];
 
 interface HomeMenuProps {
+  cars: Car[];
   activeTab?: TabName;
   onTabPress?: (tab: TabName) => void;
   onAddPress?: () => void;
@@ -41,7 +52,7 @@ const buildWavePath = (width: number, height: number) => {
   ].join(' ');
 };
 
-export default function HomeMenu({ activeTab = 'Home', onTabPress, onAddPress }: HomeMenuProps) {
+export default function HomeMenu({ activeTab = 'Home', onTabPress, onAddPress, cars }: HomeMenuProps) {
   const insets = useSafeAreaInsets();
   const { isDark } = useTheme();
 
@@ -104,6 +115,7 @@ export default function HomeMenu({ activeTab = 'Home', onTabPress, onAddPress }:
                 onPress={() => onTabPress?.(tab.name)}
                 activeOpacity={0.7}
                 className="flex-1 items-center justify-center"
+                disabled={cars.length === 0 && (tab.name === 'Documents' || tab.name === 'Expenses')}
               >
                 <Icon
                   className={`${isActive ? 'text-icons-900' : 'text-icons-200'}`}

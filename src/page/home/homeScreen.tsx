@@ -7,11 +7,11 @@ import HomeMenu from './homeMenu';
 import { carApi } from '@/src/api/services/carService';
 import { documentApi } from '@/src/api/services/docService';
 import { Text } from '@/components/ui/text';
-import { CarFront, Plus } from 'lucide-react-native';
+import { Plus } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/src/navigation/AppNavigator';
-import { Button } from '@/components/ui/button';
+import { Button, ButtonText } from '@/components/ui/button';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import HomeQuickActions from './homeQuickActions';
 import HomeGarage from './homeGarage';
@@ -23,6 +23,7 @@ import HomeHealth from './homeHealth';
 import HomeDocuments from './homeDocuments';
 import AddFuel from '../cars/addFuel';
 import { useTheme } from '@/src/context/themeContext';
+import { Icons } from '@/src/utils/icons';
 
 type TabName = 'Home' | 'Documents' | 'Expenses' | 'Settings';
 
@@ -88,8 +89,10 @@ export default function HomeScreen() {
             healthScore: responseData[0]?.healthScore,
             consumption: responseData[0]?.consumption,
           });
-          await fetchDocuments(responseData[0]?.id);
-          await fetchExpenses(responseData[0]?.id);
+          if (responseData.length > 0) {
+            await fetchDocuments(responseData[0]?.id);
+            await fetchExpenses(responseData[0]?.id);
+          }
         } catch (error) {
           console.error(error);
         } finally {
@@ -107,6 +110,7 @@ export default function HomeScreen() {
       setExpenses(responseData);
     } catch (error) {
       console.error(error);
+      console.error('Error fetching expenses:');
     } finally {
       setExpensesLoading(false);
     }
@@ -119,6 +123,7 @@ export default function HomeScreen() {
       setDocuments(responseData);
     } catch (error) {
       console.error(error);
+      console.error('Error fetching documents:');
     } finally {
       setDocumentsLoading(false);
     }
@@ -200,26 +205,40 @@ export default function HomeScreen() {
             </View>
           ) : (
             <View
-              className="px-7 flex-1 items-center justify-center gap-10"
+              className="px-7 flex-1 items-center justify-center gap-10 mt-24"
               style={{ paddingBottom: 180 }}
             >
-              <View className="w-32 h-32 rounded-full bg-secondary-500 items-center justify-center">
-                <CarFront size={60} color="#ffffff" strokeWidth={1.6} />
+              <View className={`${isDark ? 'bg-background-icon-900' : 'bg-background-icon-100'} w-32 h-32 rounded-full items-center justify-center`}>
+                <Icons.CarFront
+                  className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                  size={60}
+                  strokeWidth={1.6}
+                />
               </View>
 
-              <Text className="text-center font-inter-medium text-typography-50 leading-6">
-                Nu există mașini în garaj. Adaugă una pentru a începe să urmărești cheltuielile și
-                documentele!
-              </Text>
+              <View className="items-center justify-center mt-10 px-8">
+                <Text
+                  className={`${isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-base text-center`}
+                >
+                  Nicio mașină în garaj
+                </Text>
+                <Text
+                  className={`${isDark ? 'text-typography-800' : 'text-typography-200'} font-inter-regular text-sm text-center mt-1`}
+                >
+                  Adaugă o mașină pentru a începe să urmărești cheltuielile și documentele!
+                </Text>
+              </View>
 
               <Button
                 onPress={() => navigation.navigate('AddCar')}
-                className="flex-row items-center justify-center h-16 bg-secondary-500 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]"
+                className={`${isDark ? 'bg-background-primary-100' : 'bg-background-primary-900'} flex-row items-center justify-center h-16 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]`}
               >
                 <Plus size={18} color="#ffffff" strokeWidth={2.5} />
-                <Text className="text-primary-0 font-inter-semibold text-base">
+                <ButtonText
+                  className={`${isDark ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-lg`}
+                >
                   Adaugă o mașină
-                </Text>
+                </ButtonText>
               </Button>
             </View>
           )}
@@ -227,12 +246,14 @@ export default function HomeScreen() {
       </Box>
 
       <HomeMenu
+        cars={cars}
         activeTab={activeTab}
         onTabPress={(tab) => setActiveTab(tab)}
         onAddPress={() => setShowAddSheet((prev) => !prev)}
       />
 
       <HomeAddBottomSheet
+        cars={cars}
         visible={showAddSheet}
         onClose={() => setShowAddSheet(false)}
         onAddCar={() => navigation.navigate('AddCar')}

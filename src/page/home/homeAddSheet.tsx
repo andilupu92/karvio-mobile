@@ -17,7 +17,18 @@ import { Icons } from '@/src/utils/icons';
 
 const { height } = Dimensions.get('window');
 
+type Car = {
+  id: number;
+  name: string;
+  energyType: string;
+  kilometers: number;
+  year: number;
+  consumption: number;
+  healthScore: number;
+};
+
 interface HomeAddBottomSheetProps {
+  cars: Car[];
   visible: boolean;
   onClose: () => void;
   onAddCar: () => void;
@@ -26,6 +37,7 @@ interface HomeAddBottomSheetProps {
 }
 
 export default function HomeAddBottomSheet({
+  cars,
   visible,
   onClose,
   onAddCar,
@@ -107,6 +119,8 @@ export default function HomeAddBottomSheet({
     },
   ];
 
+  const ACTIVE_ACTIONS = ACTIONS.slice(0, cars.length > 0 ? ACTIONS.length : 1)
+
   if (!isMounted) return null;
 
   return (
@@ -150,8 +164,8 @@ export default function HomeAddBottomSheet({
             elevation: 12,
           }}
         >
-          {ACTIONS.map((action, index) => {
-            const isLast = index === ACTIONS.length - 1;
+          {ACTIVE_ACTIONS.map((action, index) => {
+            const isLast = index === ACTIVE_ACTIONS.length - 1;
 
             return (
               <TouchableOpacity key={index} onPress={action.onPress} activeOpacity={0.8}>

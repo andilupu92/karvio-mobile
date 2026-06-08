@@ -75,7 +75,7 @@ export default function HomeHealth({ healthScore }: Props) {
           <Text
             className={`font-inter-medium text-[10px] ${isDark ? 'text-typography-900' : 'text-typography-100'}`}
           >
-            "-"
+            -
           </Text>
         )}
       </Text>

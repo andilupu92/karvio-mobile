@@ -202,23 +202,19 @@ export default function Settings() {
                 />
               </View>
             </View>
-
-            <View
-              className={`${isDark ? 'text-typography-800' : 'text-typography-200'} mt-80 pt-16 font-inter-medium text-sm items-center justify-center`}
-            >
-              <Text className="italic">App version 1.0.0</Text>
-            </View>
           </View>
         </KeyboardAwareScrollView>
       </Box>
 
       <HomeMenu
+        cars={cars}
         activeTab={activeTab}
         onTabPress={(tab) => setActiveTab(tab)}
         onAddPress={() => setShowAddSheet((prev) => !prev)}
       />
 
       <HomeAddBottomSheet
+        cars={cars}
         visible={showAddSheet}
         onClose={() => setShowAddSheet(false)}
         onAddCar={() => navigation.navigate('AddCar')}

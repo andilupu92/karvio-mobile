@@ -66,7 +66,6 @@ export default function HomeGarage({ cars, onCarSelect }: Props) {
           </View>
         </View>
 
-        {cars.length > 1 && (
           <View>
             {/* View all */}
             <TouchableOpacity
@@ -86,7 +85,6 @@ export default function HomeGarage({ cars, onCarSelect }: Props) {
               </Text>
             </TouchableOpacity>
           </View>
-        )}
       </View>
 
       <View className="flex-row h-[40px]">

@@ -93,7 +93,7 @@ export default function Cars() {
               ))
             )}
           </View>
-          <View className="px-4 flex-1 items-center justify-center">
+          <View className="px-4 absolute bottom-0 w-full">
             <Button
               onPress={() => navigation.navigate('AddCar')}
               className={`${isDark ? 'bg-background-primary-100' : 'bg-background-primary-900'} flex-row items-center justify-center h-16 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]`}
@@ -104,7 +104,7 @@ export default function Cars() {
                 strokeWidth={2.5}
               />
               <Text
-                className={`${isDark ? 'text-typography-100' : 'text-typography-900'} font-inter-semibold text-base`}
+                className={`${isDark ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-base`}
               >
                 Adaugă o mașină
               </Text>

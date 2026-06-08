@@ -13,6 +13,9 @@ import type { RootStackParamList } from '@/src/navigation/AppNavigator';
 import HomeAddBottomSheet from '../home/homeAddSheet';
 import DocumentCard from './documentCard';
 import { useTheme } from '@/src/context/themeContext';
+import { Icons } from '@/src/utils/icons';
+import { Button, ButtonText } from '@/components/ui/button';
+import { Plus } from 'lucide-react-native';
 
 type TabName = 'Home' | 'Documents' | 'Expenses' | 'Settings';
 
@@ -94,7 +97,7 @@ export default function DocumentsMenu() {
       </View>
 
       <Box
-        className={`flex-1 ${isDark ? 'bg-background-primary-900' : 'bg-background-primary-100'} px-5 py-1`}
+        className={`flex-1 ${isDark ? 'bg-background-primary-900' : 'bg-background-primary-100'} px-2 py-1`}
       >
         <KeyboardAwareScrollView
           contentContainerStyle={{ flexGrow: 1 }}
@@ -129,7 +132,7 @@ export default function DocumentsMenu() {
                   />
                 </View>
 
-                {(actionRequired?.length ?? 0) && (
+                {(actionRequired?.length ?? 0) > 0 && (
                   <>
                     <Text
                       className={`${isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-base mx-4 mt-6 mb-2`}
@@ -152,7 +155,7 @@ export default function DocumentsMenu() {
                   </>
                 )}
 
-                {(valid?.length ?? 0) && (
+                {(valid?.length ?? 0) > 0 && (
                   <>
                     <Text
                       className={`${isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-base mx-4 mt-6 mb-2`}
@@ -176,17 +179,41 @@ export default function DocumentsMenu() {
                 )}
               </Box>
             ) : (
-              <View className="items-center justify-center mt-20 px-8">
-                <Text
-                  className={`${isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-base text-center`}
+              <View
+                className="px-7 flex-1 items-center justify-center gap-10"
+                style={{ paddingBottom: 200 }}
+              >
+                <View className={`${isDark ? 'bg-background-icon-900' : 'bg-background-icon-100'} w-32 h-32 rounded-full items-center justify-center`}>
+                                <Icons.FileText
+                                  className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                                  size={60}
+                                  strokeWidth={1.6}
+                                />
+                              </View>
+                              <View className="items-center justify-center mt-10 px-8">
+                  <Text
+                    className={`${isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-base text-center`}
+                  >
+                    Niciun document găsit
+                  </Text>
+                  <Text
+                    className={`${isDark ? 'text-typography-800' : 'text-typography-200'} font-inter-regular text-sm text-center mt-1`}
+                  >
+                    Adaugă documente pentru mașinile tale pentru a le urmări ușor.
+                  </Text> 
+                </View>
+
+                <Button
+                  onPress={() => navigation.navigate('AddDocument', { car, cars })}
+                  className={`${isDark ? 'bg-background-primary-100' : 'bg-background-primary-900'} flex-row items-center justify-center h-16 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]`}
                 >
-                  Niciun document găsit
-                </Text>
-                <Text
-                  className={`${isDark ? 'text-typography-800' : 'text-typography-200'} font-inter-regular text-sm text-center mt-1`}
-                >
-                  Adaugă documente pentru mașinile tale pentru a le urmări ușor.
-                </Text>
+                  <Plus size={18} color="#ffffff" strokeWidth={2.5} />
+                  <ButtonText
+                    className={`${isDark ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-lg`}
+                  >
+                    Adaugă un document
+                  </ButtonText>
+                </Button>
               </View>
             )}
           </View>
@@ -194,12 +221,14 @@ export default function DocumentsMenu() {
       </Box>
 
       <HomeMenu
+        cars={cars}
         activeTab={activeTab}
         onTabPress={(tab) => setActiveTab(tab)}
         onAddPress={() => setShowAddSheet((prev) => !prev)}
       />
 
       <HomeAddBottomSheet
+        cars={cars}
         visible={showAddSheet}
         onClose={() => setShowAddSheet(false)}
         onAddCar={() => navigation.navigate('AddCar')}

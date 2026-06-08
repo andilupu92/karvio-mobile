@@ -99,31 +99,34 @@ export default function Documents() {
               </Button>
             </View>
           ) : (
-            documents.map((document) => (
-              <DocumentCard
-                key={document.id}
-                document={document}
-                onPress={() => navigation.navigate('DocumentDetail', { car, document, cars })}
-              />
-            ))
-          )}
-          <View className="px-4 flex-1 items-center justify-center">
-            <Button
-              onPress={() => navigation.navigate('AddDocument', { car, cars })}
-              className={`${isDark ? 'bg-background-primary-100' : 'bg-background-primary-900'} flex-row items-center justify-center h-16 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]`}
-            >
-              <Icons.Plus
-                className={`${isDark ? 'text-icons-100' : 'text-icons-900'}`}
-                size={18}
-                strokeWidth={2.5}
-              />
-              <Text
-                className={`${isDark ? 'text-typography-100' : 'text-typography-900'} font-inter-semibold text-base`}
-              >
-                Adaugă un document
-              </Text>
-            </Button>
-          </View>
+              <>
+                {documents.map((document) => (
+                  <DocumentCard
+                    key={document.id}
+                    document={document}
+                    onPress={() => navigation.navigate('DocumentDetail', { car, document, cars })}
+                  />
+                ))}
+                <View className="px-4 flex-1 items-center justify-center">
+                  <Button
+                    onPress={() => navigation.navigate('AddDocument', { car, cars })}
+                    className={`${isDark ? 'bg-background-primary-100' : 'bg-background-primary-900'} flex-row items-center justify-center h-16 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]`}
+                  >
+                    <Icons.Plus
+                      className={`${isDark ? 'text-icons-100' : 'text-icons-900'}`}
+                      size={18}
+                      strokeWidth={2.5}
+                    />
+                    <Text
+                      className={`${isDark ? 'text-typography-100' : 'text-typography-900'} font-inter-semibold text-base`}
+                    >
+                      Adaugă un document
+                    </Text>
+                  </Button>
+                </View>
+              </>     
+            )
+          }
         </KeyboardAwareScrollView>
       </Box>
     </SafeAreaView>

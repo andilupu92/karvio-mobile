@@ -24,7 +24,7 @@ export default function HomeHeader({
   const { isDark } = useTheme();
 
   return (
-    <Box className="flex-row items-center px-4 py-3 gap-3">
+    <Box className="flex-row justify-between items-center px-4 py-3 gap-3">
       {/* Left side */}
       {lengthCar != 0 && (
         <View
@@ -82,7 +82,7 @@ export default function HomeHeader({
                   <Text
                     className={`font-inter-medium text-[10px] ${isDark ? 'text-typography-900' : 'text-typography-100'}`}
                   >
-                    "-"
+                    -
                   </Text>
                 )}
               </Text>
@@ -92,7 +92,7 @@ export default function HomeHeader({
       )}
 
       {/* Avatar */}
-      <TouchableOpacity onPress={onProfilePress} activeOpacity={0.8}>
+      <TouchableOpacity onPress={onProfilePress} activeOpacity={0.8} className="ml-auto">
         <View className="relative">
           <View className="w-11 h-11 rounded-full items-center justify-center">
             <Icons.CircleUserRound

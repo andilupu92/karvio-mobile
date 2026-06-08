@@ -401,7 +401,7 @@ export default function ExpensesDetail() {
               </Text>
             )}
           </View>
-          <View className="flex-1 items-center justify-center">
+          <View className="absolute bottom-0 w-full">
             <Button
               onPress={() => navigation.navigate('AddExpense', { cars })}
               className={`${isDark ? 'bg-background-primary-100' : 'bg-background-primary-900'} flex-row items-center justify-center h-16 rounded-xl py-4 w-full gap-2 active:scale-[0.99]`}

@@ -57,7 +57,7 @@ export default function ContactUsScreen() {
           } text-lg font-inter-semibold text-center flex-1`}
           style={{ marginRight: 36 }}
         >
-          Contact Us
+          Contactează-ne
         </Text>
       </View>
 
@@ -103,8 +103,8 @@ export default function ContactUsScreen() {
                 isDark ? 'text-typography-800' : 'text-typography-200'
               } font-inter-regular text-sm text-center leading-6`}
             >
-              Aici cateva detalii despre noi. Echipa noastra este pregatita sa va ajute cu orice
-              intrebare sau nelamurire legata de aplicatia noastra.
+              Aici cateva detalii despre noi. Echipa noastră este pregatită sa te ajute cu orice
+              întrebare sau nelămurire legată de aplicația noastră.
             </Text>
           </View>
 
@@ -174,7 +174,7 @@ export default function ContactUsScreen() {
                       isDark ? 'text-typography-800' : 'text-typography-300'
                     } font-inter-regular text-xs mb-0.5`}
                   >
-                    Telefon (L-V, 09:00 - 18:00)
+                    Telefon
                   </Text>
                   <Text
                     className={`${
@@ -212,7 +212,7 @@ export default function ContactUsScreen() {
                       isDark ? 'text-typography-800' : 'text-typography-300'
                     } font-inter-regular text-xs mb-0.5`}
                   >
-                    WhatsApp (L-V, 09:00 - 18:00)
+                    WhatsApp
                   </Text>
                   <Text
                     className={`${

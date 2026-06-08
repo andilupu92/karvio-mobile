@@ -63,7 +63,21 @@ export default function CarCard({ car, onPress }: Props) {
                 strokeWidth={1.8}
               />
               <Text className={`text-sm font-inter-medium ${colorFuelScore(car.consumption)}`}>
-                {car.consumption != null ? `${car.consumption.toFixed(1)}%` : '—'}
+                {car.consumption}
+                {car.consumption ? (
+                  <Text
+                    className={`font-inter-medium text-[10px] ${isDark ? 'text-typography-900' : 'text-typography-100'}`}
+                  >
+                    {' '}
+                    %
+                  </Text>
+                ) : (
+                  <Text
+                    className={`font-inter-medium text-[10px] ${isDark ? 'text-typography-900' : 'text-typography-100'}`}
+                  >
+                    -
+                  </Text>
+                )}
               </Text>
             </View>
 
@@ -75,7 +89,19 @@ export default function CarCard({ car, onPress }: Props) {
                 strokeWidth={1.8}
               />
               <Text className={`text-sm font-inter-medium ${getExpenseColor(car.amount)}`}>
-                {formatCurrency(car.amount)}
+                {car.amount ? (
+                  <Text
+                    className={`font-inter-medium`}
+                  >
+                    {formatCurrency(car.amount)}
+                  </Text>
+                ) : (
+                  <Text
+                    className={`font-inter-medium text-[10px] ${isDark ? 'text-typography-900' : 'text-typography-100'}`}
+                  >
+                    -
+                  </Text>
+                )}
               </Text>
             </View>
 
@@ -87,7 +113,21 @@ export default function CarCard({ car, onPress }: Props) {
                 strokeWidth={1.8}
               />
               <Text className={`text-sm font-inter-medium ${formatHealthScore(car.healthScore)}`}>
-                {car.healthScore != null ? `${car.healthScore}%` : '—'}
+                {car.healthScore}
+                {car.healthScore ? (
+                  <Text
+                    className={`font-inter-medium text-[10px] ${isDark ? 'text-typography-900' : 'text-typography-100'}`}
+                  >
+                    {' '}
+                    %
+                  </Text>
+                ) : (
+                  <Text
+                    className={`font-inter-medium text-[10px] ${isDark ? 'text-typography-900' : 'text-typography-100'}`}
+                  >
+                    -
+                  </Text>
+                )}
               </Text>
             </View>
           </View>

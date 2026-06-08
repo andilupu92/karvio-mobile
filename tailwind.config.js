@@ -63,7 +63,7 @@ module.exports = {
             900: '#1E1E1E', // Dark mode card background color
           },
           icon: {
-            100: '#F0F0F0', // Light mode icon background color
+            100: '#e6e5e5', // Light mode icon background color
             900: '#2C2C2C', // Dark mode icon background color
           },
           chart: {

@@ -221,7 +221,7 @@ export default function NotificationsScreen() {
           } text-lg font-inter-semibold text-center flex-1`}
           style={{ marginRight: 36 }}
         >
-          Notificari
+          Notificări
         </Text>
       </View>
 

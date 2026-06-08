@@ -152,7 +152,7 @@ export default function ProfileScreen() {
                 <Text
                   className={`${isDark ? 'text-typography-900' : 'text-typography-100'} flex-1 font-inter-medium text-base`}
                 >
-                  Notificari
+                  Notificări
                 </Text>
                 <Icons.ChevronRight
                   className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
@@ -182,7 +182,7 @@ export default function ProfileScreen() {
                   <Text
                     className={`${isDark ? 'text-typography-900' : 'text-typography-100'} flex-1 font-inter-medium text-base`}
                   >
-                    Raportează un bug
+                    Raportează o problemă
                   </Text>
                   <Icons.ChevronRight
                     className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}

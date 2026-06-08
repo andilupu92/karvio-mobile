@@ -79,10 +79,12 @@ export default function CarDetail() {
     try {
       const responseData = await documentApi.expenses(carId);
 
-      const top3 = responseData[responseData.length - 1].expenseResponseList
-        .sort((a : any, b : any) => b.amount - a.amount)
-        .slice(0, 3);
-      setExpenses(top3);
+      if (responseData.length != 0) {
+        const top3 = responseData[responseData.length - 1].expenseResponseList
+          .sort((a : any, b : any) => b.amount - a.amount)
+          .slice(0, 3);
+        setExpenses(top3);
+      }
     } catch (error) {
       console.error(error);
     }

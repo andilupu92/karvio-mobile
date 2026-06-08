@@ -6,12 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/src/navigation/AppNavigator';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Button } from '@/components/ui/button';
 import { useTheme } from '@/src/context/themeContext';
 import * as Icons from 'lucide-react-native';
 import DocumentCard from '../documents/documentCard';
 import { documentApi } from '@/src/api/services/docService';
 import { useEffect, useState } from 'react';
+import { Button, ButtonText } from '@/components/ui/button';
+import { Plus } from 'lucide-react-native';
 
 type Document = {
   id: number;
@@ -112,41 +113,41 @@ export default function PersonalDocuments() {
                   </>  
                 ) : (
             <View
-              className="px-7 flex-1 items-center justify-center gap-10"
-              style={{ paddingBottom: 180 }}
-            >
-              <View
-                className={`w-32 h-32 rounded-full ${isDark ? 'bg-background-icon-900' : 'bg-background-icon-100'} items-center justify-center`}
+                className="px-7 flex-1 items-center justify-center gap-10"
+                style={{ paddingBottom: 200 }}
               >
-                <Icons.FileText
-                  className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
-                  size={60}
-                  strokeWidth={1.6}
-                />
-              </View>
+                <View className={`${isDark ? 'bg-background-icon-900' : 'bg-background-icon-100'} w-32 h-32 rounded-full items-center justify-center`}>
+                                <Icons.FileText
+                                  className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                                  size={60}
+                                  strokeWidth={1.6}
+                                />
+                              </View>
+                              <View className="items-center justify-center mt-10 px-8">
+                  <Text
+                    className={`${isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-base text-center`}
+                  >
+                    Niciun document găsit
+                  </Text>
+                  <Text
+                    className={`${isDark ? 'text-typography-800' : 'text-typography-200'} font-inter-regular text-sm text-center mt-1`}
+                  >
+                    Adaugă documentele personale pentru a le urmări ușor.
+                  </Text> 
+                </View>
 
-              <Text
-                className={`${isDark ? 'text-typography-900' : 'text-typography-100'} text-center font-inter-medium leading-6`}
-              >
-                Nu există documente pentru utilizator. Adaugă primul document!
-              </Text>
-
-              <Button
-                onPress={() => navigation.navigate('AddPersonalDocument', { })}
-                className={`${isDark ? 'bg-background-primary-100' : 'bg-background-primary-900'} flex-row items-center justify-center h-16 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]`}
-              >
-                <Icons.Plus
-                  className={`${isDark ? 'text-icons-100' : 'text-icons-900'}`}
-                  size={18}
-                  strokeWidth={2.5}
-                />
-                <Text
-                  className={`${isDark ? 'text-typography-100' : 'text-typography-900'} font-inter-semibold text-base`}
+                <Button
+                  onPress={() => navigation.navigate('AddPersonalDocument', { })}
+                  className={`${isDark ? 'bg-background-primary-100' : 'bg-background-primary-900'} flex-row items-center justify-center h-16 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]`}
                 >
-                  Adaugă un document
-                </Text>
-              </Button>
-            </View>
+                  <Plus size={18} color="#ffffff" strokeWidth={2.5} />
+                  <ButtonText
+                    className={`${isDark ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-lg`}
+                  >
+                    Adaugă un document
+                  </ButtonText>
+                </Button>
+              </View>
             
           )}
           

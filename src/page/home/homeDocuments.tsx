@@ -30,6 +30,7 @@ export default function HomeDocuments({ documents, onDocumentPress }: Props) {
   };
 
   return (
+    
     <Box className="px-4 mb-4">
       {/* Card */}
       <Box
@@ -91,5 +92,6 @@ export default function HomeDocuments({ documents, onDocumentPress }: Props) {
         })}
       </Box>
     </Box>
+    
   );
 }

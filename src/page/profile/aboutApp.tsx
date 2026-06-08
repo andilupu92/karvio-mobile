@@ -136,12 +136,12 @@ export default function AboutAppScreen() {
                   isDark ? 'text-typography-900' : 'text-typography-100'
                 } font-inter-bold text-2xl`}
               >
-                MyGarage
+                Karvio
               </Text>
               <Text
                 className={`${
                   isDark ? 'text-typography-800' : 'text-typography-300'
-                } font-inter-regular text-xs`}
+                } italic font-inter-regular text-xs`}
               >
                 Versiunea {APP_VERSION}
               </Text>
@@ -221,7 +221,7 @@ export default function AboutAppScreen() {
                 isDark ? 'text-typography-800' : 'text-typography-300'
               } font-inter-regular text-xs text-center`}
             >
-              © {new Date().getFullYear()} MyGarage. Toate drepturile rezervate.
+              © {new Date().getFullYear()} Karvio. Toate drepturile rezervate.
             </Text>
           </View>
         </Box>

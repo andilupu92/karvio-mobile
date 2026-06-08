@@ -138,7 +138,7 @@ export default function AddDocument() {
           className={`w-10 h-10 ${isDark ? 'bg-background-card-900' : 'bg-background-card-100'} rounded-full items-center justify-center`}
           activeOpacity={0.7}
         >
-          <Icons.ChevronLeft
+          <Icons.ChevronLeft 
             className={`${isDark ? 'text-icons-900' : 'text-icons-100'}`}
             size={20}
             strokeWidth={1.6}

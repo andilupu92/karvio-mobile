@@ -100,7 +100,7 @@ export default function FeedbackScreen() {
           } text-lg font-inter-semibold text-center flex-1`}
           style={{ marginRight: 36 }}
         >
-          Report feedback
+          Trimite feedback
         </Text>
       </View>
 
@@ -122,7 +122,7 @@ export default function FeedbackScreen() {
               isDark ? 'text-typography-800' : 'text-typography-200'
             } font-inter-regular text-sm text-center leading-6`}
           >
-            Cum putem face aplicația și mai bună pentru dumneavoastră? Trimiteți-ne feedback-ul, sugestiile sau ideile de funcționalități noi chiar aici, iar noi le vom analiza cu prioritate!
+            Cum putem face aplicația și mai bună pentru tine? Trimite-ne feedback-ul, sugestiile sau ideile de funcționalități noi chiar aici, iar noi le vom analiza cu prioritate!
           </Text>
 
           {/* ── Description Field ── */}
@@ -144,7 +144,7 @@ export default function FeedbackScreen() {
                   <TextInput
                     value={value}
                     onChangeText={onChange}
-                    placeholder="Descrieți problema aici..."
+                    placeholder="Descrie problema aici..."
                     placeholderTextColor={isDark ? '#6B7280' : '#9CA3AF'}
                     multiline
                     textAlignVertical="top"

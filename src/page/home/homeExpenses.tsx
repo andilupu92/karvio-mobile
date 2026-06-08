@@ -55,7 +55,7 @@ export default function HomeExpenses({
     .slice(0, 3);
 
   return (
-    <TouchableOpacity onPress={() => onExpensesPress()} className="flex-1" activeOpacity={0.7}>
+    <TouchableOpacity onPress={() => onExpensesPress()} disabled={top3.length === 0} className="flex-1" activeOpacity={0.7}>
       <Box
         className={`rounded-xl p-4 border ${isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100'}`}
       >
@@ -82,7 +82,7 @@ export default function HomeExpenses({
           Expenses
         </Text>
 
-        {top3 ? (
+        {top3.length > 0 ? (
           <View>
             <Text
               className={`${isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-bold text-xl mb-2`}
@@ -126,7 +126,7 @@ export default function HomeExpenses({
           </View>
         ) : (
           <Text
-            className={`text-white/60 font-inter-medium text-xs mb-3 ${isDark ? 'text-typography-900' : 'text-typography-100'}`}
+            className={`text-white/60 font-inter-medium text-xs italic mt-2 mb-3 ${isDark ? 'text-typography-900' : 'text-typography-100'}`}
           >
             Încă nu ai cheltuieli pentru mașina aceasta!
           </Text>

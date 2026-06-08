@@ -15,6 +15,8 @@ import ExpensesPerCarFromMenu from './expensesPerCarFromMenu';
 import TopCategoriesFromMenu from './topCategoriesFromMenu';
 import { useTheme } from '@/src/context/themeContext';
 import * as Icons from 'lucide-react-native';
+import { Button, ButtonText } from '@/components/ui/button';
+import { Plus } from 'lucide-react-native';
 
 type CarWithExpenses = {
   carId: number;
@@ -129,7 +131,7 @@ export default function ExpensesMenu() {
       </View>
 
       <Box
-        className={`flex-1 ${isDark ? 'bg-background-primary-900' : 'bg-background-primary-100'} px-6 py-1`}
+        className={`flex-1 ${isDark ? 'bg-background-primary-900' : 'bg-background-primary-100'} px-2 py-1`}
       >
         <KeyboardAwareScrollView
           contentContainerStyle={{ flexGrow: 1 }}
@@ -142,7 +144,7 @@ export default function ExpensesMenu() {
             {loading ? (
               <ActivityIndicator size="small" color="#14b8a6" style={{ marginTop: 40 }} />
             ) : expenses.length > 0 ? (
-              <Box>
+              <Box className='px-4'>
                 <View
                   className={`rounded-xl px-9 py-6 border ${isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100'}`}
                 >
@@ -273,19 +275,56 @@ export default function ExpensesMenu() {
                 />
               </Box>
             ) : (
-              <Text className="text-center mt-20">Nu există date despre cheltuieli.</Text>
+              <View
+                className="px-7 flex-1 items-center justify-center gap-10"
+                style={{ paddingBottom: 200 }}
+              >
+                <View className={`${isDark ? 'bg-background-icon-900' : 'bg-background-icon-100'} w-32 h-32 rounded-full items-center justify-center`}>
+                                <Icons.Receipt
+                                  className={`${isDark ? 'text-typography-800' : 'text-typography-200'}`}
+                                  size={60}
+                                  strokeWidth={1.6}
+                                />
+                              </View>
+                              <View className="items-center justify-center mt-10 px-8">
+                  <Text
+                    className={`${isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-base text-center`}
+                  >
+                    Nicio cheltuială găsită
+                  </Text>
+                  <Text
+                    className={`${isDark ? 'text-typography-800' : 'text-typography-200'} font-inter-regular text-sm text-center mt-1`}
+                  >
+                    Adaugă cheltuieli pentru mașinile tale pentru a le urmări ușor.
+                  </Text> 
+                </View>
+
+                <Button
+                  onPress={() => navigation.navigate('AddExpense', { cars })}
+                  className={`${isDark ? 'bg-background-primary-100' : 'bg-background-primary-900'} flex-row items-center justify-center h-16 rounded-2xl py-4 w-full gap-2 active:scale-[0.99]`}
+                >
+                  <Plus size={18} color="#ffffff" strokeWidth={2.5} />
+                  <ButtonText
+                    className={`${isDark ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-lg`}
+                  >
+                    Adaugă o cheltuială 
+                  </ButtonText>
+                </Button>
+              </View>
             )}
           </View>
         </KeyboardAwareScrollView>
       </Box>
 
       <HomeMenu
+        cars={cars}
         activeTab={activeTab}
         onTabPress={(tab) => setActiveTab(tab)}
         onAddPress={() => setShowAddSheet((prev) => !prev)}
       />
 
       <HomeAddBottomSheet
+        cars={cars}
         visible={showAddSheet}
         onClose={() => setShowAddSheet(false)}
         onAddCar={() => navigation.navigate('AddCar')}

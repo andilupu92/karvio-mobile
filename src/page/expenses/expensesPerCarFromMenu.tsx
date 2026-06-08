@@ -41,7 +41,7 @@ export default function ExpensesPerCarFromMenu({
   return (
     <View className="mt-6">
       <Text
-        className={`${isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-bold text-typography-900 text-lg mb-3`}
+        className={`${isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-bold text-lg mb-3`}
       >
         Repartizare per mașină
       </Text>

@@ -81,7 +81,7 @@ export default function HomeQuickActions({ car, cars, documents }: Props) {
         className={`px-2 py-4 flex-1 rounded-xl border ${isDark ? 'bg-background-card-900 border-outline-900' : 'bg-background-card-100 border-outline-100'}`}
       >
         {/* Icons row */}
-        <View className="flex-row justify-evenly items-start">
+        <View className="flex-row justify-center gap-28 items-start">
           {actions.map((action, index) => (
             <TouchableOpacity
               className="items-center gap-4"
