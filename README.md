@@ -1,4 +1,4 @@
-## AutoTrace App (Expo React Native)
+## Karvio App (Expo React Native)
 
 This is a React Native application created with Expo using the TypeScript blank template.
 
@@ -7,7 +7,7 @@ This is a React Native application created with Expo using the TypeScript blank 
 - **Install dependencies**
 
 ```bash
-cd autotrace-app
+cd karvio-app
 npm install
 ```
 
