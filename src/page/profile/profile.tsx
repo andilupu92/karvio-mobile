@@ -11,6 +11,13 @@ import { Box } from '@/components/ui/box';
 import { useAuthStore } from '@/src/store/authStore';
 import { useState } from 'react';
 import { authApi } from '@/src/api/services/authService';
+import { notificationApi } from '@/src/api/services/notifService';
+import{ 
+  getMessaging,
+  getToken,
+  deleteToken,
+} from '@react-native-firebase/messaging';
+import { getApp } from '@react-native-firebase/app';
 
 export default function ProfileScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -18,9 +25,13 @@ export default function ProfileScreen() {
   const logout = useAuthStore((state) => state.logout);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+   const messagingInstance = getMessaging(getApp());
 
   const handleLogout = async () => {
     try {
+      const fcmToken = await getToken(messagingInstance);
+      await notificationApi.deleteToken(fcmToken);
+      await deleteToken(messagingInstance);
       await logout();
       navigation.reset({
         index: 0,

@@ -9,7 +9,7 @@ import { VStack } from '@/components/ui/vstack';
 import { HStack } from '@/components/ui/hstack';
 import { Text } from '@/components/ui/text';
 import { Link, LinkText } from '@/components/ui/link';
-import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
+import { Button, ButtonText } from '@/components/ui/button';
 import { FormControl, FormControlError, FormControlErrorText } from '@/components/ui/form-control';
 import { EyeIcon, EyeOffIcon, CheckCircleIcon } from 'lucide-react-native';
 import WelcomeCard from './WelcomeCard';
@@ -21,6 +21,7 @@ import { authApi } from '../../api/services/authService';
 import { useAuthStore } from '../../store/authStore';
 import GoogleIcon from '@/src/icons/GoogleIcon';
 import { Icons } from '@/src/utils/icons';
+import requestUserPermissionAndRegisterToken from '../../api/registerToken';
 
 const loginSchema = z.object({
   email: z
@@ -67,6 +68,7 @@ export default function LoginScreen() {
         responseData.refreshToken,
         { email: data.email },
       );
+      await requestUserPermissionAndRegisterToken(responseData.accessToken);
 
       console.log('Login Success for: ', data.email);
       navigation.navigate('Home');
