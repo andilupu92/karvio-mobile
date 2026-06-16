@@ -27,6 +27,8 @@ import VerifyOTPScreen from '../page/auth/verifyOTP';
 import ResetPasswordScreen from '../page/auth/resetPassword';
 import PrivacyPolicyScreen from '../page/settings/privacyPolicy';
 import TermsAndConditionsScreen from '../page/settings/termsAndConditions';
+import { useAuthStore } from '../store/authStore';
+import { View, ActivityIndicator } from 'react-native';
 
 type Car = {
   id: number;
@@ -110,62 +112,57 @@ export type RootStackParamList = {
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-//const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
 export default function AppNavigator() {
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const isLoading = useAuthStore((state) => state.isLoading);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
-    <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: true }}>
-      {/*{isAuthenticated ? (
-          <>*/}
-      <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-      <Stack.Screen
-        name="ForgotPassword"
-        component={ForgotPasswordScreen}
-        options={{ headerShown: false }}
-      />
-            <Stack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicyScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="TermsAndConditionsScreen" component={TermsAndConditionsScreen} options={{ headerShown: false }} />
-      {/*</>
-          ) : (
-          <>*/}
-      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="AddCar" component={AddCar} options={{ headerShown: false }} />
-      <Stack.Screen name="AddDocument" component={AddDocument} options={{ headerShown: false }} />
-      <Stack.Screen name="AddExpense" component={AddExpense} options={{ headerShown: false }} />
-      <Stack.Screen name="Documents" component={Documents} options={{ headerShown: false }} />
-      <Stack.Screen
-        name="DocumentDetail"
-        component={DocumentDetail}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name="Cars" component={Cars} options={{ headerShown: false }} />
-      <Stack.Screen name="CarDetail" component={CarDetail} options={{ headerShown: false }} />
-      <Stack.Screen
-        name="ExpensesDetail"
-        component={ExpensesDetail}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name="ExpensesMenu" component={ExpensesMenu} options={{ headerShown: false }} />
-      <Stack.Screen
-        name="DocumentsMenu"
-        component={DocumentsMenu}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
-      <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
-      <Stack.Screen name="PersonalDocuments" component={PersonalDocuments} options={{ headerShown: false }} />
-      <Stack.Screen name="PersonalDocumentDetail" component={PersonalDocumentDetail} options={{ headerShown: false }} />
-      <Stack.Screen name="AddPersonalDocument" component={AddPersonalDocument} options={{ headerShown: false }} />
-      <Stack.Screen name="Notifications" component={Notifications} options={{ headerShown: false }} />
-      <Stack.Screen name="BugReportScreen" component={BugReportScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="FeedbackScreen" component={FeedbackScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="ContactUsScreen" component={ContactUsScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="AboutAppScreen" component={AboutAppScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="VerifyOTP" component={VerifyOTPScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ headerShown: false }} />
-      {/*</>
-        )}*/}
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {accessToken ? (
+        <>
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="AddCar" component={AddCar} />
+          <Stack.Screen name="AddDocument" component={AddDocument} />
+          <Stack.Screen name="AddExpense" component={AddExpense} />
+          <Stack.Screen name="Documents" component={Documents} />
+          <Stack.Screen name="DocumentDetail" component={DocumentDetail} />
+          <Stack.Screen name="Cars" component={Cars} />
+          <Stack.Screen name="CarDetail" component={CarDetail} />
+          <Stack.Screen name="ExpensesDetail" component={ExpensesDetail} />
+          <Stack.Screen name="ExpensesMenu" component={ExpensesMenu} />
+          <Stack.Screen name="DocumentsMenu" component={DocumentsMenu} />
+          <Stack.Screen name="Settings" component={Settings} />
+          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="PersonalDocuments" component={PersonalDocuments} />
+          <Stack.Screen name="PersonalDocumentDetail" component={PersonalDocumentDetail} />
+          <Stack.Screen name="AddPersonalDocument" component={AddPersonalDocument} />
+          <Stack.Screen name="Notifications" component={Notifications} />
+          <Stack.Screen name="BugReportScreen" component={BugReportScreen} />
+          <Stack.Screen name="FeedbackScreen" component={FeedbackScreen} />
+          <Stack.Screen name="ContactUsScreen" component={ContactUsScreen} />
+          <Stack.Screen name="AboutAppScreen" component={AboutAppScreen} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+          <Stack.Screen name="VerifyOTP" component={VerifyOTPScreen} />
+          <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+        </>
+      )}
+      
+      <Stack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicyScreen} />
+      <Stack.Screen name="TermsAndConditionsScreen" component={TermsAndConditionsScreen} />
     </Stack.Navigator>
   );
 }

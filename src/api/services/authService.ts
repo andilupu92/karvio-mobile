@@ -13,6 +13,11 @@ export interface LoginResponse {
 }
 
 export const authApi = {
+  me: async () => {
+    const response = await apiClient.get(`${API_URL}/me`);
+    return response.data;
+  },
+
   signUp: async (credentials: LoginCredentials) => {
     const response = await apiClient.post(`${API_URL}/register`, credentials);
     return response.data;

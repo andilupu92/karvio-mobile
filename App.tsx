@@ -24,6 +24,7 @@ import { getApp } from '@react-native-firebase/app';
 import requestUserPermissionAndRegisterToken from './src/api/registerToken';
 import { Alert } from 'react-native';
 import { notificationApi } from './src/api/services/notifService';
+import { setupInterceptors } from './src/api/client';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,6 +40,7 @@ export default function App() {
   });
 
   useEffect(() => {
+    setupInterceptors(useAuthStore);
     initialize();
   }, []);
 

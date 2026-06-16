@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import { secureStorage } from '../utils/secureStorage';
+import { authApi } from '../api/services/authService';
+import requestUserPermissionAndRegisterToken from '../api/registerToken';
 
 interface User {
   email: string;
@@ -14,7 +16,7 @@ interface AuthState {
 
   // Actions
   setTokens: (accessToken: string, refreshToken: string) => void;
-  setUser: (user: User | null) => void;
+  setUser: (user: User) => Promise<void>;
   login: (accessToken: string, refreshToken: string, user: User) => Promise<void>;
   logout: () => Promise<void>;
   initialize: () => Promise<void>;
@@ -32,7 +34,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ accessToken, refreshToken });
   },
 
-  setUser: (user) => {
+  setUser: async(user) => {
     set({ user, isAuthenticated: !!user });
   },
 
@@ -73,20 +75,39 @@ export const useAuthStore = create<AuthState>((set) => ({
       const refreshToken = await secureStorage.getRefreshToken();
 
       if (accessToken && refreshToken) {
-        set({
-          accessToken,
-          refreshToken,
-          isLoading: false,
-        });
+          set({
+            accessToken,
+            refreshToken,
+            isLoading: false,
+          });
 
-        // Optionally fetch user data here
-        // You might want to validate the token or fetch user profile
+          try {
+            const email = await authApi.me();
+            if (email) {
+              set({ 
+                user: { email: email },
+                isAuthenticated: true,
+                isLoading: false 
+              });
+
+              try {
+                await requestUserPermissionAndRegisterToken(accessToken);
+                console.log('FCM Token verificat/actualizat cu succes la pornire.');
+              } catch (fcmError) {
+                console.error('Eroare la înregistrarea Firebase pe init:', fcmError);
+              }
+            } else {
+              set({ isLoading: false, isAuthenticated: false });
+            }
+          } catch (apiError) {
+            set({ isLoading: false, isAuthenticated: false });
+          }
       } else {
-        set({ isLoading: false });
+        set({ isLoading: false, isAuthenticated: false });
       }
     } catch (error) {
       console.error('Error initializing auth:', error);
-      set({ isLoading: false });
+      set({ isLoading: false, isAuthenticated: false });
     }
   },
 
