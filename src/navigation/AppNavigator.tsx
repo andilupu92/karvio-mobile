@@ -25,6 +25,8 @@ import ContactUsScreen from '../page/profile/contactUs';
 import AboutAppScreen from '../page/profile/aboutApp';
 import VerifyOTPScreen from '../page/auth/verifyOTP';
 import ResetPasswordScreen from '../page/auth/resetPassword';
+import PrivacyPolicyScreen from '../page/settings/privacyPolicy';
+import TermsAndConditionsScreen from '../page/settings/termsAndConditions';
 
 type Car = {
   id: number;
@@ -103,6 +105,8 @@ export type RootStackParamList = {
   ForgotPassword: undefined;
   VerifyOTP: { email: string };
   ResetPassword: { email: string; otpCode: string };
+  PrivacyPolicyScreen: undefined;
+  TermsAndConditionsScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -120,6 +124,8 @@ export default function AppNavigator() {
         component={ForgotPasswordScreen}
         options={{ headerShown: false }}
       />
+            <Stack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicyScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="TermsAndConditionsScreen" component={TermsAndConditionsScreen} options={{ headerShown: false }} />
       {/*</>
           ) : (
           <>*/}

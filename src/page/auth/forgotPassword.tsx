@@ -67,9 +67,9 @@ export default function ForgotPasswordScreen() {
       {/* HEADER */}
       <Box style={{ zIndex: 10 }}>
         <WelcomeCard
-          primaryTitle="Forgot"
-          secondaryTitle="Password?"
-          contain="Enter your email and we'll send you a code"
+          primaryTitle="Ai uitat parola?"
+          secondaryTitle="😞"
+          contain="Îți vom trimite un cod pe adresa ta"
           showBackButton={true}
         />
       </Box>
@@ -86,7 +86,7 @@ export default function ForgotPasswordScreen() {
 
             {/* Description */}
             <Text className={`${colorScheme === 'dark' ? 'text-typography-600' : 'text-typography-400'} text-sm mb-8 leading-5`}>
-              {`We'll send a 6-digit code to your email address.\nThe code will expire in 10 minutes.`}
+              {`Îți vom trimite un cod de 6 cifre la adresa ta de email.\nCodul va expira în 10 minute.`}
             </Text>
 
             {/* EMAIL INPUT */}
@@ -137,7 +137,7 @@ export default function ForgotPasswordScreen() {
               onPress={handleSubmit(onSubmit)}
             >
               <ButtonText className={`${colorScheme === 'dark' ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-lg`}>
-                {isLoading ? 'Sending...' : 'Send Code'}
+                {isLoading ? 'Se trimite...' : 'Trimite Cod'}
               </ButtonText>
             </Button>
 

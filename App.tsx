@@ -91,7 +91,6 @@ function AppContent() {
     const unsubscribeTokenRefresh = onTokenRefresh(
       messagingInstance,
       async (newToken) => {
-        console.log("The FCM token has been refreshed:", newToken);
         try {
           if ( jwtToken ) {
             await notificationApi.registerToken(newToken, jwtToken);

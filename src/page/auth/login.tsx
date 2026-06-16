@@ -100,9 +100,9 @@ export default function LoginScreen() {
       {/* HEADER */}
       <Box style={{ zIndex: 10 }}>
         <WelcomeCard
-          primaryTitle="Welcome"
-          secondaryTitle="Back"
-          contain="Please sign in to continue"
+          primaryTitle="Bine ai venit!"
+          secondaryTitle="👋"
+          contain="Te rog să te autentifici pentru a continua"
           showBackButton={false}
         />
       </Box>
@@ -163,7 +163,7 @@ export default function LoginScreen() {
                 name="password"
                 render={({ field: { onChange, value, onBlur } }) => (
                   <FloatingInput
-                    label="Password"
+                    label="Parolă"
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -203,7 +203,7 @@ export default function LoginScreen() {
             <Box className="items-end mb-8 mr-1"> 
               <Link onPress={() => navigation.navigate('ForgotPassword')}>
                 <LinkText className="text-sm text-blue-500 dark:text-blue-400 font-medium no-underline">
-                  Forgot your password?
+                  Ai uitat parola?
                 </LinkText>
               </Link>
             </Box>
@@ -224,7 +224,7 @@ export default function LoginScreen() {
                   />
                 ) : null}
                 <ButtonText className={`${colorScheme === 'dark' ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-lg`}>
-                  {isLoading ? 'Logging in...' : 'Login'}
+                  {isLoading ? 'Se autentifică...' : 'Autentificare'}
                 </ButtonText>
               </HStack>
             </Button>
@@ -260,11 +260,11 @@ export default function LoginScreen() {
             {/* Footer Links */}
             <HStack className="justify-center mt-8 items-center" space="xs">
               <Text className={`${colorScheme === 'dark' ? 'text-typography-800' : 'text-typography-200'} font-medium`}>
-                Don't have an account?
+                Nu ai un cont?
               </Text>
               <Link onPress={() => navigation.navigate('SignUp')}>
                 <LinkText className={`${colorScheme === 'dark' ? 'text-blue-400' : 'text-blue-600'} font-bold no-underline`}>
-                  Sign up
+                  Înregistrare
                 </LinkText>
               </Link>
             </HStack>

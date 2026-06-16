@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, View, TouchableOpacity } from 'react-native';
 import { useColorScheme } from 'nativewind';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -91,9 +91,9 @@ export default function SignUpScreen() {
       {/* HEADER */}
       <Box style={{ zIndex: 10 }}>
         <WelcomeCard
-          primaryTitle="Create"
-          secondaryTitle="Account"
-          contain="Please sign Up to continue"
+          primaryTitle="Creare"
+          secondaryTitle="Cont"
+          contain="Te rog să creezi cont pentru a continua"
           showBackButton={true}
           onBackPress={() => navigation.goBack()}
         />
@@ -155,7 +155,7 @@ export default function SignUpScreen() {
                 name="password"
                 render={({ field: { onChange, value, onBlur } }) => (
                   <FloatingInput
-                    label="Password"
+                    label="Parolă"
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -191,6 +191,25 @@ export default function SignUpScreen() {
               </FormControlError>
             </FormControl>
 
+            <View className="mt-4 px-6 mb-6">
+            <Text className={`${colorScheme === 'dark' ? 'text-typography-800' : 'text-typography-200'} text-xs text-center leading-5`}>
+              Prin crearea contului, ești de acord cu{' '}
+              <Text 
+                className="underline font-inter-semibold" 
+                onPress={() => navigation.navigate('TermsAndConditionsScreen')}
+              >
+                Termenii și Condițiile
+              </Text>{' '}
+              noastre și confirmi că ai citit{' '}
+              <Text 
+                className="underline font-inter-semibold" 
+                onPress={() => navigation.navigate('PrivacyPolicyScreen')}
+              >
+                Politica de Confidențialitate
+              </Text>.
+            </Text>
+          </View>
+
             {/* Sign Up Button */}
             <Button
               size="xl"
@@ -207,7 +226,7 @@ export default function SignUpScreen() {
                                 />
                               ) : null}
                               <ButtonText className={`${colorScheme === 'dark' ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-lg`}>
-                                {isLoading ? 'Signing up...' : 'Sign Up'}
+                                {isLoading ? 'Se înregistrează...' : 'Înregistrare'}
                               </ButtonText>
                             </HStack>
             </Button>
@@ -243,11 +262,11 @@ export default function SignUpScreen() {
             {/* Footer Links */}
             <HStack className="justify-center mt-8 items-center" space="xs">
               <Text className={`${colorScheme === 'dark' ? 'text-typography-800' : 'text-typography-200'} font-medium`}>
-                Already have an account?
+                Ai deja un cont?
               </Text>
               <Link onPress={() => navigation.navigate('Login')}>
                 <LinkText className={`${colorScheme === 'dark' ? 'text-blue-400' : 'text-blue-600'} font-bold no-underline`}>
-                  Sign in
+                  Autentificare
                 </LinkText>
               </Link>
             </HStack>

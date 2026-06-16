@@ -263,7 +263,7 @@ export default function ExpensesDetail() {
                   <Text
                     className={`text-base font-inter-semibold ${isDark ? 'text-typography-900' : 'text-typography-100'} mb-4`}
                   >
-                    All expenses this month
+                    Toate cheltuielile din {MONTH_SHORT[selectedMonth.monthName.toLowerCase()] ?? selectedMonth.monthName}
                   </Text>
                   {/* ── Lista cheltuieli ── */}
                   <View
@@ -372,7 +372,7 @@ export default function ExpensesDetail() {
                                 className={`font-inter-medium mr-1 ${isDark ? 'text-typography-800' : 'text-typography-200'}`}
                                 style={{ fontSize: 13 }}
                               >
-                                {showAll ? 'Show less' : 'Show more'}
+                                {showAll ? 'Arată mai puțin' : 'Arată mai mult'}
                               </Text>
                               {showAll ? (
                                 <Icons.ChevronUp

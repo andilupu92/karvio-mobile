@@ -79,7 +79,7 @@ export default function HomeExpenses({
         <Text
           className={`${isDark ? 'text-typography-900' : 'text-typography-100'} font-inter-semibold text-base leading-5`}
         >
-          Expenses
+          Cheltuieli
         </Text>
 
         {top3.length > 0 ? (
