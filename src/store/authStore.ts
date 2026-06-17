@@ -92,9 +92,9 @@ export const useAuthStore = create<AuthState>((set) => ({
 
               try {
                 await requestUserPermissionAndRegisterToken(accessToken);
-                console.log('FCM Token verificat/actualizat cu succes la pornire.');
+                console.log('FCM Token checked and registered successfully');
               } catch (fcmError) {
-                console.error('Eroare la înregistrarea Firebase pe init:', fcmError);
+                console.error("don't save the token on the server", fcmError);
               }
             } else {
               set({ isLoading: false, isAuthenticated: false });

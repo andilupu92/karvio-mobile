@@ -26,9 +26,9 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/src/navigation/AppNavigator';
 import { carApi } from '@/src/api/services/carService';
-import { useAuthStore } from '@/src/store/authStore';
 import { useTheme } from '@/src/context/themeContext';
 import { Icons } from '@/src/utils/icons';
+import { useToast } from '@/src/context/toastContext';
 
 const { height } = Dimensions.get('window');
 
@@ -65,6 +65,7 @@ export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
   const [blurEnabled, setBlurEnabled] = useState(true);
   const [showInsertDatePicker, setShowInsertDatePicker] = useState(false);
   const [isSaveLoading, setSaveLoading] = useState(false);
+  const { showToast } = useToast();
 
   const {
     control,
@@ -116,19 +117,15 @@ export default function AddFuel({ visible, carId, onClose }: AddFuelProps) {
       setSaveLoading(true);
       const validatedData = insertFuelSchema.parse(data);
       const response = await carApi.addFuel({ ...validatedData, carId });
-      console.log(
-        'Fuel added successfully for user: ' + useAuthStore.getState().user?.email + ' with car: ',
-        response.name,
-      );
+
+      showToast('Combustibil adăugat cu succes pentru mașina ' + response.name + '.', 'success');
 
       navigation.reset({
         index: 0,
         routes: [{ name: 'Home' }],
       });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message || error?.message || 'An error occurred during fuel save';
-      console.error('Fuel save error:', errorMessage);
+      showToast('Eroare la adăugarea combustibilului.', 'error');
     } finally {
       setSaveLoading(false);
     }

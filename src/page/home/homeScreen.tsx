@@ -24,6 +24,7 @@ import HomeDocuments from './homeDocuments';
 import AddFuel from '../cars/addFuel';
 import { useTheme } from '@/src/context/themeContext';
 import { Icons } from '@/src/utils/icons';
+import { useToast } from '@/src/context/toastContext';
 
 type TabName = 'Home' | 'Documents' | 'Expenses' | 'Settings';
 
@@ -74,6 +75,7 @@ export default function HomeScreen() {
   const [expenses, setExpenses] = useState<ExpenseHistory[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [cars, setCars] = useState<Car[]>([]);
+  const { showToast } = useToast();
 
   useFocusEffect(
     useCallback(() => {
@@ -94,7 +96,7 @@ export default function HomeScreen() {
             await fetchExpenses(responseData[0]?.id);
           }
         } catch (error) {
-          console.error(error);
+          showToast('A apărut o eroare la încărcarea mașinilor.', 'error');
         } finally {
           setLoading(false);
         }
@@ -109,8 +111,7 @@ export default function HomeScreen() {
       const responseData = await documentApi.expenses(carId);
       setExpenses(responseData);
     } catch (error) {
-      console.error(error);
-      console.error('Error fetching expenses:');
+      showToast('A apărut o eroare la încărcarea cheltuielilor.', 'error');
     } finally {
       setExpensesLoading(false);
     }
@@ -122,8 +123,7 @@ export default function HomeScreen() {
       const responseData = await documentApi.documents(carId);
       setDocuments(responseData);
     } catch (error) {
-      console.error(error);
-      console.error('Error fetching documents:');
+      showToast('A apărut o eroare la încărcarea documentelor.', 'error');
     } finally {
       setDocumentsLoading(false);
     }

@@ -1,5 +1,5 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, StatusBar, TouchableOpacity, Alert, ActivityIndicator, Modal } from 'react-native';
+import { View, StatusBar, TouchableOpacity, ActivityIndicator, Modal } from 'react-native';
 import { Text } from '@/components/ui/text';
 import { useEffect, useState } from 'react';
 import {
@@ -24,11 +24,11 @@ import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import { documentApi } from '@/src/api/services/docService';
 import { carApi } from '@/src/api/services/carService';
-import { useAuthStore } from '@/src/store/authStore';
 import StatusCard from './statusCard';
 import formatCurrency from '@/src/utils/formatCurrency';
 import { useTheme } from '@/src/context/themeContext';
 import * as Icons from 'lucide-react-native';
+import { useToast } from '@/src/context/toastContext';
 
 type Document = {
   id: number;
@@ -58,6 +58,7 @@ export default function CarDetail() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [deleteExpenses, setDeleteExpenses] = useState(false);
   const { isDark } = useTheme();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchDocuments = async (carId: number) => {
@@ -67,7 +68,7 @@ export default function CarDetail() {
         setDocuments(responseData);
         fetchExpenses(carId);
       } catch (error) {
-        console.error(error);
+        showToast('Eroare la încărcarea documentelor. Încearcă din nou.', 'error');
       } finally {
         setDocumentsLoading(false);
       }
@@ -86,7 +87,7 @@ export default function CarDetail() {
         setExpenses(top3);
       }
     } catch (error) {
-      console.error(error);
+      showToast('Eroare la încărcarea cheltuielilor. Încearcă din nou.', 'error');
     }
   };
 
@@ -107,21 +108,13 @@ export default function CarDetail() {
         await documentApi.deleteAllExpensesByCar(car.carId);
       }
 
-      console.log(
-        'Car ' + car.name + ' remove successfully for user: ' + useAuthStore.getState().user?.email,
-      );
-
+      showToast('Mașina ' + car.name + ' a fost ștearsă.', 'delete');
       navigation.reset({
         index: 0,
         routes: [{ name: 'Home' }],
       });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        'An error occurred while deleting the car';
-      console.error('Car delete error:', errorMessage);
-      Alert.alert('Error', errorMessage);
+      showToast('A apărut o eroare la ștergerea mașinii.', 'error');
     }
   };
 

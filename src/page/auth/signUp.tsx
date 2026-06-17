@@ -20,6 +20,7 @@ import type { RootStackParamList } from '../../navigation/AppNavigator';
 import { authApi } from '@/src/api/services/authService';
 import GoogleIcon from '@/src/icons/GoogleIcon';
 import { Icons } from '@/src/utils/icons';
+import { useToast } from '@/src/context/toastContext';
 
 const signUpSchema = z.object({
   email: z
@@ -37,6 +38,7 @@ export default function SignUpScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [isGoogleLoading, setGoogleLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const { showToast } = useToast();
 
   const {
     control,
@@ -54,19 +56,18 @@ export default function SignUpScreen() {
 
   const onSubmit = async (data: SignUpFormData) => {
     try {
-      console.log('Sign up with email:', data.email);
       setLoading(true);
 
       const responseData = await authApi.signUp(data);
 
       if (responseData && responseData.includes('created')) {
-        console.log(responseData);
+        showToast('Cont creat cu succes! Te poți autentifica acum. 🎉', 'success');
         navigation.navigate('Login');
       } else {
-        console.error('Unexpected response:', responseData);
+        showToast('Eroare la crearea contului. Încearcă din nou.', 'error');
       }
     } catch (error) {
-      console.error('Sign up failed:', error);
+      showToast('Eroare la crearea contului. Încearcă din nou.', 'error');
     } finally {
       setLoading(false);
     }
@@ -75,9 +76,9 @@ export default function SignUpScreen() {
   /*const handleSubmitGoogle = async () => {
     setGoogleLoading(true);
     try {
-      console.log('Google login clicked');
+      showToast('Te-ai logat cu succes! 🎉', 'success');
     } catch (error) {
-      console.error('Google login error:', error);
+      showToast('Eroare la autentificare. Încearcă din nou.', 'error');
     } finally {
       setGoogleLoading(false);
     }

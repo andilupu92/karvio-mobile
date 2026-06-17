@@ -13,6 +13,7 @@ import { documentApi } from '@/src/api/services/docService';
 import { useEffect, useState } from 'react';
 import { Button, ButtonText } from '@/components/ui/button';
 import { Plus } from 'lucide-react-native';
+import { useToast } from '@/src/context/toastContext';
 
 type Document = {
   id: number;
@@ -28,6 +29,7 @@ export default function PersonalDocuments() {
   const { isDark } = useTheme();
   const [loading, setLoading] = useState(false);
   const [documents, setDocuments] = useState<Document[]>([]);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchDocuments = async () => {
@@ -36,7 +38,7 @@ export default function PersonalDocuments() {
           const responseData = await documentApi.personalDocuments();
           setDocuments(responseData);
         } catch (error) {
-          console.error(error);
+          showToast('A apărut o eroare la încărcarea documentelor.', 'error');
         } finally {
           setLoading(false);
         }

@@ -25,6 +25,7 @@ import requestUserPermissionAndRegisterToken from './src/api/registerToken';
 import { Alert } from 'react-native';
 import { notificationApi } from './src/api/services/notifService';
 import { setupInterceptors } from './src/api/client';
+import { ToastProvider } from './src/context/toastContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -61,7 +62,9 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <ThemeProvider>
-          <AppContent />
+          <ToastProvider>
+            <AppContent />
+          </ToastProvider>
         </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

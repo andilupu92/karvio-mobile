@@ -12,9 +12,9 @@ import { ICON_MAP } from '@/src/constants/iconMap';
 import formatDate from '@/src/utils/formatDate';
 import { Button } from '@/components/ui/button';
 import { documentApi } from '@/src/api/services/docService';
-import { useAuthStore } from '@/src/store/authStore';
 import { useTheme } from '@/src/context/themeContext';
 import { Icons } from '@/src/utils/icons';
+import { useToast } from '@/src/context/toastContext';
 
 type Expense = {
   id: number;
@@ -48,6 +48,7 @@ export default function ExpensesDetail() {
   const [selectedIndex, setSelectedIndex] = useState(expenses.length - 1);
   const [showAll, setShowAll] = useState(false);
   const INITIAL_VISIBLE = 3;
+  const { showToast } = useToast();
 
   useEffect(() => {
     setSelectedIndex(expenses.length - 1);
@@ -83,24 +84,14 @@ export default function ExpensesDetail() {
   const onDelete = async (expense: Expense) => {
     try {
       await documentApi.deleteExpense(expense.id);
-      console.log(
-        'Expense ' +
-          expense.expenseTypeName +
-          ' remove successfully for user: ' +
-          useAuthStore.getState().user?.email,
-      );
+      showToast('Cheltuiala ' + expense.expenseTypeName + ' a fost ștearsă.', 'delete');
 
       navigation.reset({
         index: 0,
         routes: [{ name: 'Home' }],
       });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        'An error occurred while deleting the expense';
-      console.error('Expense delete error:', errorMessage);
-      Alert.alert('Error', errorMessage);
+      showToast('A apărut o eroare la ștergerea cheltuielii.', 'error');
     }
   };
 

@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Box } from '@/components/ui/box';
 import { useEffect, useState, useCallback } from 'react';
 import { notificationApi } from '@/src/api/services/notifService';
+import { useToast } from '@/src/context/toastContext';
 
 
 
@@ -23,19 +24,17 @@ interface Notification {
 export default function NotificationsScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { isDark } = useTheme();
-
+  const { showToast } = useToast();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchNotifications = useCallback(async () => {
     try {
       setLoading(true);
-      setError(null);
       const data = await notificationApi.notifications();
       setNotifications(data);
     } catch (err) {
-      setError('Nu am putut încărca notificările. Încearcă din nou.');
+      showToast('A apărut o eroare la încărcarea notificărilor.', 'error');
     } finally {
       setLoading(false);
     }
@@ -80,31 +79,6 @@ export default function NotificationsScreen() {
       {loading ? (
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color={isDark ? '#fff' : '#000'} />
-        </View>
-      ) : error ? (
-        <View className="flex-1 items-center justify-center px-6 gap-4">
-          <Text
-            className={`font-inter-regular text-sm text-center ${
-              isDark ? 'text-typography-800' : 'text-typography-300'
-            }`}
-          >
-            {error}
-          </Text>
-          <TouchableOpacity
-            onPress={fetchNotifications}
-            className={`px-5 py-2.5 rounded-xl ${
-              isDark ? 'bg-background-card-900' : 'bg-background-card-100'
-            }`}
-            activeOpacity={0.7}
-          >
-            <Text
-              className={`font-inter-medium text-sm ${
-                isDark ? 'text-typography-900' : 'text-typography-100'
-              }`}
-            >
-              Încearcă din nou
-            </Text>
-          </TouchableOpacity>
         </View>
       ) : (
         <ScrollView

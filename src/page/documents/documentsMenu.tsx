@@ -16,6 +16,7 @@ import { useTheme } from '@/src/context/themeContext';
 import { Icons } from '@/src/utils/icons';
 import { Button, ButtonText } from '@/components/ui/button';
 import { Plus } from 'lucide-react-native';
+import { useToast } from '@/src/context/toastContext';
 
 type TabName = 'Home' | 'Documents' | 'Expenses' | 'Settings';
 
@@ -53,6 +54,7 @@ export default function DocumentsMenu() {
   const [showAddSheet, setShowAddSheet] = useState(false);
   const [documentsSummary, setDocumentsSummary] = useState<DocumentsSummary>();
   const { isDark } = useTheme();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchDocuments = async () => {
@@ -61,7 +63,7 @@ export default function DocumentsMenu() {
         const responseData = await documentApi.documentsHistory();
         setDocumentsSummary(responseData);
       } catch (error) {
-        console.error(error);
+        showToast('A apărut o eroare la încărcarea documentelor.', 'error');
       } finally {
         setLoading(false);
       }

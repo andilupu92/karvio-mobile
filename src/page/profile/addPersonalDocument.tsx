@@ -21,6 +21,7 @@ import { useAuthStore } from '@/src/store/authStore';
 import { ICON_MAP } from '@/src/constants/iconMap';
 import { useTheme } from '@/src/context/themeContext';
 import * as Icons from 'lucide-react-native';
+import { useToast } from '@/src/context/toastContext';
 
 type DocumentTypeItem = {
   id: number;
@@ -52,6 +53,7 @@ export default function AddPersonalDocument() {
   const [documentTypes, setDocumentTypes] = useState<DocumentTypeItem[]>([]);
   const [showExpiryDatePicker, setShowExpiryDatePicker] = useState(false);
   const isEditing = !!document;
+  const { showToast } = useToast();
 
   const {
     control,
@@ -73,7 +75,7 @@ export default function AddPersonalDocument() {
         const responseData = await documentApi.documentTypes('personal');
         setDocumentTypes(responseData);
       } catch (error) {
-        console.error(error);
+        showToast('Eroare la încărcarea tipurilor de documente. Încearcă din nou.', 'error');
       } finally {
         setLoading(false);
       }
@@ -87,20 +89,10 @@ export default function AddPersonalDocument() {
       const validatedData = insertDocumentSchema.parse(data);
       if (isEditing) {
         const response = await documentApi.updatePersonalDocument(document.id, validatedData);
-        console.log(
-          'Document ' +
-            response.documentTypeName +
-            ' modified successfully for user: ' +
-            useAuthStore.getState().user?.email,
-        );
+        showToast('Documentul ' + response.documentTypeName + ' a fost modificat cu succes.', 'success');
       } else {
         const response = await documentApi.addPersonalDocument(validatedData);
-        console.log(
-          'Document ' +
-            response.documentTypeName +
-            ' added successfully for user: ' +
-            useAuthStore.getState().user?.email,
-        );
+        showToast('Documentul ' + response.documentTypeName + ' a fost adăugat cu succes.', 'success');
       }
 
       navigation.reset({
@@ -108,12 +100,7 @@ export default function AddPersonalDocument() {
         routes: [{ name: 'Home' }],
       });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        'An error occurred during document save';
-      console.log('Body:', JSON.stringify(error?.response?.data));
-      console.error('Document save error:', errorMessage);
+      showToast('A apărut o eroare la salvarea documentului.', 'error');
     } finally {
       setSaveLoading(false);
     }

@@ -12,6 +12,7 @@ import type { RouteProp } from '@react-navigation/native';
 import type { RootStackParamList } from '../../navigation/AppNavigator';
 import { authApi } from '../../api/services/authService';
 import WelcomeCard from './WelcomeCard';
+import { useToast } from '@/src/context/toastContext';
 
 type VerifyOTPRouteProp = RouteProp<RootStackParamList, 'VerifyOTP'>;
 
@@ -21,6 +22,7 @@ export default function VerifyOTPScreen() {
   const [error, setError] = useState<string | null>(null);
   const [resendTimer, setResendTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
+  const { showToast } = useToast();
 
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
@@ -99,7 +101,7 @@ export default function VerifyOTPScreen() {
       setResendTimer(60);
       inputRefs.current[0]?.focus();
     } catch (error) {
-      console.error('Resend error:', error);
+      showToast('A apărut o eroare. Încearcă din nou.', 'error');
     }
   };
 

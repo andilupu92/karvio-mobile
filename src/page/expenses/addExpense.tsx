@@ -18,10 +18,10 @@ import { documentApi } from '@/src/api/services/docService';
 import { useEffect, useState } from 'react';
 import { FloatingSelect } from '@/components/ui/floating-select';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useAuthStore } from '@/src/store/authStore';
 import { ICON_MAP } from '@/src/constants/iconMap';
 import { useTheme } from '@/src/context/themeContext';
 import * as Icons from 'lucide-react-native';
+import { useToast } from '@/src/context/toastContext';
 
 type ExpenseTypeItem = {
   id: number;
@@ -52,6 +52,7 @@ export default function AddExpense() {
   const [expenseTypes, setExpenseTypes] = useState<ExpenseTypeItem[]>([]);
   const [showInsertDatePicker, setShowInsertDatePicker] = useState(false);
   const { isDark } = useTheme();
+  const { showToast } = useToast();
 
   const {
     control,
@@ -70,7 +71,7 @@ export default function AddExpense() {
         const responseData = await documentApi.expenseTypes();
         setExpenseTypes(responseData);
       } catch (error) {
-        console.error(error);
+        showToast('A apărut o eroare la încărcarea categoriilor de cheltuieli.', 'error');
       } finally {
         setLoading(false);
       }
@@ -83,21 +84,14 @@ export default function AddExpense() {
       setSaveLoading(true);
       const validatedData = insertExpenseSchema.parse(data);
       const response = await documentApi.addExpense(validatedData);
-      console.log(
-        'Expense ' +
-          response.expenseTypeName +
-          ' added successfully for user: ' +
-          useAuthStore.getState().user?.email,
-      );
+      showToast('Cheltuiala ' + response.name + ' a fost adăugată cu succes!', 'success');
 
       navigation.reset({
         index: 0,
         routes: [{ name: 'Home' }],
       });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message || error?.message || 'An error occurred during expense save';
-      console.error('Expense save error:', errorMessage);
+      showToast('Eroare la salvare.', 'error');
     } finally {
       setSaveLoading(false);
     }

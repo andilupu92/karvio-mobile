@@ -12,6 +12,7 @@ import CarCard from './carCard';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/src/context/themeContext';
 import * as Icons from 'lucide-react-native';
+import { useToast } from '@/src/context/toastContext';
 
 type CarWithExpenses = {
   carId: number;
@@ -26,6 +27,7 @@ export default function Cars() {
   const [loading, setLoading] = useState(false);
   const [cars, setCars] = useState<CarWithExpenses[]>([]);
   const { isDark } = useTheme();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchCarsWithExpenses = async () => {
@@ -34,7 +36,7 @@ export default function Cars() {
         const responseData = await carApi.carsWithExpenses();
         setCars(responseData);
       } catch (error) {
-        console.error(error);
+        showToast('Eroare la încărcarea mașinilor. Încearcă din nou.', 'error');
       } finally {
         setLoading(false);
       }

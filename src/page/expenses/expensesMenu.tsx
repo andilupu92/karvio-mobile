@@ -17,6 +17,7 @@ import { useTheme } from '@/src/context/themeContext';
 import * as Icons from 'lucide-react-native';
 import { Button, ButtonText } from '@/components/ui/button';
 import { Plus } from 'lucide-react-native';
+import { useToast } from '@/src/context/toastContext';
 
 type CarWithExpenses = {
   carId: number;
@@ -78,6 +79,7 @@ export default function ExpensesMenu() {
   const [showAddSheet, setShowAddSheet] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(expenses.length - 1);
   const { isDark } = useTheme();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchExpenses = async () => {
@@ -87,7 +89,7 @@ export default function ExpensesMenu() {
         setSelectedIndex(responseData.length - 1);
         setExpenses(responseData);
       } catch (error) {
-        console.error(error);
+        showToast('A apărut o eroare la încărcarea cheltuielilor.', 'error');
       } finally {
         setLoading(false);
       }

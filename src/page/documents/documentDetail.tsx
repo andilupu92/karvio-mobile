@@ -11,9 +11,9 @@ import formatDate from '@/src/utils/formatDate';
 import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import { documentApi } from '@/src/api/services/docService';
-import { useAuthStore } from '@/src/store/authStore';
 import { useTheme } from '@/src/context/themeContext';
 import * as Icons from 'lucide-react-native';
+import { useToast } from '@/src/context/toastContext';
 
 export default function DocumentDetail() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -22,6 +22,7 @@ export default function DocumentDetail() {
   const IconComponent = ICON_MAP[document.documentTypeIconName];
   const fill = getProgressFill(document.daysRemaining);
   const { isDark } = useTheme();
+  const { showToast } = useToast();
 
   const handleDelete = () => {
     Alert.alert(
@@ -37,24 +38,15 @@ export default function DocumentDetail() {
   const onDelete = async () => {
     try {
       await documentApi.deleteDocument(document.id);
-      console.log(
-        'Document ' +
-          document.documentTypeName +
-          ' remove successfully for user: ' +
-          useAuthStore.getState().user?.email,
-      );
+
+      showToast('Documentul ' + document.documentTypeName + ' a fost șters.', 'success');
 
       navigation.reset({
         index: 0,
         routes: [{ name: 'Home' }],
       });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        'An error occurred while deleting the document';
-      console.error('Document delete error:', errorMessage);
-      Alert.alert('Error', errorMessage);
+      showToast('A apărut o eroare la ștergerea documentului.', 'error');
     }
   };
 

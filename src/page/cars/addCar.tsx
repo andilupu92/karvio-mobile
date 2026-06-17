@@ -16,9 +16,9 @@ import { carApi } from '@/src/api/services/carService';
 import { useState } from 'react';
 import { FloatingSelect } from '@/components/ui/floating-select';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useAuthStore } from '@/src/store/authStore';
 import { useTheme } from '@/src/context/themeContext';
 import * as Icons from 'lucide-react-native';
+import { useToast } from '@/src/context/toastContext';
 
 const insertCarSchema = z.object({
   name: z.coerce.string().min(2, 'Numele este necesar').max(40, 'Numele este prea lung'),
@@ -43,6 +43,7 @@ export default function AddCar() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [isLoading, setLoading] = useState(false);
   const { isDark } = useTheme();
+  const { showToast } = useToast();
 
   const {
     control,
@@ -59,21 +60,15 @@ export default function AddCar() {
       setLoading(true);
       const validatedData = insertCarSchema.parse(data);
       const response = await carApi.add(validatedData);
-      console.log(
-        'Car ' +
-          response.name +
-          ' added successfully for user: ' +
-          useAuthStore.getState().user?.email,
-      );
+
+      showToast('Mașina ' + response.name + ' a fost adăugată cu succes!', 'success');
 
       navigation.reset({
         index: 0,
         routes: [{ name: 'Home' }],
       });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message || error?.message || 'An error occurred during car save';
-      console.error('Car save error:', errorMessage);
+      showToast('Eroare la salvare.', 'error');
     } finally {
       setLoading(false);
     }

@@ -22,8 +22,8 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { FormControl, FormControlError, FormControlErrorText } from '@/components/ui/form-control';
-import { useAuthStore } from '@/src/store/authStore';
 import { userApi } from '@/src/api/services/userService';
+import { useToast } from '@/src/context/toastContext';
 
 const bugReportSchema = z.object({
   description: z.string().min(10, 'Descrierea este necesară').max(200, 'Descrierea nu poate depăși 200 de caractere'),
@@ -35,6 +35,7 @@ export default function BugReportScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { isDark } = useTheme();
   const [isSaveLoading, setSaveLoading] = useState(false);
+  const { showToast } = useToast();
 
   const {
     control,
@@ -51,23 +52,15 @@ export default function BugReportScreen() {
     try {
           setSaveLoading(true);
           const validatedData = bugReportSchema.parse(data);
-          const response = await userApi.add(validatedData, 'BUG');
-          console.log(
-            'Bug report submitted successfully for user: ' +
-               useAuthStore.getState().user?.email,
-          );
+          await userApi.add(validatedData, 'BUG');
+          showToast('Raportul de eroare a fost trimis cu succes.', 'success');
     
           navigation.reset({
             index: 0,
             routes: [{ name: 'Home' }],
           });
         } catch (error: any) {
-          const errorMessage =
-            error?.response?.data?.message ||
-            error?.message ||
-            'An error occurred during bug report submission';
-          console.log('Body:', JSON.stringify(error?.response?.data));
-          console.error('Bug report submission error:', errorMessage);
+          showToast('A apărut o eroare la trimiterea raportului de eroare.', 'error');
         } finally {
           setSaveLoading(false);
         }

@@ -18,6 +18,7 @@ import{
   deleteToken,
 } from '@react-native-firebase/messaging';
 import { getApp } from '@react-native-firebase/app';
+import { useToast } from '@/src/context/toastContext';
 
 export default function ProfileScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -26,6 +27,7 @@ export default function ProfileScreen() {
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
    const messagingInstance = getMessaging(getApp());
+   const { showToast } = useToast();
 
   const handleLogout = async () => {
     try {
@@ -39,7 +41,7 @@ export default function ProfileScreen() {
       });
     } catch (error) {
       setLogoutModalVisible(false);
-      console.error('Logout failed:', error);
+      showToast('A apărut o eroare la deconectare.', 'error');
     }
   };
 
@@ -53,7 +55,7 @@ export default function ProfileScreen() {
       });
     } catch (error) {
       setDeleteModalVisible(false);
-      console.error('Delete account failed:', error);
+      showToast('A apărut o eroare la ștergerea contului.', 'error');
     }
   };
 

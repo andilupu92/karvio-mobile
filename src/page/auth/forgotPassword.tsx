@@ -17,6 +17,7 @@ import { authApi } from '../../api/services/authService';
 import WelcomeCard from './WelcomeCard';
 import FloatingInput from '@/components/ui/floating-input';
 import { Icons } from '@/src/utils/icons';
+import { useToast } from '@/src/context/toastContext';
 
 const forgotPasswordSchema = z.object({
   email: z
@@ -30,6 +31,7 @@ type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 export default function ForgotPasswordScreen() {
   const [isLoading, setLoading] = useState(false);
   const { colorScheme } = useColorScheme();
+  const { showToast } = useToast();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const {
@@ -54,9 +56,7 @@ export default function ForgotPasswordScreen() {
       navigation.navigate('VerifyOTP', { email: data.email });
 
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message || error?.message || 'An error occurred';
-      console.error('Forgot password error:', errorMessage);
+      showToast('Eroare la solicitarea codului de resetare', 'error');
     } finally {
       setLoading(false);
     }

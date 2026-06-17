@@ -21,7 +21,7 @@ import { authApi } from '../../api/services/authService';
 import { useAuthStore } from '../../store/authStore';
 import GoogleIcon from '@/src/icons/GoogleIcon';
 import { Icons } from '@/src/utils/icons';
-import requestUserPermissionAndRegisterToken from '../../api/registerToken';
+import { useToast } from '../../context/toastContext';
 
 const loginSchema = z.object({
   email: z
@@ -39,6 +39,7 @@ export default function LoginScreen() {
   const [isLoading, setLoading] = useState(false);
   const [isGoogleLoading, setGoogleLoading] = useState(false);
   const { colorScheme } = useColorScheme();
+  const { showToast } = useToast();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const {
@@ -57,7 +58,6 @@ export default function LoginScreen() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      console.log('Attempting login...');
       setLoading(true);
 
       // Call the separated API function
@@ -68,14 +68,11 @@ export default function LoginScreen() {
         responseData.refreshToken,
         { email: data.email },
       );
-      await requestUserPermissionAndRegisterToken(responseData.accessToken);
 
-      console.log('Login Success for: ', data.email);
+      showToast('Te-ai logat cu succes! 🎉', 'success');
       navigation.navigate('Home');
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message || error?.message || 'An error occurred during login';
-      console.error('Login error:', errorMessage);
+      showToast('Email sau parolă incorecte', 'error');
     } finally {
       setLoading(false);
     }
@@ -84,9 +81,9 @@ export default function LoginScreen() {
   const handleSubmitGoogle = async () => {
     setGoogleLoading(true);
     try {
-      console.log('Google login clicked');
+      showToast('Te-ai logat cu succes! 🎉', 'success');
     } catch (error) {
-      console.error('Google login error:', error);
+      showToast('Eroare la autentificare. Încearcă din nou.', 'error');
     } finally {
       setGoogleLoading(false);
     }
