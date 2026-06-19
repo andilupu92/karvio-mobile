@@ -18,7 +18,8 @@ import { ThemeProvider, useTheme } from './src/context/themeContext';
 import{ 
   getMessaging,
   onTokenRefresh,
-  onMessage
+  onMessage,
+  setBackgroundMessageHandler
 } from '@react-native-firebase/messaging';
 import { getApp } from '@react-native-firebase/app';
 import requestUserPermissionAndRegisterToken from './src/api/registerToken';
@@ -26,6 +27,15 @@ import { Alert } from 'react-native';
 import { notificationApi } from './src/api/services/notifService';
 import { setupInterceptors } from './src/api/client';
 import { ToastProvider } from './src/context/toastContext';
+
+try {
+  const messagingInstance = getMessaging(getApp());
+  setBackgroundMessageHandler(messagingInstance, async (remoteMessage) => {
+    console.log('The notification generated:', remoteMessage);
+  });
+} catch (error) {
+  console.error("Error initializing background messenger:", error);
+}
 
 SplashScreen.preventAutoHideAsync();
 

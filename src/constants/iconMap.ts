@@ -14,6 +14,8 @@ import {
   Fuel,
   TriangleAlert,
   IdCard,
+  CircleDot,
+  PersonStanding,
 } from 'lucide-react-native';
 
 export const ICON_MAP: Record<string, LucideIcon> = {
@@ -23,7 +25,7 @@ export const ICON_MAP: Record<string, LucideIcon> = {
   shield: Shield,
   'shield-check': ShieldCheck,
   receipt: Receipt,
-  FireExtinguisher,
+  'fire-extinguisher': FireExtinguisher,
   cross: Cross,
   gauge: Gauge,
   droplets: Droplets,
@@ -31,4 +33,6 @@ export const ICON_MAP: Record<string, LucideIcon> = {
   fuel: Fuel,
   'triangle-alert': TriangleAlert,
   'id-card': IdCard,
+  'circle-dot': CircleDot,
+  'person-standing': PersonStanding,
 };
