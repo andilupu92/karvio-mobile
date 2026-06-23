@@ -56,13 +56,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (fontsLoaded && !isLoading) {
-      const hideSplash = async () => {
-        await SplashScreen.hideAsync();
-      };
-      hideSplash();
+    if (fontsLoaded) {
+        SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, isLoading]);
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;
