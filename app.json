@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Karvio",
-    "slug": "Karvio",
+    "name": "karvio",
+    "slug": "karvio",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/karvio.png",
@@ -13,6 +13,7 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "bundleIdentifier": "com.anonymous.karvioapp",
       "supportsTablet": true
     },
     "android": {
@@ -34,8 +35,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "d23f3c7e-a51b-4cf8-a407-e2d14b4e532f"
+        "projectId": "9d4129ec-0ba9-4e61-b0a7-78ee82561b0f"
       }
-    }
+    },
+    "owner": "andreilupu92"
   }
 }
