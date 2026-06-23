@@ -13,7 +13,6 @@ interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  loadingStep: 0 | 1 | 2 | 3;
 
   // Actions
   setTokens: (accessToken: string, refreshToken: string) => void;
@@ -30,7 +29,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   refreshToken: null,
   isAuthenticated: false,
   isLoading: true,
-  loadingStep: 0,
 
   setTokens: (accessToken, refreshToken) => {
     set({ accessToken, refreshToken });
@@ -48,7 +46,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       user,
       isAuthenticated: true,
       isLoading: false,
-      loadingStep: 3,
     });
   },
 
@@ -60,24 +57,21 @@ export const useAuthStore = create<AuthState>((set) => ({
       refreshToken: null,
       isAuthenticated: false,
       isLoading: false,
-      loadingStep: 0,
     });
   },
 
   initialize: async () => {
-    set({ isLoading: true, loadingStep: 0 });
+    set({ isLoading: true });
 
     try {
       const accessToken = await secureStorage.getAccessToken();
       const refreshToken = await secureStorage.getRefreshToken();
-      set({ loadingStep: 1 });
 
       if (accessToken && refreshToken) {
         set({ accessToken, refreshToken });
 
         try {
           const email = await authApi.me();
-          set({ loadingStep: 2 });
 
           if (email) {
             set({
@@ -92,19 +86,19 @@ export const useAuthStore = create<AuthState>((set) => ({
               console.error("don't save the token on the server", fcmError);
             }
 
-            set({ loadingStep: 3, isLoading: false });
+            set({ isLoading: false });
           } else {
-            set({ loadingStep: 3, isLoading: false, isAuthenticated: false });
+            set({ isLoading: false, isAuthenticated: false });
           }
         } catch (apiError) {
-          set({ loadingStep: 3, isLoading: false, isAuthenticated: false });
+          set({ isLoading: false, isAuthenticated: false });
         }
       } else {
-        set({ loadingStep: 3, isLoading: false, isAuthenticated: false });
+        set({ isLoading: false, isAuthenticated: false });
       }
     } catch (error) {
       console.error('Error initializing auth:', error);
-      set({ loadingStep: 3, isLoading: false });
+      set({ isLoading: false });
     }
   },
 
