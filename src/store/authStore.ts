@@ -13,6 +13,7 @@ interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  loadingStep: 0 | 1 | 2 | 3;
 
   // Actions
   setTokens: (accessToken: string, refreshToken: string) => void;
@@ -29,85 +30,81 @@ export const useAuthStore = create<AuthState>((set) => ({
   refreshToken: null,
   isAuthenticated: false,
   isLoading: true,
+  loadingStep: 0,
 
   setTokens: (accessToken, refreshToken) => {
     set({ accessToken, refreshToken });
   },
 
-  setUser: async(user) => {
+  setUser: async (user) => {
     set({ user, isAuthenticated: !!user });
   },
 
   login: async (accessToken, refreshToken, user) => {
-    // Save tokens to secure storage
     await secureStorage.saveTokens(accessToken, refreshToken);
-
-    // Update state
     set({
       accessToken,
       refreshToken,
       user,
       isAuthenticated: true,
       isLoading: false,
+      loadingStep: 3,
     });
   },
 
   logout: async () => {
-    // Clear tokens from secure storage
     await secureStorage.clearTokens();
-
-    // Reset state
     set({
       user: null,
       accessToken: null,
       refreshToken: null,
       isAuthenticated: false,
       isLoading: false,
+      loadingStep: 0,
     });
   },
 
   initialize: async () => {
-    set({ isLoading: true });
+    set({ isLoading: true, loadingStep: 0 });
 
     try {
-      // Load tokens from secure storage
       const accessToken = await secureStorage.getAccessToken();
       const refreshToken = await secureStorage.getRefreshToken();
+      set({ loadingStep: 1 });
 
       if (accessToken && refreshToken) {
-          set({
-            accessToken,
-            refreshToken,
-            isLoading: false,
-          });
+        set({ accessToken, refreshToken });
 
-          try {
-            const email = await authApi.me();
-            if (email) {
-              set({ 
-                user: { email: email },
-                isAuthenticated: true,
-                isLoading: false 
-              });
+        try {
+          const email = await authApi.me();
+          set({ loadingStep: 2 });
 
-              try {
-                await requestUserPermissionAndRegisterToken(accessToken);
-                console.log('FCM Token checked and registered successfully');
-              } catch (fcmError) {
-                console.error("don't save the token on the server", fcmError);
-              }
-            } else {
-              set({ isLoading: false, isAuthenticated: false });
+          if (email) {
+            set({
+              user: { email },
+              isAuthenticated: true,
+            });
+
+            try {
+              await requestUserPermissionAndRegisterToken(accessToken);
+              console.log('FCM Token checked and registered successfully');
+            } catch (fcmError) {
+              console.error("don't save the token on the server", fcmError);
             }
-          } catch (apiError) {
-            set({ isLoading: false, isAuthenticated: false });
+
+            set({ loadingStep: 3, isLoading: false });
+          } else {
+            set({ loadingStep: 3, isLoading: false, isAuthenticated: false });
           }
+        } catch (apiError) {
+          set({ loadingStep: 3, isLoading: false, isAuthenticated: false });
+        }
       } else {
-        set({ isLoading: false, isAuthenticated: false });
+        set({ loadingStep: 3, isLoading: false, isAuthenticated: false });
       }
     } catch (error) {
       console.error('Error initializing auth:', error);
-      set({ isLoading: false, isAuthenticated: false });
+      set({ loadingStep: 3, isLoading: false });
     }
   },
 

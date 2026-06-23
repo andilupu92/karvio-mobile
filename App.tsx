@@ -27,6 +27,7 @@ import { Alert } from 'react-native';
 import { notificationApi } from './src/api/services/notifService';
 import { setupInterceptors } from './src/api/client';
 import { ToastProvider } from './src/context/toastContext';
+import SplashScreenLoader from './src/utils/splashScreenLoader';
 
 try {
   const messagingInstance = getMessaging(getApp());
@@ -41,6 +42,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const initialize = useAuthStore((state) => state.initialize);
+  const loadingStep = useAuthStore((state) => state.loadingStep);
   const isLoading = useAuthStore((state) => state.isLoading);
 
   const [fontsLoaded, fontError] = useFonts({
@@ -56,16 +58,13 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (fontsLoaded && !isLoading) {
-      const hideSplash = async () => {
-        await SplashScreen.hideAsync();
-      };
-      hideSplash();
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, isLoading]);
+  }, [fontsLoaded]);
 
   if (!fontsLoaded || isLoading) {
-    return null;
+    return <SplashScreenLoader loadingStep={loadingStep} />;
   }
 
   return (

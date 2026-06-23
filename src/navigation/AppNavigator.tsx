@@ -28,7 +28,6 @@ import ResetPasswordScreen from '../page/auth/resetPassword';
 import PrivacyPolicyScreen from '../page/settings/privacyPolicy';
 import TermsAndConditionsScreen from '../page/settings/termsAndConditions';
 import { useAuthStore } from '../store/authStore';
-import { View, ActivityIndicator } from 'react-native';
 
 type Car = {
   id: number;
@@ -115,15 +114,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
   const accessToken = useAuthStore((state) => state.accessToken);
-  const isLoading = useAuthStore((state) => state.isLoading);
-
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

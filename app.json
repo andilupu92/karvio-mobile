@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "karvio-app",
-    "slug": "karvio-app",
+    "name": "Karvio",
+    "slug": "Karvio",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/karvio.png",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/karvio-splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,8 +17,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/karvio.png",
+        "backgroundColor": "#202e5a"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
