@@ -9,7 +9,7 @@ import { VStack } from '@/components/ui/vstack';
 import { HStack } from '@/components/ui/hstack';
 import { Text } from '@/components/ui/text';
 import { Link, LinkText } from '@/components/ui/link';
-import { Button, ButtonText } from '@/components/ui/button';
+import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { FormControl, FormControlError, FormControlErrorText } from '@/components/ui/form-control';
 import { EyeIcon, EyeOffIcon, CheckCircleIcon } from 'lucide-react-native';
 import WelcomeCard from './WelcomeCard';
@@ -22,6 +22,12 @@ import { useAuthStore } from '../../store/authStore';
 import GoogleIcon from '@/src/icons/GoogleIcon';
 import { Icons } from '@/src/utils/icons';
 import { useToast } from '../../context/toastContext';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+GoogleSignin.configure({
+  webClientId: '189896588323-5966988c9ihv76865m52jdml49nfo4jt.apps.googleusercontent.com',
+  offlineAccess: true, 
+});
 
 const loginSchema = z.object({
   email: z
@@ -81,7 +87,22 @@ export default function LoginScreen() {
   const handleSubmitGoogle = async () => {
     setGoogleLoading(true);
     try {
-      showToast('Te-ai logat cu succes! 🎉', 'success');
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      const idToken = userInfo.data?.idToken;
+      if (!idToken) {
+        showToast('Nu s-a putut obține ID Token de la Google.', 'error');
+      } else {
+        const responseData = await authApi.googleLogin(idToken);
+        await login(
+          responseData.accessToken,
+          responseData.refreshToken,
+          { email: userInfo.data?.user?.email || '' },
+        );
+
+        showToast('Te-ai logat cu succes! 🎉', 'success');
+      }
+      
     } catch (error) {
       showToast('Eroare la autentificare. Încearcă din nou.', 'error');
     } finally {
@@ -208,7 +229,7 @@ export default function LoginScreen() {
             {/* Sign In Button */}
             <Button
               size="xl"
-              className={`${colorScheme === 'dark' ? 'bg-background-primary-100' : 'bg-background-primary-900'} h-16 rounded-2xl shadow-lg shadow-gray-200 dark:shadow-none active:scale-[0.98]`}
+              className={`${colorScheme === 'dark' ? 'bg-background-primary-100' : 'bg-background-primary-900'} h-16 rounded-2xl dark:shadow-none active:scale-[0.98]`}
               isDisabled={isLoading}
               onPress={handleSubmit(onSubmit)}
             >
@@ -226,19 +247,19 @@ export default function LoginScreen() {
               </HStack>
             </Button>
 
-            {/*<HStack className="items-center my-8">
+            <HStack className="items-center my-8">
               <Box className="flex-1 h-[1px] bg-gray-200 dark:bg-slate-800" />
               <Text className={`${colorScheme === 'dark' ? 'text-typography-800' : 'text-typography-200'} px-4 text-sm font-medium`}>
                 or continue with
               </Text>
               <Box className={`flex-1 h-[1px] ${colorScheme === 'dark' ? 'bg-outline-900' : 'bg-outline-100'}`} />
-            </HStack>*/}
+            </HStack>
 
             {/* Social Login Buttons Container */}
-            {/*<Button
+            <Button
               size="xl"
               action="secondary"
-              className="w-full h-16 items-center justify-center border border-[#747775] bg-white dark:border-[#8E918F] dark:bg-[#131314] rounded-2xl shadow-lg shadow-gray-200 dark:shadow-none border border-gray-200"
+              className="w-full h-16 items-center justify-center border border-[#747775] bg-white dark:border-[#8E918F] dark:bg-[#131314] rounded-2xl border border-gray-200"
               isDisabled={isGoogleLoading}
               onPress={handleSubmitGoogle}
             >
@@ -249,10 +270,10 @@ export default function LoginScreen() {
                   <GoogleIcon width={18} height={18} />
                 )}
                 <ButtonText className="text-[14px] leading-[20px] text-[#1F1F1F] dark:text-[#E3E3E3] font-medium">
-                  {isGoogleLoading ? 'Signing up...' : 'Sign up with Google'}
+                  {isGoogleLoading ? 'Se conectează...' : 'Continuă cu Google'}
                 </ButtonText>
               </HStack>
-            </Button>*/}
+            </Button>
 
             {/* Footer Links */}
             <HStack className="justify-center mt-8 items-center" space="xs">
