@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Box } from '@/components/ui/box';
 
-const CONTACT_EMAIL = 'support@mygarage.ro';
+const CONTACT_EMAIL = 'suport@karvio.ro';
 const CONTACT_PHONE = '+40 743 222 774';
 const CONTACT_WHATSAPP = '+40 743 222 774';
 
