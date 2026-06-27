@@ -23,6 +23,7 @@ import GoogleIcon from '@/src/icons/GoogleIcon';
 import { Icons } from '@/src/utils/icons';
 import { useToast } from '../../context/toastContext';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 GoogleSignin.configure({
   webClientId: '189896588323-5966988c9ihv76865m52jdml49nfo4jt.apps.googleusercontent.com',
@@ -120,19 +121,23 @@ export default function LoginScreen() {
         <WelcomeCard
           primaryTitle="Bine ai venit!"
           secondaryTitle="👋"
-          contain="Te rog să te autentifici pentru a continua"
+          contain="Te rog să te autentifici"
           showBackButton={false}
         />
       </Box>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
-      >
-        <VStack
-          className={`flex-1 px-8 pt-12 mt-20 ${colorScheme === 'dark' ? 'bg-background-primary-900' : 'bg-background-primary-100'} rounded-t-[35px]`}
-          style={{ zIndex: 20 }}
-        >
+      <KeyboardAwareScrollView
+                contentContainerStyle={{
+                flexGrow: 1,
+                paddingHorizontal: 32,
+                paddingTop: 110,
+                paddingBottom: 40
+              }}
+                enableOnAndroid
+                extraScrollHeight={20}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+              >
           <Box className="mt-2">
             {/* --- EMAIL INPUT --- */}
             <FormControl isInvalid={!!errors.email} className="mb-5">
@@ -287,8 +292,7 @@ export default function LoginScreen() {
               </Link>
             </HStack>
           </Box>
-        </VStack>
-      </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
     </Box>
   );
 }

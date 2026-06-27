@@ -21,6 +21,7 @@ import { authApi } from '@/src/api/services/authService';
 import GoogleIcon from '@/src/icons/GoogleIcon';
 import { Icons } from '@/src/utils/icons';
 import { useToast } from '@/src/context/toastContext';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const signUpSchema = z.object({
   email: z
@@ -94,20 +95,24 @@ export default function SignUpScreen() {
         <WelcomeCard
           primaryTitle="Creare"
           secondaryTitle="Cont"
-          contain="Te rog să creezi cont pentru a continua"
+          contain="Te rog să creezi un cont"
           showBackButton={true}
           onBackPress={() => navigation.goBack()}
         />
       </Box>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
-      >
-        <VStack
-          className={`flex-1 px-8 pt-12 mt-20 ${colorScheme === 'dark' ? 'bg-background-primary-900' : 'bg-background-primary-100'} rounded-t-[35px]`}  
-          style={{ zIndex: 20 }}
-        >
+      <KeyboardAwareScrollView
+                      contentContainerStyle={{
+                      flexGrow: 1,
+                      paddingHorizontal: 32,
+                      paddingTop: 110,
+                      paddingBottom: 40
+                    }}
+                      enableOnAndroid
+                      extraScrollHeight={20}
+                      keyboardShouldPersistTaps="handled"
+                      showsVerticalScrollIndicator={false}
+                    >
           <Box className="mt-2">
             {/* --- EMAIL INPUT --- */}
             <FormControl isInvalid={!!errors.email} className="mb-5">
@@ -192,7 +197,7 @@ export default function SignUpScreen() {
               </FormControlError>
             </FormControl>
 
-            <View className="mt-4 px-6 mb-6">
+            <View className="mt-4 px-6 mb-10">
             <Text className={`${colorScheme === 'dark' ? 'text-typography-800' : 'text-typography-200'} text-xs text-center leading-5`}>
               Prin crearea contului, ești de acord cu{' '}
               <Text 
@@ -272,8 +277,7 @@ export default function SignUpScreen() {
               </Link>
             </HStack>
           </Box>
-        </VStack>
-      </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
     </Box>
   );
 }
