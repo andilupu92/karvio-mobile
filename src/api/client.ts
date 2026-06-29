@@ -4,18 +4,12 @@ import { secureStorage } from '../utils/secureStorage';
 import Constants from 'expo-constants';
 
 const getBaseUrl = () => {
-  if (!__DEV__) {
-    return process.env.EXPO_PUBLIC_API_BASE_URL;
+  if (__DEV__ && process.env.EXPO_PUBLIC_USE_LOCAL_API === 'true') {
+     const ip = Constants.expoConfig?.hostUri?.split(':')[0] ?? '10.0.2.2';
+     return `http://${ip}:8080`;
   }
-
-  const hostUri = Constants.expoConfig?.hostUri;
-  if (!hostUri) {
-    return process.env.EXPO_PUBLIC_API_BASE_URL;
-  }
-
-  const ip = hostUri.split(':')[0];
-  const port = process.env.EXPO_PUBLIC_API_PORT ?? '8080';
-  return `http://${ip}:${port}`;
+  
+  return process.env.EXPO_PUBLIC_API_BASE_URL;
 };
 
 const apiClient = axios.create({
