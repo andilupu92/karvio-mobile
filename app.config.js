@@ -63,7 +63,15 @@ export default {
       [
         "@react-native-google-signin/google-signin"
       ],
-      "@react-native-firebase/app"
+      "@react-native-firebase/app",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
     ],
     extra: {
       eas: {
