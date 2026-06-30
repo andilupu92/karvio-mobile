@@ -14,9 +14,9 @@ export default {
     },
     ios: {
       bundleIdentifier: "com.anonymous.karvioapp",
-      "buildNumber": "1.0.0",
-      "supportsTablet": false,
-      "itsAppUsesNonExemptEncryption": false
+      buildNumber: "1.0.0",
+      supportsTablet: false,
+      itsAppUsesNonExemptEncryption: false
     },
     android: {
       adaptiveIcon: {
@@ -36,6 +36,14 @@ export default {
       "@react-native-community/datetimepicker",
       [
         "@react-native-google-signin/google-signin"
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
       ]
     ],
     extra: {
