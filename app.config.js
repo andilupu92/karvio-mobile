@@ -44,7 +44,7 @@ export default {
         {
           "ios": {
             "useFrameworks": "static",
-            forceStaticLinking: ["RNFBApp"],
+            forceStaticLinking: ["RNFBApp", "RNFBMessaging"],
           }
         }
       ]
