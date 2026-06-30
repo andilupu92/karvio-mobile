@@ -33,10 +33,7 @@ export default {
       "expo-font",
       "@react-native-community/datetimepicker",
       [
-        "@react-native-google-signin/google-signin",
-        {
-          iosUrlScheme: "com.googleusercontent.apps.31878404477-1lc32398bo1k30il8ec3sqdmjlkhhhg8"
-        }
+        "@react-native-google-signin/google-signin"
       ]
     ],
     extra: {
