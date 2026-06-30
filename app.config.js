@@ -14,7 +14,9 @@ export default {
     },
     ios: {
       bundleIdentifier: "com.anonymous.karvioapp",
-      supportsTablet: true
+      "buildNumber": "1.0.0",
+      "supportsTablet": false,
+      "itsAppUsesNonExemptEncryption": false
     },
     android: {
       adaptiveIcon: {
