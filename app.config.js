@@ -1,3 +1,28 @@
+const { withDangerousMod } = require('@expo/config-plugins');
+const fs = require('fs');
+const path = require('path');
+
+// Xcode snippet to modify the Podfile to allow non-modular headers in iOS builds
+const withAllowNonModularHeaders = (config) => {
+  return withDangerousMod(config, [
+    'ios',
+    async (cfg) => {
+      const podfilePath = path.join(cfg.modRequest.projectRoot, 'ios', 'Podfile');
+      if (fs.existsSync(podfilePath)) {
+        let content = await fs.promises.readFile(podfilePath, 'utf8');
+        const searchStr = "react_native_post_install(installer)";
+        const replaceStr = "react_native_post_install(installer)\n    installer.pods_project.targets.each do |target|\n      target.build_configurations.each do |config|\n        config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'\n      end\n    end";
+        
+        if (content.includes(searchStr) && !content.includes('CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES')) {
+          content = content.replace(searchStr, replaceStr);
+          await fs.promises.writeFile(podfilePath, content, 'utf8');
+        }
+      }
+      return cfg;
+    },
+  ]);
+};
+
 export default {
   expo: {
     name: "karvio",
@@ -16,7 +41,8 @@ export default {
       bundleIdentifier: "com.anonymous.karvioapp",
       buildNumber: "1.0.0",
       supportsTablet: false,
-      itsAppUsesNonExemptEncryption: false
+      itsAppUsesNonExemptEncryption: false,
+      googleServicesFile: process.env.IOS_GOOGLE_SERVICES_FILE || "./GoogleService-Info.plist"
     },
     android: {
       adaptiveIcon: {
