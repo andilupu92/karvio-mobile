@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { useColorScheme } from 'nativewind';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -105,7 +105,9 @@ export default function LoginScreen() {
       }
       
     } catch (error) {
-      showToast('Eroare la autentificare. Încearcă din nou.', 'error');
+      Alert.alert('Eroare', `${error || 'Eroare la autentificarea cu Google'}`);
+      console.log('Eroare la autentificarea cu Google:', error);
+      showToast(`Eroare: ${error || 'necunoscută'}`, 'error');
     } finally {
       setGoogleLoading(false);
     }
