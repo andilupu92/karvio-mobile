@@ -17,7 +17,13 @@ export default {
       buildNumber: "1.0.0",
       supportsTablet: false,
       itsAppUsesNonExemptEncryption: false,
-      googleServicesFile: process.env.IOS_GOOGLE_SERVICES_FILE || "./GoogleService-Info.plist"
+      googleServicesFile: process.env.IOS_GOOGLE_SERVICES_FILE || "./GoogleService-Info.plist",
+      infoPlist: {
+        UIBackgroundModes: ["remote-notification"]
+      },
+      entitlements: {
+        "aps-environment": "production"
+      }
     },
     android: {
       adaptiveIcon: {
@@ -39,6 +45,7 @@ export default {
         "@react-native-google-signin/google-signin"
       ],
       "@react-native-firebase/app",
+      "@react-native-firebase/messaging",
       [
         "expo-build-properties",
         {
