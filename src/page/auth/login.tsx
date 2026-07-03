@@ -24,6 +24,7 @@ import { Icons } from '@/src/utils/icons';
 import { useToast } from '../../context/toastContext';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import * as AppleAuthentication from 'expo-apple-authentication';
 
 GoogleSignin.configure({
   webClientId: '189896588323-5966988c9ihv76865m52jdml49nfo4jt.apps.googleusercontent.com',
@@ -105,11 +106,41 @@ export default function LoginScreen() {
       }
       
     } catch (error) {
-      Alert.alert('Eroare', `${error || 'Eroare la autentificarea cu Google'}`);
-      console.log('Eroare la autentificarea cu Google:', error);
-      showToast(`Eroare: ${error || 'necunoscută'}`, 'error');
+      showToast('Eroare la autentificarea cu Google:', 'error');
     } finally {
       setGoogleLoading(false);
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      const { identityToken, email, fullName } = credential;
+
+      if (identityToken) {
+        const responseData = await authApi.appleLogin({
+          token: identityToken,
+          email,
+          firstName: fullName?.givenName || undefined,
+          lastName: fullName?.familyName || undefined,
+        });
+        
+        await login(
+          responseData.accessToken,
+          responseData.refreshToken,
+          { email: email || '' },
+        );
+
+        showToast('Te-ai logat cu succes! 🎉', 'success');
+      }
+    } catch (e) {
+        showToast('Eroare la autentificarea cu Apple', 'error');
     }
   };
 
@@ -281,6 +312,16 @@ export default function LoginScreen() {
                 </ButtonText>
               </HStack>
             </Button>
+
+            {Platform.OS === 'ios' && (
+              <AppleAuthentication.AppleAuthenticationButton
+                buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+                buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+                cornerRadius={5}
+                style={{ width: 200, height: 44 }}
+                onPress={handleAppleLogin}
+              />
+            )}
 
             {/* Footer Links */}
             <HStack className="justify-center mt-8 items-center" space="xs">

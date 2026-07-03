@@ -7,6 +7,13 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface LoginAppleCredentials {
+  token: string;
+  email: string | null;
+  firstName: string | undefined;
+  lastName: string | undefined;
+}
+
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
@@ -30,6 +37,11 @@ export const authApi = {
 
   googleLogin: async (idToken: string): Promise<LoginResponse> => {
     const response = await apiClient.post<LoginResponse>(`${API_URL}/google`, { token: idToken });
+    return response.data;
+  },
+
+  appleLogin: async (credentials: LoginAppleCredentials): Promise<LoginResponse> => {
+    const response = await apiClient.post<LoginResponse>(`${API_URL}/apple`, credentials);
     return response.data;
   },
 

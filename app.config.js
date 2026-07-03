@@ -46,6 +46,7 @@ export default {
       ],
       "@react-native-firebase/app",
       "@react-native-firebase/messaging",
+      "expo-apple-authentication",
       [
         "expo-build-properties",
         {
