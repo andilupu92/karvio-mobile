@@ -113,36 +113,63 @@ export default function LoginScreen() {
   };
 
   const handleAppleLogin = async () => {
-    try {
-      const credential = await AppleAuthentication.signInAsync({
-        requestedScopes: [
-          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-          AppleAuthentication.AppleAuthenticationScope.EMAIL,
-        ],
-      });
+  try {
+    // 1. Încercăm autentificarea nativă Apple
+    const credential = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+    });
 
-      const { identityToken, email, fullName } = credential;
+    const { identityToken, email, fullName } = credential;
 
-      if (identityToken) {
-        const responseData = await authApi.appleLogin({
-          token: identityToken,
-          email,
-          firstName: fullName?.givenName || undefined,
-          lastName: fullName?.familyName || undefined,
-        });
-        
-        await login(
-          responseData.accessToken,
-          responseData.refreshToken,
-          { email: email || '' },
-        );
-
-        showToast('Te-ai logat cu succes! 🎉', 'success');
-      }
-    } catch (e) {
-        showToast('Eroare la autentificarea cu Apple', 'error');
+    // CAPCANĂ EVITATĂ: Dacă Apple nu dă token, arătăm direct în toast
+    if (!identityToken) {
+      showToast('Eroare: Apple nu a returnat identityToken!', 'error');
+      return;
     }
-  };
+
+    // 2. Încercăm trimiterea către backend-ul tău de Spring Boot
+    let responseData;
+    try {
+      responseData = await authApi.appleLogin({
+        token: identityToken,
+        email,
+        firstName: fullName?.givenName || undefined,
+        lastName: fullName?.familyName || undefined,
+      });
+    } catch (apiError: any) {
+      // Extragem eroarea venită din Spring (ex: 400, 401, 500)
+      const springError = apiError?.response?.data?.message || apiError?.message || JSON.stringify(apiError);
+      showToast(`Backend Err: ${springError.substring(0, 50)}`, 'error');
+      console.error("Spring Apple Login Error:", apiError);
+      return; // Oprim execuția dacă backend-ul a picat
+    }
+
+    // 3. Încercăm salvarea în Store-ul local (Zustand / local storage)
+    try {
+      await login(
+        responseData.accessToken,
+        responseData.refreshToken,
+        { email: email || '' },
+      );
+      showToast('Te-ai logat cu succes! 🎉', 'success');
+    } catch (storeError: any) {
+      showToast(`Store Err: ${storeError?.message || 'Nu s-a putut salva sesiunea'}`, 'error');
+    }
+
+  } catch (e: any) {
+    // Aici ajung doar erorile native de la AppleAuthentication.signInAsync
+    if (e?.code === 'ERR_REQUEST_CANCELED' || e?.code === 'ERR_CANCELED') {
+      showToast('Autentificare anulată de utilizator', 'info');
+    } else {
+      // Prinde erori de configurare Xcode, lipsă drepturi, etc.
+      const detailedError = e?.message || JSON.stringify(e);
+      showToast(`Apple Native (${e?.code || 'unknown'}): ${detailedError.substring(0, 50)}`, 'error');
+    }
+  }
+};
 
   const iconColor = colorScheme === 'dark' ? '#94a3b8' : '#9ca3af';
   const activeIconColor = '#10b981';
