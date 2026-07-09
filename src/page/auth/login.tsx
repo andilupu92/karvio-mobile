@@ -10,7 +10,7 @@ import { Text } from '@/components/ui/text';
 import { Link, LinkText } from '@/components/ui/link';
 import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { FormControl, FormControlError, FormControlErrorText } from '@/components/ui/form-control';
-import { EyeIcon, EyeOffIcon, CheckCircleIcon } from 'lucide-react-native';
+import { EyeIcon, EyeOffIcon, CheckCircleIcon, AppleIcon } from 'lucide-react-native';
 import WelcomeCard from './WelcomeCard';
 import FloatingInput from '@/components/ui/floating-input';
 import { useNavigation } from '@react-navigation/native';
@@ -24,6 +24,7 @@ import { useToast } from '../../context/toastContext';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import { FontAwesome } from '@expo/vector-icons';
 
 GoogleSignin.configure({
   webClientId: '189896588323-5966988c9ihv76865m52jdml49nfo4jt.apps.googleusercontent.com',
@@ -293,7 +294,7 @@ export default function LoginScreen() {
             {/* Sign In Button */}
             <Button
               size="xl"
-              className={`${colorScheme === 'dark' ? 'bg-background-primary-100' : 'bg-background-primary-900'} h-16 rounded-2xl dark:shadow-none active:scale-[0.98]`}
+              className={`${colorScheme === 'dark' ? 'bg-background-primary-100' : 'bg-background-primary-900'} h-16 rounded-2xl active:scale-[0.98]`}
               isDisabled={isLoading}
               onPress={handleSubmit(onSubmit)}
             >
@@ -323,7 +324,7 @@ export default function LoginScreen() {
             <Button
               size="xl"
               action="secondary"
-              className="w-full h-16 items-center justify-center border border-[#747775] bg-white dark:border-[#8E918F] dark:bg-[#131314] rounded-2xl border border-gray-200"
+              className="w-full h-16 items-center justify-center border border-[#747775] bg-white dark:border-[#8E918F] dark:bg-[#131314] rounded-2xl border border-gray-200 mb-4"
               isDisabled={isGoogleLoading}
               onPress={handleSubmitGoogle}
             >
@@ -340,23 +341,28 @@ export default function LoginScreen() {
             </Button>
 
             {Platform.OS === 'ios' && (
-              <View 
-                className="w-full"
-                style={{ opacity: isLoading ? 0.5 : 1 }}
-                pointerEvents={isLoading ? 'none' : 'auto'}
+              <Button
+                size="xl"
+                className={`${colorScheme === 'dark' ? 'bg-background-primary-100' : 'bg-background-primary-900'} h-16 rounded-2xl active:scale-[0.98]`}
+                isDisabled={isLoading}
+                onPress={handleAppleLogin}
               >
-                <AppleAuthentication.AppleAuthenticationButton
-                  buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-                  buttonStyle={
-                    colorScheme === 'dark'
-                      ? AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
-                      : AppleAuthentication.AppleAuthenticationButtonStyle.WHITE
-                  }
-                  cornerRadius={16}
-                  style={{ width: '100%', height: 64 }}
-                  onPress={handleAppleLogin}
-                />
-              </View>
+                <HStack space="md" className="items-center justify-center">
+                  {isLoading ? (
+                    <ActivityIndicator
+                      size="small"
+                      color={Platform.OS === 'ios' ? undefined : '#FFFFFF'}
+                      className="text-white dark:text-blue-400 mr-2"
+                    />
+                  ) : (
+                    <FontAwesome name="apple" size={20} color={colorScheme === 'dark' ? '#000000' : '#FFFFFF'} className="mr-2"/>
+                  )}
+                  
+                  <ButtonText className={`${colorScheme === 'dark' ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-lg`}>
+                    {isLoading ? 'Se autentifică...' : 'Continuă cu Apple'}
+                  </ButtonText>
+                </HStack>
+              </Button>
             )}
 
             {/* Footer Links */}
