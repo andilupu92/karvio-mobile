@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Platform, TouchableOpacity, View } from 'react-native';
 import { useColorScheme } from 'nativewind';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box } from '@/components/ui/box';
-import { VStack } from '@/components/ui/vstack';
 import { HStack } from '@/components/ui/hstack';
 import { Text } from '@/components/ui/text';
 import { Link, LinkText } from '@/components/ui/link';
@@ -341,13 +340,23 @@ export default function LoginScreen() {
             </Button>
 
             {Platform.OS === 'ios' && (
-              <AppleAuthentication.AppleAuthenticationButton
-                buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-                buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-                cornerRadius={5}
-                style={{ width: 200, height: 44 }}
-                onPress={handleAppleLogin}
-              />
+              <View 
+                className="w-full"
+                style={{ opacity: isLoading ? 0.5 : 1 }}
+                pointerEvents={isLoading ? 'none' : 'auto'}
+              >
+                <AppleAuthentication.AppleAuthenticationButton
+                  buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+                  buttonStyle={
+                    colorScheme === 'dark'
+                      ? AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+                      : AppleAuthentication.AppleAuthenticationButtonStyle.WHITE
+                  }
+                  cornerRadius={16}
+                  style={{ width: '100%', height: 64 }}
+                  onPress={handleAppleLogin}
+                />
+              </View>
             )}
 
             {/* Footer Links */}
