@@ -334,7 +334,7 @@ export default function LoginScreen() {
                 ) : (
                   <GoogleIcon width={18} height={18} />
                 )}
-                <ButtonText className="text-[14px] leading-[20px] text-[#1F1F1F] dark:text-[#E3E3E3] font-medium">
+                <ButtonText className="font-inter-bold text-lg text-[#1F1F1F] dark:text-[#E3E3E3]">
                   {isGoogleLoading ? 'Se conectează...' : 'Continuă cu Google'}
                 </ButtonText>
               </HStack>
@@ -355,7 +355,7 @@ export default function LoginScreen() {
                       className="text-white dark:text-blue-400 mr-2"
                     />
                   ) : (
-                    <FontAwesome name="apple" size={20} color={colorScheme === 'dark' ? '#000000' : '#FFFFFF'} className="mr-2"/>
+                    <FontAwesome name="apple" size={20} color={colorScheme === 'dark' ? '#000000' : '#FFFFFF'}/>
                   )}
                   
                   <ButtonText className={`${colorScheme === 'dark' ? 'text-typography-100' : 'text-typography-900'} font-inter-bold text-lg`}>
